@@ -1,0 +1,8 @@
+# ignore everything
+*
+
+# Except
+!.gitignore
+!README.md
+!scenario_71_projectESCAPE.lua
+!scenario_100_PE-Test.lua
