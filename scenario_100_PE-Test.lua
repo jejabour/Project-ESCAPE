@@ -77,9 +77,9 @@ function gmSetScenario4()
     TraineeShip:commandDock(central_command)
 
     TraineeShip:addToShipLog("Our communications crew has picked up a distress signal "
-    .. "from a docking station in quadrant H5. However, qe cannot confirm the faction "
-    .. "of this station, so we need you and your crew to fly there and confirm "
-    .. "the loyalties of this station. Be warned of tricks from the Exuari.", "yellow")
+    .. "from a station in quadrant H5. However, we have detected Exuari ships approaching "
+    .. "this station quickly, so we need you and your crew to fly there and protect "
+    .. "the independent station.", "yellow")
 
     UnknownDock = SpaceStation():setTemplate("Medium Station"):setFaction("Kraylor"):setScanned(false)
     UknownShip = CpuShip():setTemplate("Phobos T3"):setFaction("Kraylor"):setPosition(21000, 11000)
