@@ -9,7 +9,7 @@
 
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "Scenario4      +", gmScenario4))
+    addGMFunction(_("buttonGM", "Scenario4      +"), gmScenario4)
     addGMFunction(_("buttonGM", "Alert Level         +"),gmAlertLevel)
     addGMFunction(_("buttonGM", "Extra Commands      +"), gmUsefulCommmands)
 end
@@ -20,6 +20,74 @@ function gmAlertLevel()
     addGMFunction(_("buttonGM", "Normal"),gmAlertNormal)
     addGMFunction(_("buttonGM", "Yellow"),gmAlertYellow)
     addGMFunction(_("buttonGM", "Red"),gmAlertRed)
+end
+
+
+--- Scenario 4 Commands
+function gmScenario4()
+    clearGMFunctions() -- Clear the menu
+    addGMFunction(_("buttonGM", "Scenario 4 -"),gmMainMenu)
+    addGMFunction(_("buttonGM", "SendCommand"),gmScenario4_1)
+    addGMFunction(_("buttonGM", "SendCommand2"),gmScenario4_2)
+    addGMFunction(_("buttonGM", "Set Mission"),gmSetScenario4)
+
+
+end
+
+
+function gmUsefulCommmands()
+    clearGMFunctions() -- Clear the menu
+    addGMFunction(_("buttonGM", "Useful Commands -"),gmMainMenu)
+    addGMFunction(_("buttonGM", "Create CC"),gmCreateCentralCommand)
+    addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
+
+end
+
+
+-- ##########################################################################
+-- ## Scenario 4 ##
+-- ##########################################################################
+
+function gmScenario4_1()
+    clearGMFunctions()
+    gmMainMenu()
+
+    
+end
+
+function gmScenario4_2()
+    clearGMFunctions()
+    gmMainMenu()
+
+end
+
+-- ##########################
+-- SET SCENARIO
+-- ##########################
+
+function gmSetScenario4()
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+
+    -- Create the main ship for the trainees.
+    TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+    TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
+    TraineeShip:setRotation(180) -- make sure it's facing away from station
+    TraineeShip:commandDock(central_command)
+
+    TraineeShip:addToShipLog("Our communications crew has picked up a distress signal "
+    .. "from a docking station in quadrant H5. However, qe cannot confirm the faction "
+    .. "of this station, so we need you and your crew to fly there and confirm "
+    .. "the loyalties of this station. Be warned of tricks from the Exuari.", "yellow")
+
+    UnknownDock = SpaceStation():setTemplate("Medium Station"):setFaction("Kraylor"):setScanned(false)
+    UknownShip = CpuShip():setTemplate("Phobos T3"):setFaction("Kraylor"):setPosition(21000, 11000)
+    KnownShip = CpuShip():setTemplate("MT52 Hornet"):setFaction("Exuari"):setPosition(19000, 9000)
+    -- UnknownDock:setPosition(10000,53000):setCallSign("Distress!")
+    UnknownDock:setPosition(20000,10000):setCallSign("Distress!")
+
+
 end
 
 -- ##########################################################################
@@ -125,4 +193,22 @@ function init()
     placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 2000)
     placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 2000)
 
+end
+
+--- Place objects randomly in a rough line
+-- Distribute a `number` of random `object_type` objects in a line from point
+-- x1,y1 to x2,y2, with a random distance up to `random_amount` between them.
+function placeRandom(object_type, number, x1, y1, x2, y2, random_amount)
+    for n = 1, number do
+        local f = random(0, 1)
+        local x = x1 + (x2 - x1) * f
+        local y = y1 + (y2 - y1) * f
+
+        local r = random(0, 360)
+        local distance = random(0, random_amount)
+        x = x + math.cos(r / 180 * math.pi) * distance
+        y = y + math.sin(r / 180 * math.pi) * distance
+
+        object_type():setPosition(x, y)
+    end
 end
