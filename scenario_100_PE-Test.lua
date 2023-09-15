@@ -83,6 +83,7 @@ function gmSetScenario4()
 
     UnknownDock = SpaceStation():setTemplate("Medium Station"):setFaction("Kraylor"):setScanned(false)
     UknownShip = CpuShip():setTemplate("Phobos T3"):setFaction("Kraylor"):setPosition(21000, 11000)
+    HumanShip = CpuShip():setTemplate("MT52 Hornet"):setFaction("Human Navy"):setPosition(21000,11500)
     KnownShip = CpuShip():setTemplate("MT52 Hornet"):setFaction("Exuari"):setPosition(19000, 9000)
     -- UnknownDock:setPosition(10000,53000):setCallSign("Distress!")
     UnknownDock:setPosition(20000,10000):setCallSign("Distress!")
