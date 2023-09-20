@@ -81,9 +81,26 @@ function gmSetScenario4()
     .. "this station quickly, so we need you and your crew to fly there and protect "
     .. "the independent station.", "yellow")
 
-    UnknownDock = SpaceStation():setTemplate("Medium Station"):setFaction("Kraylor"):setScanned(false)
-    UknownShip = CpuShip():setTemplate("Phobos T3"):setFaction("Kraylor"):setPosition(21000, 11000)
-    KnownShip = CpuShip():setTemplate("MT52 Hornet"):setFaction("Exuari"):setPosition(19000, 9000)
+    -- UnknownDock = SpaceStation():setTemplate("Medium Station"):setFaction("Kraylor"):setScanned(false)
+    TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(47589, -26790):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(40112, -23993):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip2 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip3 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(49352, -16801):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(45414, -23553):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(49966, -27447):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+   
+
+    -- In relation to Human Navy{
+    
+        -- Good Guys [USN, TSN, CUF, Human Navy]
+
+        -- Neutral [Arlenians, Independent]
+
+        -- Bad Guys [Exuari, Ktlitans, Kraylor, Ghosts]
+    
+    -- }
+
     -- UnknownDock:setPosition(10000,53000):setCallSign("Distress!")
     UnknownDock:setPosition(20000,10000):setCallSign("Distress!")
 
@@ -193,7 +210,108 @@ function init()
     placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 2000)
     placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 2000)
 
+    mission_state = 1
+
 end
+
+function update(delta)
+    
+    if not TraineeShip:isValid() then
+        victory("Exuari")
+
+    end
+
+    -- Mission State 1 is set in the init function. Next state occurs when the TargetShip, the Kraylor ship, is destroyed
+    if mission_state == 1  and not TargetShip:isValid() then
+        
+        -- Create a supply drop where the targetship was
+        transport_drop = SupplyDrop():setFaction("Human Navy"):setPosition(47589, -26790)
+
+        -- Send a comm from central command
+        central_command:sendCommsMessage(TraineeShip,("The supply drop has fallen out of the Kraylor transport. Grab it, and return to base."))
+    
+        -- set mission_state to 2
+        mission_state = 2
+        
+    end
+
+    -- trigger next events when the supply drop is picked up.
+    if mission_state == 2 and not transport_drop:isValid() then
+
+        -- message from command saying Exuari appeared next to trainees, and central command
+        central_command:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
+        Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
+
+        -- Spawn two enemies near the trainees
+        ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(53328, -27216):orderAttack(TraineeShip):setScanned(true)
+        ExShip6 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
+
+        -- spawn three by central command, but they're set to idle
+        ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle():setScanned(true)
+        ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle():setScanned(true)
+        ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
+
+        -- spawn two weak and one decent friendly ships by command, set to idle
+        NavyShip3 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true)
+        NavyShip4 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(24134, 17232):orderIdle():setScanned(true)
+        NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true)
+
+
+        mission_state = 3
+
+    end
+
+    if mission_state == 3 then
+
+        -- Trigger when the trainees are near central command. "Activate" the cpu ships
+        if distance(TraineeShip, central_command) < 7500 then
+            ExShip7:orderRoaming()
+            ExShip8:orderRoaming()
+            ExShip9:orderRoaming()
+            NavyShip3:orderDefendTarget(central_command)
+            NavyShip4:orderDefendTarget(central_command)
+            NavyShip5:orderDefendTarget(central_command)
+
+            mission_state = 4
+
+        end
+
+    end
+
+    if mission_state == 4 then
+
+        -- the idea is that if the trainees left the two back there, then they'll both appear by central command when they're destroyed one ship here
+        if not ExShip7:isValid() or not ExShip8:isValid() or not ExShip9:isValid() then
+           
+            if ExShip5:isValid() then
+                ExShip5:setPosition(28824, 12817)
+            end
+
+            if ExShip6:isValid() then
+                ExShip6:setPosition(28957, 14802)
+            end
+
+            mission_state = 5
+
+        end
+
+        -- binary seqrch, sequential, merge, quick sort, stability, inplace, knoiw recognize if expression is done iteratively or recursive form
+    
+    end
+    
+    
+    
+    
+    
+    -- Intentionally blank
+
+    -- GM will manage alert levels, so this will reset it constantly to what
+    -- the GM has set it to
+
+    
+    TraineeShip:commandSetAlertLevel(alertLevel)
+end
+
 
 --- Place objects randomly in a rough line
 -- Distribute a `number` of random `object_type` objects in a line from point
@@ -211,4 +329,12 @@ function placeRandom(object_type, number, x1, y1, x2, y2, random_amount)
 
         object_type():setPosition(x, y)
     end
+end
+
+--- Return the distance between two objects.
+function distance(obj1, obj2)
+    local x1, y1 = obj1:getPosition()
+    local x2, y2 = obj2:getPosition()
+    local xd, yd = (x1 - x2), (y1 - y2)
+    return math.sqrt(xd * xd + yd * yd)
 end
