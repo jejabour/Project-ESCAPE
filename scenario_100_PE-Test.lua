@@ -27,8 +27,11 @@ end
 function gmScenario4()
     clearGMFunctions() -- Clear the menu
     addGMFunction(_("buttonGM", "Scenario 4 -"),gmMainMenu)
-    addGMFunction(_("buttonGM", "SendCommand"),gmScenario4_1)
-    addGMFunction(_("buttonGM", "SendCommand2"),gmScenario4_2)
+    addGMFunction(_("buttonGM", "Grab Drop"),gmScenario4_1)
+    addGMFunction(_("buttonGM", "Under Attack"),gmScenario4_2)
+    addGMFunction(_("buttonGM", "Enemy Chase"),gmScenario4_Chase)
+    addGMFunction(_("buttonGM", "CC Lost"),gmScenario4_CC_Lost)
+    addGMFunction(_("buttonGM", "Victory"),gmScenario4_Victory)
     addGMFunction(_("buttonGM", "Set Mission"),gmSetScenario4)
 
 
@@ -52,58 +55,55 @@ function gmScenario4_1()
     clearGMFunctions()
     gmMainMenu()
 
-    
+    central_command:sendCommsMessage(TraineeShip,("The supply drop has fallen out of the Kraylor transport. Grab it, and return to base."))
+
 end
 
 function gmScenario4_2()
     clearGMFunctions()
     gmMainMenu()
 
+    central_command:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
+        Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
+
 end
+
+
+function gmScenario4_Chase()
+    clearGMFunctions()
+    gmMainMenu()
+
+    central_command:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
+
+
+end
+
+function gmScenario4_CC_Lost()
+    clearGMFunctions()
+    gmMainMenu()
+
+    central_command:sendCommsMessage(TraineeShip,("Central Command has been destroyed. Report for debriefing."))
+
+
+
+end
+
+function gmScenario4_Victory()
+    clearGMFunctions()
+    gmMainMenu()
+
+    central_command:sendCommsMessage(TraineeShip,([[Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing.]]))
+
+end
+
 
 -- ##########################
 -- SET SCENARIO
 -- ##########################
 
 function gmSetScenario4()
-    -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
-
-    -- Create the main ship for the trainees.
-    TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-    TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
-    TraineeShip:setRotation(180) -- make sure it's facing away from station
-    TraineeShip:commandDock(central_command)
-
-    TraineeShip:addToShipLog("Our communications crew has picked up a distress signal "
-    .. "from a station in quadrant H5. However, we have detected Exuari ships approaching "
-    .. "this station quickly, so we need you and your crew to fly there and protect "
-    .. "the independent station.", "yellow")
-
-    -- UnknownDock = SpaceStation():setTemplate("Medium Station"):setFaction("Kraylor"):setScanned(false)
-    TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(47589, -26790):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(40112, -23993):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    ExShip2 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    ExShip3 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(49352, -16801):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(45414, -23553):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(49966, -27447):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
-   
-
-    -- In relation to Human Navy{
-    
-        -- Good Guys [USN, TSN, CUF, Human Navy]
-
-        -- Neutral [Arlenians, Independent]
-
-        -- Bad Guys [Exuari, Ktlitans, Kraylor, Ghosts]
-    
-    -- }
-
-    -- UnknownDock:setPosition(10000,53000):setCallSign("Distress!")
-    UnknownDock:setPosition(20000,10000):setCallSign("Distress!")
-
 
 end
 
@@ -210,16 +210,53 @@ function init()
     placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 2000)
     placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 2000)
 
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+
+    -- Create the main ship for the trainees.
+    TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+    TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
+    TraineeShip:setRotation(180) -- make sure it's facing away from station
+    TraineeShip:commandDock(central_command)
+
+    TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
+    .. " but were ambushed by Exuari in sector G7. It seems all the ships in the skirmish have been abandoned, but "
+    .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
+    .. "Your Science officer will be able to determine the factions of any unknown ships.", "white")
+
+    
+    TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(47589, -26790):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(40112, -23993):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip2 = CpuShip():setTemplate("Battlestation"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip3 = CpuShip():setTemplate("Blade"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(49352, -16801):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(45414, -23553):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(49966, -27447):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+    
+
+    -- In relation to Human Navy{
+    
+        -- Good Guys [USN, TSN, CUF, Human Navy]
+
+        -- Neutral [Arlenians, Independent]
+
+        -- Bad Guys [Exuari, Ktlitans, Kraylor, Ghosts]
+    
+    -- }
+
     mission_state = 1
 
 end
 
 function update(delta)
-    
-    if not TraineeShip:isValid() then
-        victory("Exuari")
+
+    if TraineeShip:isDocked(central_command) then
+        TraineeShip:setWeaponStorage("homing", 12):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
 
     end
+    
 
     -- Mission State 1 is set in the init function. Next state occurs when the TargetShip, the Kraylor ship, is destroyed
     if mission_state == 1  and not TargetShip:isValid() then
@@ -244,17 +281,17 @@ function update(delta)
 
         -- Spawn two enemies near the trainees
         ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(53328, -27216):orderAttack(TraineeShip):setScanned(true)
-        ExShip6 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
+        ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
 
         -- spawn three by central command, but they're set to idle
         ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle():setScanned(true)
         ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle():setScanned(true)
-        ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
+        -- ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
 
         -- spawn two weak and one decent friendly ships by command, set to idle
-        NavyShip3 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true)
-        NavyShip4 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(24134, 17232):orderIdle():setScanned(true)
-        NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true)
+        NavyShip3 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
+        -- NavyShip4 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(24134, 17232):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
+        NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true):setWeaponStorageMax("homing", 12):setWeaponStorage("homing", 12)
 
 
         mission_state = 3
@@ -267,9 +304,9 @@ function update(delta)
         if distance(TraineeShip, central_command) < 7500 then
             ExShip7:orderRoaming()
             ExShip8:orderRoaming()
-            ExShip9:orderRoaming()
+            -- ExShip9:orderRoaming()
             NavyShip3:orderDefendTarget(central_command)
-            NavyShip4:orderDefendTarget(central_command)
+            -- NavyShip4:orderDefendTarget(central_command)
             NavyShip5:orderDefendTarget(central_command)
 
             mission_state = 4
@@ -280,8 +317,9 @@ function update(delta)
 
     if mission_state == 4 then
 
+        -- or not ExShip9:isValid()
         -- the idea is that if the trainees left the two back there, then they'll both appear by central command when they're destroyed one ship here
-        if not ExShip7:isValid() or not ExShip8:isValid() or not ExShip9:isValid() then
+        if not ExShip7:isValid() or not ExShip8:isValid()  then
            
             if ExShip5:isValid() then
                 ExShip5:setPosition(28824, 12817)
@@ -295,15 +333,35 @@ function update(delta)
 
         end
 
-        -- binary seqrch, sequential, merge, quick sort, stability, inplace, knoiw recognize if expression is done iteratively or recursive form
+        -- binary search, sequential, merge, quick sort, stability, inplace, know how to recognize if expression is done iteratively or recursive form
     
     end
+
+    if mission_state == 5 then
+
+
+        if not ExShip5:isValid() and not ExShip6:isValid() and not ExShip7:isValid() and not ExShip8:isValid() then
+            mission_state = 6
+        end
+
+        -- and not ExShip9:isValid()
+
+
+
+    end
+
+    if mission_state == 6 then
     
+        if TraineeShip:isDocked(central_command) then
+        
+            central_command:sendCommsMessage(TraineeShip,([[Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing.]]))
+            
+            victory("Human Navy")
+        end
+
     
-    
-    
-    
-    -- Intentionally blank
+    end
+
 
     -- GM will manage alert levels, so this will reset it constantly to what
     -- the GM has set it to
