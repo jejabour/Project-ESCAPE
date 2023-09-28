@@ -102,8 +102,6 @@ function gmSendMission()
     gmMainMenu() -- Return to main screen
 
 
-
-
     update_Relay = ("You can check the logs by tapping the long icon "
     .. "on the bottom of the screen, and close it by tapping anywhere "
     .. "in the message")
@@ -111,20 +109,36 @@ function gmSendMission()
 
     TraineeShip:addToShipLog("We've picked up a distress signal in sector E5. "
     .. "Fly there, and see what's going on. "
-    .. "Make sure you keep your crew up to date with information, as you are the  "
+    .. "Make sure you keep your crew up to date with information, as you are the "
     .. "only one who receives information. "
     .. "You can close this message by tapping anywhere in the message window.",
     "white")
 
-    TraineeShip:addToShipLog("You can  "
-    .. "Fly there, and see what's going on. "
-    .. "Make sure you keep your crew up to date with information, as you are the  "
-    .. "only one who receives information. "
-    .. "You can close this message by tapping anywhere in the message window.",
-    "white")
+    TraineeShip:addToShipLog("You can send out probes to reveal areas of interest "
+    .. "by tapping 'Launch Probe', then tapping a location on the map. " 
+    .. "Your probe count is refilled upon docking. ",
+    "yellow")
 
-    spawn_station = SpaceStation():setTemplate("Small Station"):setFaction("Independent")
-    spawn_station:setPosition(cur_locx + 300, cur_locy - 400)
+    TraineeShip:addToShipLog("You can also place waypoints at any location. "
+    .. "These will give your crewmates an indicator as to what direction you " 
+    .. "want them to go in. ",
+    "yellow")
+
+    exampleStation = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy"):setCommsScript("")
+    exampleStation:setPosition(9444, -7000)
+
+    if distance(TraineeShip, exampleStation) < 6000 then
+        
+        TraineeShip:addToShipLog("This is a test. ", "yellow")
+        
+        exampleStation:sendCommsMessage(TraineeShip, "Thank you for responding to our distress signal. Now prepare to die!")
+
+
+
+        ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(9500, -7100):orderAttack(TraineeShip):setScanned(true)
+    end
+    
+    -- if spawn_station:isFriendly()
 
 
 end
@@ -140,6 +154,7 @@ function gmSpawnStation()
     cur_locx, cur_locy = TraineeShip:getPosition()
     spawn_station = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
     spawn_station:setPosition(cur_locx + 300, cur_locy - 400)
+
     
 
 end
@@ -204,6 +219,8 @@ function update(delta)
     end
 
     TraineeShip:commandSetAlertLevel(alertLevel)
+
+    -- spawn_station:setCommsScript("You're a stinky butt")
 
 end
 
