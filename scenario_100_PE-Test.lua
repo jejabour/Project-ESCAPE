@@ -48,7 +48,7 @@ end
 
 
 -- ##########################################################################
--- ## Scenario 4 ##
+-- ## Scenario 4 UNDER CONSTRUCTION ##
 -- ##########################################################################
 
 function gmScenario4_1()
@@ -176,6 +176,10 @@ end
 
 
 
+-- ##########################################################################
+-- ## Initial Function ##
+-- ##########################################################################
+
 function init()
     -- Setup GM menu
     gmMainMenu()
@@ -206,7 +210,10 @@ function init()
     Nebula():setPosition(3750, 31250)
     Nebula():setPosition(-39500, 18700)
 
-    -- Create 50 Asteroids
+--- Place objects randomly in a rough line
+-- Distribute a `number` of random `object_type` objects in a line from point
+-- x1,y1 to x2,y2, with a random distance up to `random_amount` between them.
+-- Create 50 Asteroids
     placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 2000)
     placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 2000)
 
