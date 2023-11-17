@@ -1,6 +1,6 @@
--- Name: PE FUNNEL
+-- Name: Scenario 5: FUNNEL
 -- Description: This is a scenario about funneling the group
--- Type: Mission
+-- Type: Project ESCAPE
 
 -- ##########################################################################
 -- ## NOTES ##
@@ -233,7 +233,7 @@ function init()
     alertLevel = "normal"
 
     -- Create the command station
-    central_command = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
+    central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
     central_command:setPosition(23500, 16100):setCallSign("Central Command")
 
     -- Nebula that hide the enemy station.
@@ -283,8 +283,8 @@ function init()
 
     -- placeRandom(Asteroid, 400, 500, 63555, 40000, 58468, 15000)
     -- placeRandom(Asteroid, 700, 70000, 33555, 98000, 0, 15000)
-    placeRandom(Asteroid, 300, -7500, 31000, 6500, 100000, 20000)
-    placeRandom(Asteroid, 300, 60000, 26229, 45000, 100000, 20000)
+    placeRandom(Asteroid, 300, -7500, 31000, 6500, 100000, 14000)
+    placeRandom(Asteroid, 300, 60000, 26229, 45000, 100000, 15000)
 
 
 
@@ -324,7 +324,7 @@ function init()
     NavyShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(19254, 23354):setScanned(true)
     NavyShip2 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(29786, 23184):setScanned(true)
 
-    NavyStation = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy"):setPosition(12423, 123339):setScanned(true)
+    NavyStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setPosition(12423, 123339):setScanned(true)
 
     table.insert(enemyList, ExShip1)
     table.insert(enemyList, ExShip2)
@@ -337,8 +337,10 @@ function init()
     table.insert(friendList, NavyShip2)
     table.insert(friendList, NavyStation)
 
-    mission_state = 1
+    mission_state = 0
+    
 
+    -- addGMMessage("Going to mission_state 1")
 
 end
 
@@ -350,10 +352,48 @@ function update(delta)
 
     end
 
-    if mission_state == 1 and not TargetShip:isDocked() then
+    if mission_state == 0 and TraineeShip:isDocked(central_command) then
+        mission_state = 1
+        addGMMessage("moving to Mission state 1")
+    end
+
+    if mission_state == 1 and not TraineeShip:isDocked(central_command) then
+       
         NavyShip1:orderFlyTowards(30326, 72195)
         NavyShip2:orderFlyTowards(21627, 74268)
+        ExShip1:orderRoaming()
+        ExShip2:orderRoaming()
+        ExShip3:orderRoaming()
+        ExShip4:orderRoaming()
+        ExShip5:orderRoaming()
 
+        mission_state = 2
+        addGMMessage("moving to Mission state 2")
+        
+
+    end
+
+
+    if mission_state == 2 and TraineeShip:isDocked(NavyStation) then
+        central_command:sendCommsMessage(TraineeShip,("Good job retrieving the supplies. Make your way back to Central Command."))
+        addGMMessage("Moving to mission state 3")
+        mission_state = 3
+    end
+
+    if mission_state == 3 and TraineeShip:isDocked(central_command) then
+
+        message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
+
+        -- Display a mesasage on the main screen for 2 minutes
+        globalMessage(message_victory, 120)
+    
+        -- Display a popup message on each players screen.
+        -- addCustomMessage(role, name of the string???, string)
+        TraineeShip:addCustomMessage("helms", "helms_message_victory", message_victory)
+        TraineeShip:addCustomMessage("engineering", "engineering_message_victory", message_victory)
+        TraineeShip:addCustomMessage("weapons", "weapon_message_victory", message_victory)
+        TraineeShip:addCustomMessage("science", "science_message_victory", message_victory)
+        TraineeShip:addCustomMessage("relay", "relay_message_victory", message_victory)
     end
 
 

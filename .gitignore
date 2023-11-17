@@ -4,8 +4,9 @@
 # Except
 !.gitignore
 !README.md
-!scenario_71_projectESCAPE.lua
-!scenario_100_PE_AMBUSH.lua
-!scenario_101_PE_TUTORIAL.lua
-!scenario_102_PE_FUNNEL.lua
-!scenario_103_PE_COLLABORATION.lua
+!scenario_100_PE_TUTORIAL.lua
+!scenario_101_projectESCAPE.lua
+!scenario_102_PE_AMBUSH.lua
+!scenario_103_PE_FUNNEL.lua
+!scenario_104_PE_COLLABORATION.lua
+

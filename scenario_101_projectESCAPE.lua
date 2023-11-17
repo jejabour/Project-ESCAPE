@@ -1,6 +1,6 @@
--- Name: Project ESCAPE
+-- Name: Scenario 1-3
 -- Description: A collection of scenario's designed to enforce leadership and Extreme Ownership principles
--- Type: Mission
+-- Type: Project ESCAPE
 
 -- Scenario
 -- @script scenario_71_projectESCAPE
@@ -648,7 +648,7 @@ function gmCreateCentralCommand()
     -- Home = setPosition(23500, 16100)
 
     if not central_command:isValid() then
-        central_command = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
+        central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
         central_command:setPosition(23500, 16100):setCallSign("Central Command")
 
     end

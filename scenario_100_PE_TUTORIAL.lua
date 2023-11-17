@@ -1,6 +1,6 @@
--- Name: PE Tutorial
+-- Name: Tutorial
 -- Description: This is a tutorial spotlighting each officer's roles
--- Type: Tutorial
+-- Type: Project ESCAPE
 
 
 -- #####################################################################

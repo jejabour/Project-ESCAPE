@@ -1,6 +1,6 @@
--- Name: PE AMBUSH
+-- Name: Scenario 4: AMBUSH
 -- Description: A Kraylor ship carrying vital information was being escorted by the Human Navy when they were attacked by Exuari. All ships were abandoned in the skirmish. It's up to the players to navigate to the battle location, find which ship was the Kraylor ship, and retrieve the intel.
--- Type: Mission
+-- Type: Project ESCAPE
 
 
 -- ##########################################################################
@@ -318,7 +318,7 @@ function init()
     alertLevel = "normal"
 
     -- Create the command station
-    central_command = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
+    central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
     central_command:setPosition(23500, 16100):setCallSign("Central Command")
 
     -- Nebula that hide the enemy station.
