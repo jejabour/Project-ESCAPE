@@ -9,7 +9,7 @@
 
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "Scenario4      +"), gmScenario4)
+    addGMFunction(_("buttonGM", "Ambush      +"), gmScenario4)
     addGMFunction(_("buttonGM", "Alert Level         +"),gmAlertLevel)
     addGMFunction(_("buttonGM", "Extra Commands      +"), gmUsefulCommmands)
 end
@@ -27,11 +27,12 @@ end
 function gmScenario4()
     clearGMFunctions() -- Clear the menu
     addGMFunction(_("buttonGM", "Scenario 4 -"),gmMainMenu)
-    addGMFunction(_("buttonGM", "Grab Drop"),gmScenario4_1)
-    addGMFunction(_("buttonGM", "Under Attack"),gmScenario4_2)
-    addGMFunction(_("buttonGM", "Enemy Chase"),gmScenario4_Chase)
-    addGMFunction(_("buttonGM", "CC Lost"),gmScenario4_CC_Lost)
-    addGMFunction(_("buttonGM", "Victory"),gmScenario4_Victory)
+    addGMFunction(_("buttonGM", "Drop Intel"),gmAmbush_1)
+    addGMFunction(_("buttonGM", "Spawn Enemies"),gmAmbush_2)
+    addGMFunction(_("buttonGM", "Activate Enemies"),gmAmbush_3)
+    addGMFunction(_("buttonGM", "Bring Enemies"),gmAmbush_4)
+    addGMFunction(_("buttonGM", "Defeat"),gmDefeat)
+    addGMFunction(_("buttonGM", "Victory"),gmVictory)
     addGMFunction(_("buttonGM", "Set Mission"),gmSetScenario4)
 
 
@@ -51,48 +52,137 @@ end
 -- ## Scenario 4 UNDER CONSTRUCTION ##
 -- ##########################################################################
 
-function gmScenario4_1()
+-- Destroys the Kraylor ship, creates a supply drop, and sends a message to Relay
+function gmAmbush_1()
     clearGMFunctions()
     gmMainMenu()
 
     central_command:sendCommsMessage(TraineeShip,("The supply drop has fallen out of the Kraylor transport. Grab it, and return to base."))
 
+    TargetShip:destroy()
+
+    transport_drop = SupplyDrop():setFaction("Human Navy"):setPosition(47589, -26790)
+
+    mission_state = 2
+
 end
 
-function gmScenario4_2()
+-- Sends the comm message to Relay saying Exuari ships appear near the player and CC
+-- Spawns those ships, and two friendlies near CC. All ships by CC are 'frozen' however
+function gmAmbush_2()
     clearGMFunctions()
     gmMainMenu()
 
+    -- message from command saying Exuari appeared next to trainees, and central command
     central_command:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
-        Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
+    Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
+
+    -- Spawn two enemies near the trainees
+    ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(53328, -27216):orderAttack(TraineeShip):setScanned(true)
+    ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
+
+    -- spawn three by central command, but they're set to idle
+    ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle():setScanned(true)
+    ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle():setScanned(true)
+    -- ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
+
+    -- spawn two weak and one decent friendly ships by command, set to idle
+    NavyShip3 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
+    -- NavyShip4 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(24134, 17232):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
+    NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true):setWeaponStorageMax("homing", 12):setWeaponStorage("homing", 12)
+
+    table.insert(enemyList, ExShip5)
+    table.insert(enemyList, ExShip6)
+    table.insert(enemyList, ExShip7)
+    table.insert(enemyList, ExShip8)
+    table.insert(friendList, NavyShip3)
+    table.insert(friendList, NavyShip5)
+
+    mission_state = 3
 
 end
 
-
-function gmScenario4_Chase()
+-- 'Activates' the ships near CC, takes them off idle
+function gmAmbush_3()
     clearGMFunctions()
     gmMainMenu()
+
+    
+    ExShip7:orderRoaming()
+    ExShip8:orderRoaming()
+    -- ExShip9:orderRoaming()
+    NavyShip3:orderDefendTarget(central_command)
+    -- NavyShip4:orderDefendTarget(central_command)
+    NavyShip5:orderDefendTarget(central_command)
+
+    mission_state = 4
+
+
+
+end
+
+-- Brings the enemy ships from where the supply drop was to CC if they're still alive
+function gmAmbush_4()
+    clearGMFunctions()
+    gmMainMenu()
+
+
+    if ExShip5:isValid() then
+        ExShip5:setPosition(28824, 12817)
+    end
+
+    if ExShip6:isValid() then
+        ExShip6:setPosition(28957, 14802)
+    end
+
+    mission_state = 5
 
     central_command:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
 
-
 end
 
-function gmScenario4_CC_Lost()
+
+function gmDefeat()
     clearGMFunctions()
     gmMainMenu()
 
-    central_command:sendCommsMessage(TraineeShip,("Central Command has been destroyed. Report for debriefing."))
+    message_defeat = "The mission has been lost. Report for debriefing."
 
+    globalMessage(message_defeat)
 
+    -- Display a mesasage on the main screen for 2 minutes
+    globalMessage(message_defeat, 120)
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("helms", "helms_message_defeat", message_defeat)
+    TraineeShip:addCustomMessage("engineering", "engineering_message_defeat", message_defeat)
+    TraineeShip:addCustomMessage("weapons", "weapon_message_defeat", message_defeat)
+    TraineeShip:addCustomMessage("science", "science_message_defeat", message_defeat)
+    TraineeShip:addCustomMessage("relay", "relay_message_defeat", message_defeat)
+
+    -- victory("Exuari")
 
 end
 
-function gmScenario4_Victory()
+function gmVictory()
     clearGMFunctions()
     gmMainMenu()
 
-    central_command:sendCommsMessage(TraineeShip,([[Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing.]]))
+    message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
+
+    -- Display a mesasage on the main screen for 2 minutes
+    globalMessage(message_victory, 120)
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("helms", "helms_message_victory", message_victory)
+    TraineeShip:addCustomMessage("engineering", "engineering_message_victory", message_victory)
+    TraineeShip:addCustomMessage("weapons", "weapon_message_victory", message_victory)
+    TraineeShip:addCustomMessage("science", "science_message_victory", message_victory)
+    TraineeShip:addCustomMessage("relay", "relay_message_victory", message_victory)
+
+    -- victory("Human Navy")
 
 end
 
@@ -104,6 +194,43 @@ end
 function gmSetScenario4()
     clearGMFunctions()
     gmMainMenu()
+
+    TraineeShip = {}
+    enemyList = {}
+    friendList = {}
+    waveNumber = 0
+    alertLevel = "normal"
+
+     -- Create the main ship for the trainees.
+     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+     TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
+     TraineeShip:setRotation(180) -- make sure it's facing away from station
+     TraineeShip:commandDock(central_command)
+ 
+     TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
+     .. " but were ambushed by Exuari in sector G7. It seems all the ships in the skirmish have been abandoned, but "
+     .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
+     .. "Your Science officer will be able to determine the factions of any unknown ships.", "white")
+ 
+     
+     TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(47589, -26790):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(40112, -23993):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     ExShip2 = CpuShip():setTemplate("Battlestation"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     ExShip3 = CpuShip():setTemplate("Blade"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(49352, -16801):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(45414, -23553):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(49966, -27447):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+     
+ 
+     table.insert(enemyList, ExShip1)
+     table.insert(enemyList, ExShip2)
+     table.insert(enemyList, ExShip3)
+     table.insert(enemyList, ExShip4)
+     table.insert(enemyList, TargetShip)
+     table.insert(friendList, NavyShip1)
+     table.insert(friendList, NavyShip2)
+
+    mission_state = 1
 
 end
 
@@ -156,7 +283,6 @@ function gmClearMission()
 
     TraineeShip:destroy()
 
-    waveNumber = 0
 
     alertLevel = "normal"
 
@@ -242,6 +368,14 @@ function init()
     NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(49966, -27447):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
     
 
+    table.insert(enemyList, ExShip1)
+    table.insert(enemyList, ExShip2)
+    table.insert(enemyList, ExShip3)
+    table.insert(enemyList, ExShip4)
+    table.insert(enemyList, TargetShip)
+    table.insert(friendList, NavyShip1)
+    table.insert(friendList, NavyShip2)
+
     -- In relation to Human Navy{
     
         -- Good Guys [USN, TSN, CUF, Human Navy]
@@ -280,6 +414,8 @@ function update(delta)
     end
 
     -- trigger next events when the supply drop is picked up.
+    -- Spawn 2 enemy ships near the trainees
+    -- Spawn 3 enemy ships and 2 friendly ships by Central Command, but they're idle
     if mission_state == 2 and not transport_drop:isValid() then
 
         -- message from command saying Exuari appeared next to trainees, and central command
@@ -293,18 +429,26 @@ function update(delta)
         -- spawn three by central command, but they're set to idle
         ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle():setScanned(true)
         ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle():setScanned(true)
-        -- ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
+        ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
 
         -- spawn two weak and one decent friendly ships by command, set to idle
         NavyShip3 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
         -- NavyShip4 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(24134, 17232):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
         NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true):setWeaponStorageMax("homing", 12):setWeaponStorage("homing", 12)
 
+        table.insert(enemyList, ExShip5)
+        table.insert(enemyList, ExShip6)
+        table.insert(enemyList, ExShip7)
+        table.insert(enemyList, ExShip8)
+        table.insert(enemyList, ExShip9)
+        table.insert(friendList, NavyShip3)
+        table.insert(friendList, NavyShip5)
 
         mission_state = 3
 
     end
 
+    -- Activates the ships near Central Command
     if mission_state == 3 then
 
         -- Trigger when the trainees are near central command. "Activate" the cpu ships
@@ -322,6 +466,7 @@ function update(delta)
 
     end
 
+    -- 
     if mission_state == 4 then
 
         -- or not ExShip9:isValid()
