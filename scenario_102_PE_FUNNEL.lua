@@ -1,4 +1,4 @@
--- Name: PE MISSION 5
+-- Name: PE FUNNEL
 -- Description: This is a scenario about funneling the group
 -- Type: Mission
 

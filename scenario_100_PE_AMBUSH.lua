@@ -1,5 +1,5 @@
--- Name: PE Test Scenario
--- Description: This is a test scenario for testing various aspects of the game
+-- Name: PE AMBUSH
+-- Description: A Kraylor ship carrying vital information was being escorted by the Human Navy when they were attacked by Exuari. All ships were abandoned in the skirmish. It's up to the players to navigate to the battle location, find which ship was the Kraylor ship, and retrieve the intel.
 -- Type: Mission
 
 

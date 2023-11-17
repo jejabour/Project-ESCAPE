@@ -5,6 +5,7 @@
 !.gitignore
 !README.md
 !scenario_71_projectESCAPE.lua
-!scenario_100_PE-Test.lua
-!scenario_101_Tutorial.lua
-!scenario_102_MISSION5.lua
+!scenario_100_PE_AMBUSH.lua
+!scenario_101_PE_TUTORIAL.lua
+!scenario_102_PE_FUNNEL.lua
+!scenario_103_PE_COLLABORATION.lua
