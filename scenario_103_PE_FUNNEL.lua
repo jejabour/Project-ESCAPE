@@ -1,5 +1,5 @@
 -- Name: Scenario 5: FUNNEL
--- Description: This is a scenario about funneling the group
+-- Description: A wave of asteroids have appeared in the shape of a funnel. The team must navigate through the funnel, and some enemy ships, to find the friendly space station containing supplies, and return back to the base.
 -- Type: Project ESCAPE
 
 -- ##########################################################################
@@ -31,22 +31,22 @@
 
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "FUNNEL              +"), gmFUNNEL)
-    addGMFunction(_("buttonGM", "Alert Level         +"),gmAlertLevel)
-    addGMFunction(_("buttonGM", "Extra Commands +"), gmUsefulCommmands)
+    addGMFunction(_("buttonGM", "FUNNEL                    +"), gmFUNNEL)
+    addGMFunction(_("buttonGM", "Alert Level               +"),gmAlertLevel)
+    addGMFunction(_("buttonGM", "Extra Commands      +"), gmExtraCommmands)
 end
 
 function gmAlertLevel()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Alert level -"),gmMainMenu)
+    addGMFunction(_("buttonGM", "Alert level                -"),gmMainMenu)
     addGMFunction(_("buttonGM", "Normal"),gmAlertNormal)
     addGMFunction(_("buttonGM", "Yellow"),gmAlertYellow)
     addGMFunction(_("buttonGM", "Red"),gmAlertRed)
 end
 
-function gmUsefulCommmands()
+function gmExtraCommmands()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Useful Commands -"),gmMainMenu)
+    addGMFunction(_("buttonGM", "Extra Commands       -"),gmMainMenu)
     addGMFunction(_("buttonGM", "Create CC"),gmCreateCentralCommand)
     addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
 
@@ -56,7 +56,7 @@ end
 function gmFUNNEL()
     -- Clear and reset the menu
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "FUNNEL    -"), gmMainMenu)
+    addGMFunction(_("buttonGM", "FUNNEL                    -"), gmMainMenu)
     addGMFunction(_("buttonGM", "Start Moving"), gmFUNNEL_1)
     addGMFunction(_("buttonGM", "Return Home"), gmFUNNEL_2)
 
@@ -274,55 +274,61 @@ function init()
     .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return to Central Command. ", "white")
 
 
-
-
-
     --- THE FUNNEL
 
     -- placeRandom(Asteroid, 400, 500, 63555, 40000, 58468, 15000)
     -- placeRandom(Asteroid, 700, 70000, 33555, 98000, 0, 15000)
-    placeRandom(Asteroid, 300, -7500, 31000, 6500, 100000, 14000)
-    placeRandom(Asteroid, 300, 60000, 26229, 45000, 100000, 15000)
+    -- Left asteroid belt
+    placeRandom(Asteroid, 300, -7500, 28000, 2500, 90000, 14000)
+    -- Right asteroid belt
+    placeRandom(Asteroid, 300, 60000, 23229, 45000, 70000, 15000)
 
 
 
     -- Surrounding the docking station
-    placeRandom(Asteroid, 75, 9202, 109076, -4023, 146011, 4000)
-    placeRandom(Asteroid, 60, 4000, 142230, 42797, 100689, 4000)
+    -- Left side
+    placeRandom(Asteroid, 75, 6202, 89076, -4023, 116011, 4000)
+    -- Right side
+    placeRandom(Asteroid, 60, 6000, 112230, 42797, 70689, 4000)
 
 
     -- Place a ton of probes randomly throughout the asteroid belt
+    -- for n=1, <total num of things> do
+    --      local x = start_x + (end_x - start_x)
+    --      local distance = random(0, <distance they'll randomly stretch out>)
     for n=1, 45 do
         local f = random(0, 1)
         local x = 3500 + (50000 - 3500) * f
-        local y = 55000 + (90000 - 55000) * f
+        local y = 55000 + (80000 - 55000) * f
 
         local r = random(0, 360)
-        local distance = random(0, 50000)
+        local distance = random(0, 40000)
         x = x + math.cos(r / 180 * math.pi) * distance
         y = y + math.sin(r / 180 * math.pi) * distance
 
+        -- This command sets all these probes to the Human Navy, and sets the owner to the TraineeShip so the trainees can see what they see
         probe = ScanProbe():setPosition(x, y):setTarget(x, y):setFaction("Human Navy"):setOwner(TraineeShip):setLifetime(60 * 30)
 
     end
 
     --Place some enemies and good Guys
-
-    ExShip1 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(18427, 43827):setScanned(true)
+    ExShip1 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(17447, 36529):setScanned(true)
     ExShip2 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(35471, 44081):setScanned(true)
-    ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(30078, 47937):setScanned(true)
+    ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(26265, 51750):setScanned(true)
     ExShip4 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(25326, 71373):setScanned(true)
 
-    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(22215, 52416):setScanned(true)
+    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(19635, 86302):setScanned(true)
+
 
     ExShip6 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(30735, 61092):setScanned(true)
-
-    ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(24451, 57579):setScanned(true)
+    ExShip7 = CpuShip():setTemplate("Adder MK7"):setFaction("Exuari"):setPosition(14642, 70006):setScanned(true)
 
     NavyShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(19254, 23354):setScanned(true)
     NavyShip2 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(29786, 23184):setScanned(true)
+    NavyShip3 = CpuShip():setTemplate("Gunship"):setFaction("Human Navy"):setPosition(25071, 18662):setScanned(true):orderDefendTarget(central_command)
 
-    NavyStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setPosition(12423, 123339):setScanned(true)
+    -- setCanBeDestroyed makes it so this one can't be destroyed, cuz one of the ships just starts going at on activation
+    NavyStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setPosition(10571, 96869):setScanned(true):setCanBeDestroyed(false)
 
     table.insert(enemyList, ExShip1)
     table.insert(enemyList, ExShip2)
@@ -330,9 +336,11 @@ function init()
     table.insert(enemyList, ExShip4)
     table.insert(enemyList, ExShip5)
     table.insert(enemyList, ExShip6)
-    table.insert(enemyList, ExStation)
+    table.insert(enemyList, ExShip7)
+    
     table.insert(friendList, NavyShip1)
     table.insert(friendList, NavyShip2)
+    table.insert(friendList, NavyShip3)
     table.insert(friendList, NavyStation)
 
     mission_state = 0
@@ -344,20 +352,25 @@ end
 
 function update(delta)
 
-    if TraineeShip:isDocked(central_command) then
+    -- If the player is docked at Central Command, refill all their weapons and probes
+    if TraineeShip:isDocked(central_command) or TraineeShip:isDocked(NavyStation) then
         TraineeShip:setWeaponStorage("homing", 12):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
         TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
 
     end
 
+    -- If the player is docked and mission state is 0, move it to mission state 1. 
+    -- I was testing stuff and mission states are weird, and this worked so I'm leaving it
     if mission_state == 0 and TraineeShip:isDocked(central_command) then
         mission_state = 1
         -- addGMMessage("moving to Mission state 1")
     end
 
+    -- If the player is not docked at Central Command, order all the ships to "activate"
     if mission_state == 1 and not TraineeShip:isDocked(central_command) then
        
-        NavyShip1:orderFlyTowards(30326, 72195)
+        -- I told the friendly ships to move from where they spawn to just inside the funnel
+        NavyShip1:orderFlyTowards(17631, 65924)
         NavyShip2:orderFlyTowards(21627, 74268)
         ExShip1:orderRoaming()
         ExShip2:orderRoaming()
@@ -372,14 +385,17 @@ function update(delta)
     end
 
 
+    -- If the player docks at NavyStation, the target station, send Relay officer a message 
     if mission_state == 2 and TraineeShip:isDocked(NavyStation) then
         central_command:sendCommsMessage(TraineeShip,("Now that you've gotten the supplies, make your way back to Central Command."))
         -- addGMMessage("Moving to mission state 3")
         mission_state = 3
     end
 
+    -- If the TraineeShip docks at Central Command in mission state 3, send a Victory messages to everyone
     if mission_state == 3 and TraineeShip:isDocked(central_command) then
 
+        -- String message for everyone
         message_victory = "Good job, the supplies have been safely recovered. Return for mission debriefing."
 
         -- Display a mesasage on the main screen for 2 minutes
