@@ -31,9 +31,9 @@
 
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "Scenario5      +"), gmScenario4)
+    addGMFunction(_("buttonGM", "FUNNEL              +"), gmFUNNEL)
     addGMFunction(_("buttonGM", "Alert Level         +"),gmAlertLevel)
-    addGMFunction(_("buttonGM", "Extra Commands      +"), gmUsefulCommmands)
+    addGMFunction(_("buttonGM", "Extra Commands +"), gmUsefulCommmands)
 end
 
 function gmAlertLevel()
@@ -51,6 +51,52 @@ function gmUsefulCommmands()
     addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
 
 end
+
+-- FUNNEL missions
+function gmFUNNEL()
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+    addGMFunction(_("buttonGM", "FUNNEL    -"), gmMainMenu)
+    addGMFunction(_("buttonGM", "FUNNEL_1"), gmFUNNEL_1)
+    addGMFunction(_("buttonGM", "FUNNEL_2"), gmFUNNEL_2)
+    addGMFunction(_("buttonGM", "FUNNEL_3"), gmFUNNEL_3)
+
+
+end
+
+
+
+
+
+function gmFUNNEL_1()
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+
+
+end
+
+
+function gmFUNNEL_2()
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+
+
+end
+
+
+function gmFUNNEL_3()
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+
+
+end
+
+
+
 
 -- ##########################################################################
 -- ## GM Alert Level ##
@@ -120,6 +166,57 @@ function gmClearMission()
 
 end
 
+
+-- ##########################################################################
+-- ## Victory and Defeat Messages ##
+-- ##########################################################################
+
+function gmDefeat()
+    clearGMFunctions()
+    gmMainMenu()
+
+    message_defeat = "The mission has been lost. Report for debriefing."
+
+    globalMessage(message_defeat)
+
+    -- Display a mesasage on the main screen for 2 minutes
+    globalMessage(message_defeat, 120)
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("helms", "helms_message_defeat", message_defeat)
+    TraineeShip:addCustomMessage("engineering", "engineering_message_defeat", message_defeat)
+    TraineeShip:addCustomMessage("weapons", "weapon_message_defeat", message_defeat)
+    TraineeShip:addCustomMessage("science", "science_message_defeat", message_defeat)
+    TraineeShip:addCustomMessage("relay", "relay_message_defeat", message_defeat)
+
+    -- victory("Exuari")
+
+end
+
+function gmVictory()
+    clearGMFunctions()
+    gmMainMenu()
+
+    message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
+
+    -- Display a mesasage on the main screen for 2 minutes
+    globalMessage(message_victory, 120)
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("helms", "helms_message_victory", message_victory)
+    TraineeShip:addCustomMessage("engineering", "engineering_message_victory", message_victory)
+    TraineeShip:addCustomMessage("weapons", "weapon_message_victory", message_victory)
+    TraineeShip:addCustomMessage("science", "science_message_victory", message_victory)
+    TraineeShip:addCustomMessage("relay", "relay_message_victory", message_victory)
+
+    -- victory("Human Navy")
+
+end
+
+
+
 -- ##########################################################################
 -- ## Initial Function ##
 -- ##########################################################################
@@ -164,9 +261,6 @@ function init()
     placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 2000)
 
 
-
-
-
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
@@ -177,14 +271,14 @@ function init()
     TraineeShip:setRotation(180) -- make sure it's facing away from station
     TraineeShip:commandDock(central_command)
 
-    -- TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
-    -- .. " but were ambushed by Exuari in sector G7. It seems all the ships in the skirmish have been abandoned, but "
-    -- .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
-    -- .. "Your Science officer will be able to determine the factions of any unknown ships.", "white")
+    TraineeShip:addToShipLog("A wave of asteroids have appeared around our location"
+    .. " in the shape of a funnel. Unfortunately, we need supplies from a docking station that has been surrounded by asteroids on all sides except through the asteroids. "
+    .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return to Central Command. ", "white")
 
-    -- TraineeShip:addToShipLog(, "white")
 
-    
+
+
+
     --- THE FUNNEL
 
     -- placeRandom(Asteroid, 400, 500, 63555, 40000, 58468, 15000)
@@ -192,10 +286,11 @@ function init()
     placeRandom(Asteroid, 300, -7500, 31000, 6500, 100000, 20000)
     placeRandom(Asteroid, 300, 60000, 26229, 45000, 100000, 20000)
 
-    -- Left asteroid belt
-    -- placeRandom(Asteroid, 700, 80000, 0, 190800, 162000, 30000)
-    -- Right asteroid belt
-    -- placeRandom(Asteroid, 400, 100000, 100, 125000, 112000, 30000)
+
+
+    -- Surrounding the docking station
+    placeRandom(Asteroid, 75, 9202, 109076, -4023, 146011, 4000)
+    placeRandom(Asteroid, 60, 4000, 142230, 42797, 100689, 4000)
 
 
     -- Place a ton of probes randomly throughout the asteroid belt
@@ -220,9 +315,9 @@ function init()
     ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(30078, 47937):setScanned(true)
     ExShip4 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(25326, 71373):setScanned(true)
 
-    ExShip8 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(22215, 52416):setScanned(true)
+    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(22215, 52416):setScanned(true)
 
-    ExShip10 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(30735, 61092):setScanned(true)
+    ExShip6 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(30735, 61092):setScanned(true)
 
     ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(24451, 57579):setScanned(true)
 
@@ -231,11 +326,39 @@ function init()
 
     NavyStation = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy"):setPosition(12423, 123339):setScanned(true)
 
+    table.insert(enemyList, ExShip1)
+    table.insert(enemyList, ExShip2)
+    table.insert(enemyList, ExShip3)
+    table.insert(enemyList, ExShip4)
+    table.insert(enemyList, ExShip5)
+    table.insert(enemyList, ExShip6)
+    table.insert(enemyList, ExStation)
+    table.insert(friendList, NavyShip1)
+    table.insert(friendList, NavyShip2)
+    table.insert(friendList, NavyStation)
 
     mission_state = 1
 
 
 end
+
+function update(delta)
+
+    if TraineeShip:isDocked(central_command) then
+        TraineeShip:setWeaponStorage("homing", 12):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+
+    end
+
+    if mission_state == 1 and not TargetShip:isDocked() then
+        NavyShip1:orderFlyTowards(30326, 72195)
+        NavyShip2:orderFlyTowards(21627, 74268)
+
+    end
+
+
+end
+
 
 
 

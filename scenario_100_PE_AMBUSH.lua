@@ -9,7 +9,7 @@
 
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "Ambush      +"), gmScenario4)
+    addGMFunction(_("buttonGM", "AMBUSH      +"), gmScenario4)
     addGMFunction(_("buttonGM", "Alert Level         +"),gmAlertLevel)
     addGMFunction(_("buttonGM", "Extra Commands      +"), gmUsefulCommmands)
 end
@@ -26,7 +26,7 @@ end
 --- Scenario 4 Commands
 function gmScenario4()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Scenario 4 -"),gmMainMenu)
+    addGMFunction(_("buttonGM", "AMBUSH     -"),gmMainMenu)
     addGMFunction(_("buttonGM", "Drop Intel"),gmAmbush_1)
     addGMFunction(_("buttonGM", "Spawn Enemies"),gmAmbush_2)
     addGMFunction(_("buttonGM", "Activate Enemies"),gmAmbush_3)
