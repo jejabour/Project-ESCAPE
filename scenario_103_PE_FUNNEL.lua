@@ -20,7 +20,7 @@
 
     --It's easiest to just place an object in game and use the location
     -- on the top right to get an idea of where you are
-    -- The ship starts x=23400, y=16100. From this point,
+    -- The ship starts x=22598, 16086. From this point,
     -- increasing X moves it to the right. Increasing Y moves it down.
 
 --}

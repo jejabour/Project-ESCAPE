@@ -704,7 +704,7 @@ function init()
     alertLevel = "normal"
 
     -- Create the command station
-    central_command = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
+    central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
     central_command:setPosition(23500, 16100):setCallSign("Central Command")
 
     -- Nebula that hide the enemy station.
