@@ -64,8 +64,6 @@ function gmFUNNEL()
 end
 
 
-
-
 -- When undocked, tell all the ships to stop being idle
 function gmFUNNEL_1()
     -- Clear and reset the menu
@@ -82,7 +80,6 @@ function gmFUNNEL_1()
 
     mission_state = 2
 
-
 end
 
 -- Tell them to come back to central command after docking at the target station
@@ -94,7 +91,6 @@ function gmFUNNEL_2()
     central_command:sendCommsMessage(TraineeShip,("Good job retrieving the supplies. Make your way back to Central Command."))
     -- addGMMessage("Moving to mission state 3")
     mission_state = 3
-
 
 end
 
@@ -137,7 +133,7 @@ function gmCreateCentralCommand()
     -- Home = setPosition(23500, 16100)
 
     if central_command:getPosition() == nil then
-        central_command = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
+        central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
         central_command:setPosition(23500, 16100):setCallSign("Central Command")
 
     end

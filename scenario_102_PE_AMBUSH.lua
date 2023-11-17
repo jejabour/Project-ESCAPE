@@ -270,7 +270,7 @@ function gmCreateCentralCommand()
     -- Home = setPosition(23500, 16100)
 
     if central_command:getPosition() == nil then
-        central_command = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
+        central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
         central_command:setPosition(23500, 16100):setCallSign("Central Command")
 
     end
