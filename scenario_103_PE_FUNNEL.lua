@@ -56,11 +56,9 @@ end
 function gmFUNNEL()
     -- Clear and reset the menu
     clearGMFunctions()
-    gmMainMenu()
     addGMFunction(_("buttonGM", "FUNNEL    -"), gmMainMenu)
-    addGMFunction(_("buttonGM", "FUNNEL_1"), gmFUNNEL_1)
-    addGMFunction(_("buttonGM", "FUNNEL_2"), gmFUNNEL_2)
-    addGMFunction(_("buttonGM", "FUNNEL_3"), gmFUNNEL_3)
+    addGMFunction(_("buttonGM", "Start Moving"), gmFUNNEL_1)
+    addGMFunction(_("buttonGM", "Return Home"), gmFUNNEL_2)
 
 
 end
@@ -68,33 +66,37 @@ end
 
 
 
-
+-- When undocked, tell all the ships to stop being idle
 function gmFUNNEL_1()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
 
+    NavyShip1:orderFlyTowards(30326, 72195)
+    NavyShip2:orderFlyTowards(21627, 74268)
+    ExShip1:orderRoaming()
+    ExShip2:orderRoaming()
+    ExShip3:orderRoaming()
+    ExShip4:orderRoaming()
+    ExShip5:orderRoaming()
+
+    mission_state = 2
+
 
 end
 
-
+-- Tell them to come back to central command after docking at the target station
 function gmFUNNEL_2()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
 
-
-end
-
-
-function gmFUNNEL_3()
-    -- Clear and reset the menu
-    clearGMFunctions()
-    gmMainMenu()
+    central_command:sendCommsMessage(TraineeShip,("Good job retrieving the supplies. Make your way back to Central Command."))
+    -- addGMMessage("Moving to mission state 3")
+    mission_state = 3
 
 
 end
-
 
 
 
@@ -198,7 +200,7 @@ function gmVictory()
     clearGMFunctions()
     gmMainMenu()
 
-    message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
+    message_victory = "Good job, the supplies have been safely recovered. Return for mission debriefing."
 
     -- Display a mesasage on the main screen for 2 minutes
     globalMessage(message_victory, 120)
@@ -267,8 +269,8 @@ function init()
 
     -- Create the main ship for the trainees.
     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-    TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
-    TraineeShip:setRotation(180) -- make sure it's facing away from station
+    TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
+    TraineeShip:setRotation(200) -- make sure it's facing away from station
     TraineeShip:commandDock(central_command)
 
     TraineeShip:addToShipLog("A wave of asteroids have appeared around our location"
@@ -354,7 +356,7 @@ function update(delta)
 
     if mission_state == 0 and TraineeShip:isDocked(central_command) then
         mission_state = 1
-        addGMMessage("moving to Mission state 1")
+        -- addGMMessage("moving to Mission state 1")
     end
 
     if mission_state == 1 and not TraineeShip:isDocked(central_command) then
@@ -368,21 +370,21 @@ function update(delta)
         ExShip5:orderRoaming()
 
         mission_state = 2
-        addGMMessage("moving to Mission state 2")
+        -- addGMMessage("moving to Mission state 2")
         
 
     end
 
 
     if mission_state == 2 and TraineeShip:isDocked(NavyStation) then
-        central_command:sendCommsMessage(TraineeShip,("Good job retrieving the supplies. Make your way back to Central Command."))
-        addGMMessage("Moving to mission state 3")
+        central_command:sendCommsMessage(TraineeShip,("Now that you've gotten the supplies, make your way back to Central Command."))
+        -- addGMMessage("Moving to mission state 3")
         mission_state = 3
     end
 
     if mission_state == 3 and TraineeShip:isDocked(central_command) then
 
-        message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
+        message_victory = "Good job, the supplies have been safely recovered. Return for mission debriefing."
 
         -- Display a mesasage on the main screen for 2 minutes
         globalMessage(message_victory, 120)

@@ -207,7 +207,7 @@ function gmSetRescueJJ()
 
     -- Create the main ship for the trainees.
     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-    TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
+    TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
     TraineeShip:setRotation(180) -- make sure it's facing away from station
     TraineeShip:commandDock(central_command)
 
@@ -265,7 +265,7 @@ function gmSetWaves()
 
     -- Create the main ship for the trainees.
     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-    TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
+    TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
     TraineeShip:setRotation(180) -- make sure it's facing away from station
     TraineeShip:commandDock(central_command)
 
@@ -509,7 +509,7 @@ function gmSetRetrieveData()
 
     -- Create the main ship for the trainees.
     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-    TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
+    TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
     TraineeShip:setRotation(180) -- make sure it's facing away from station
     TraineeShip:commandDock(central_command)
 
