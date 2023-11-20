@@ -1,5 +1,5 @@
 -- Name: Scenario 5: FUNNEL
--- Description: This is a scenario about funneling the group
+-- Description: A wave of asteroids have appeared in the shape of a funnel. The team must navigate through the funnel, and some enemy ships, to find the friendly space station containing supplies, and return back to the base.
 -- Type: Project ESCAPE
 
 -- ##########################################################################
@@ -31,22 +31,22 @@
 
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "FUNNEL              +"), gmFUNNEL)
-    addGMFunction(_("buttonGM", "Alert Level         +"),gmAlertLevel)
-    addGMFunction(_("buttonGM", "Extra Commands +"), gmUsefulCommmands)
+    addGMFunction(_("buttonGM", "FUNNEL                    +"), gmFUNNEL)
+    addGMFunction(_("buttonGM", "Alert Level               +"),gmAlertLevel)
+    addGMFunction(_("buttonGM", "Extra Commands      +"), gmExtraCommmands)
 end
 
 function gmAlertLevel()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Alert level -"),gmMainMenu)
+    addGMFunction(_("buttonGM", "Alert level                -"),gmMainMenu)
     addGMFunction(_("buttonGM", "Normal"),gmAlertNormal)
     addGMFunction(_("buttonGM", "Yellow"),gmAlertYellow)
     addGMFunction(_("buttonGM", "Red"),gmAlertRed)
 end
 
-function gmUsefulCommmands()
+function gmExtraCommmands()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Useful Commands -"),gmMainMenu)
+    addGMFunction(_("buttonGM", "Extra Commands       -"),gmMainMenu)
     addGMFunction(_("buttonGM", "Create CC"),gmCreateCentralCommand)
     addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
 
@@ -56,7 +56,7 @@ end
 function gmFUNNEL()
     -- Clear and reset the menu
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "FUNNEL    -"), gmMainMenu)
+    addGMFunction(_("buttonGM", "FUNNEL                    -"), gmMainMenu)
     addGMFunction(_("buttonGM", "Start Moving"), gmFUNNEL_1)
     addGMFunction(_("buttonGM", "Return Home"), gmFUNNEL_2)
 
@@ -274,9 +274,6 @@ function init()
     .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return to Central Command. ", "white")
 
 
-
-
-
     --- THE FUNNEL
 
     -- placeRandom(Asteroid, 400, 500, 63555, 40000, 58468, 15000)
@@ -336,7 +333,6 @@ function init()
     table.insert(friendList, NavyStation)
 
     mission_state = 0
-
 
     -- addGMMessage("Going to mission_state 1")
 
