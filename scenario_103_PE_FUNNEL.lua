@@ -249,7 +249,7 @@ function init()
     Nebula():setPosition(3750, 31250)
     Nebula():setPosition(-39500, 18700)
 
-    
+
 --- Place objects randomly in a rough line
 -- Distribute a `number` of random `object_type` objects in a line from point
 -- x1,y1 to x2,y2, with a random distance up to `random_amount` between them.
@@ -336,7 +336,7 @@ function init()
     table.insert(friendList, NavyStation)
 
     mission_state = 0
-    
+
 
     -- addGMMessage("Going to mission_state 1")
 
@@ -356,7 +356,7 @@ function update(delta)
     end
 
     if mission_state == 1 and not TraineeShip:isDocked(central_command) then
-       
+
         NavyShip1:orderFlyTowards(30326, 72195)
         NavyShip2:orderFlyTowards(21627, 74268)
         ExShip1:orderRoaming()
