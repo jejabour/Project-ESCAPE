@@ -34,39 +34,39 @@
 function gmMainMenu()
     -- If you don't do clear GMFunctions for every button, it leaves the menu icons on screen and just adds more after you click
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "AMBUSH             +"), gmScenario4)
-    addGMFunction(_("buttonGM", "Alert Level        +"),gmAlertLevel)
-    addGMFunction(_("buttonGM", "Extra Commands     +"), gmExtraCommmands)
+    addGMFunction(_("buttonGM", "+ AMBUSH MISSION"), gmScenario4)
+    addGMFunction(_("buttonGM", "+ Alert Level"),gmAlertLevel)
+    addGMFunction(_("buttonGM", "+ Commands"), gmCommmands)
 end
 
 --- Scenario 4 Command buttons
 function gmScenario4()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "AMBUSH             -"),gmMainMenu)
-    addGMFunction(_("buttonGM", "Drop Intel"),gmAmbush_1)
-    addGMFunction(_("buttonGM", "Spawn Enemies"),gmAmbush_2)
-    addGMFunction(_("buttonGM", "Activate Enemies"),gmAmbush_3)
-    addGMFunction(_("buttonGM", "Bring Enemies"),gmAmbush_4)
-    addGMFunction(_("buttonGM", "Defeat"),gmDefeat)
-    addGMFunction(_("buttonGM", "Victory"),gmVictory)
-    addGMFunction(_("buttonGM", "Set Mission"),gmSetScenario4)
+    addGMFunction(_("buttonGM", "- AMBUSH MISSION"),gmMainMenu)
+    addGMFunction(_("buttonGM", "   Drop Intel"),gmAmbush_1)
+    addGMFunction(_("buttonGM", "   Spawn Enemies"),gmAmbush_2)
+    addGMFunction(_("buttonGM", "   Activate Enemies"),gmAmbush_3)
+    addGMFunction(_("buttonGM", "   Bring Enemies"),gmAmbush_4)
+    addGMFunction(_("buttonGM", "   Defeat"),gmDefeat)
+    addGMFunction(_("buttonGM", "   Victory"),gmVictory)
+    addGMFunction(_("buttonGM", "   Set Mission"),gmSetScenario4)
 end
 
 -- Menu buttons for the Alert effects
 function gmAlertLevel()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Alert level        -"),gmMainMenu)
-    addGMFunction(_("buttonGM", "Normal"),gmAlertNormal)
-    addGMFunction(_("buttonGM", "Yellow"),gmAlertYellow)
-    addGMFunction(_("buttonGM", "Red"),gmAlertRed)
+    addGMFunction(_("buttonGM", "- Alert Level"),gmMainMenu)
+    addGMFunction(_("buttonGM", "   Normal"),gmAlertNormal)
+    addGMFunction(_("buttonGM", "   Yellow"),gmAlertYellow)
+    addGMFunction(_("buttonGM", "   Red"),gmAlertRed)
 end
 
 -- Buttons for creating a new central commmand and clear the mission
-function gmExtraCommmands()
+function gmCommmands()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Extra Commands     -"),gmMainMenu)
-    addGMFunction(_("buttonGM", "Create CC"),gmCreateCentralCommand)
-    addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
+    addGMFunction(_("buttonGM", "- Commands"),gmMainMenu)
+    addGMFunction(_("buttonGM", "   Create FOB"),gmCreateFOB)
+    addGMFunction(_("buttonGM", "   Clear Mission"), gmClearMission)
 
 end
 
@@ -298,9 +298,9 @@ function gmAlertRed()
 end
 
 -- #####################################################################################################################
--- ## Extra Commands                                                                                                  ##
+-- ## Commands                                                                                                        ##
 -- #####################################################################################################################
-function gmCreateCentralCommand()
+function gmCreateFOB()
     gmMainMenu()
 
     if central_command:getPosition() == nil then

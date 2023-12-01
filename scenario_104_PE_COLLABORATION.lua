@@ -31,9 +31,9 @@
 
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "COLLABORATION      +"), gmCOLLABORATION)
-    addGMFunction(_("buttonGM", "Alert Level        +"), gmAlertLevel)
-    addGMFunction(_("buttonGM", "Useful Commands    +"), gmUsefulCommmands)
+    addGMFunction(_("buttonGM", "+ COLLABORATION MISSION"), gmCOLLABORATION)
+    addGMFunction(_("buttonGM", "+ Alert Level"), gmAlertLevel)
+    addGMFunction(_("buttonGM", "+ Commands"), gmUsefulCommmands)
 end
 
 -- COLLABORATION missions
@@ -41,24 +41,24 @@ function gmCOLLABORATION()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
-    addGMFunction(_("buttonGM", "COLLABORATION      -"), gmMainMenu)
-    addGMFunction(_("buttonGM", "Start Moving"), gmCOLLABORATION_1)
-    addGMFunction(_("buttonGM", "Enemy Defeated"), gmCOLLABORATION_2)
+    addGMFunction(_("buttonGM", "- COLLABORATION"), gmMainMenu)
+    addGMFunction(_("buttonGM", "   Start Moving"), gmCOLLABORATION_1)
+    addGMFunction(_("buttonGM", "   Enemy Defeated"), gmCOLLABORATION_2)
 end
 
 function gmAlertLevel()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Alert level        -"), gmMainMenu)
-    addGMFunction(_("buttonGM", "Normal"), gmAlertNormal)
-    addGMFunction(_("buttonGM", "Yellow"), gmAlertYellow)
-    addGMFunction(_("buttonGM", "Red"), gmAlertRed)
+    addGMFunction(_("buttonGM", "- Alert Level"), gmMainMenu)
+    addGMFunction(_("buttonGM", "   Normal"), gmAlertNormal)
+    addGMFunction(_("buttonGM", "   Yellow"), gmAlertYellow)
+    addGMFunction(_("buttonGM", "   Red"), gmAlertRed)
 end
 
 function gmUsefulCommmands()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Useful Commands    -"), gmMainMenu)
-    addGMFunction(_("buttonGM", "Create FOB"), gmCreateFOB)
-    addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
+    addGMFunction(_("buttonGM", "- Commands"), gmMainMenu)
+    addGMFunction(_("buttonGM", "   Create FOB"), gmCreateFOB)
+    addGMFunction(_("buttonGM", "   Clear Mission"), gmClearMission)
 end
 
 -- When undocked, tell all ships to stop being idle
@@ -66,8 +66,6 @@ function gmCOLLABORATION_1()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
-
-
 
     mission_state = 2
 end
@@ -101,7 +99,7 @@ function gmAlertRed()
 end
 
 -- #####################################################################################################################
--- ## Extra Commands                                                                                                  ##
+-- ## Commands                                                                                                        ##
 -- #####################################################################################################################
 
 function gmCreateFOB()
