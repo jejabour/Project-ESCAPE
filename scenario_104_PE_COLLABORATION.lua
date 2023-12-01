@@ -36,6 +36,16 @@ function gmMainMenu()
     addGMFunction(_("buttonGM", "Useful Commands    +"), gmUsefulCommmands)
 end
 
+-- COLLABORATION missions
+function gmCOLLABORATION()
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+    addGMFunction(_("buttonGM", "COLLABORATION      -"), gmMainMenu)
+    addGMFunction(_("buttonGM", "Start Moving"), gmCOLLABORATION_1)
+    addGMFunction(_("buttonGM", "Enemy Defeated"), gmCOLLABORATION_2)
+end
+
 function gmAlertLevel()
     clearGMFunctions() -- Clear the menu
     addGMFunction(_("buttonGM", "Alert level        -"), gmMainMenu)
@@ -49,16 +59,6 @@ function gmUsefulCommmands()
     addGMFunction(_("buttonGM", "Useful Commands    -"), gmMainMenu)
     addGMFunction(_("buttonGM", "Create FOB"), gmCreateFOB)
     addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
-end
-
--- COLLABORATION missions
-function gmCOLLABORATION()
-    -- Clear and reset the menu
-    clearGMFunctions()
-    gmMainMenu()
-    addGMFunction(_("buttonGM", "COLLABORATION      -"), gmMainMenu)
-    addGMFunction(_("buttonGM", "Start Moving"), gmCOLLABORATION_1)
-    addGMFunction(_("buttonGM", "Enemy Defeated"), gmCOLLABORATION_2)
 end
 
 -- When undocked, tell all ships to stop being idle
@@ -148,6 +148,25 @@ end
 -- #####################################################################################################################
 -- ## Victory and Defeat Messages                                                                                     ##
 -- #####################################################################################################################
+function gmVictory()
+    clearGMFunctions()
+    gmMainMenu()
+
+    message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
+
+    -- Display a mesasage on the main screen for 2 minutes
+    globalMessage(message_victory, 120)
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("helms", "helms_message_victory", message_victory)
+    TraineeShip:addCustomMessage("engineering", "engineering_message_victory", message_victory)
+    TraineeShip:addCustomMessage("weapons", "weapon_message_victory", message_victory)
+    TraineeShip:addCustomMessage("science", "science_message_victory", message_victory)
+    TraineeShip:addCustomMessage("relay", "relay_message_victory", message_victory)
+
+    -- victory("Human Navy")
+end
 
 function gmDefeat()
     clearGMFunctions()
@@ -171,30 +190,9 @@ function gmDefeat()
     -- victory("Exuari")
 end
 
-function gmVictory()
-    clearGMFunctions()
-    gmMainMenu()
-
-    message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
-
-    -- Display a mesasage on the main screen for 2 minutes
-    globalMessage(message_victory, 120)
-
-    -- Display a popup message on each players screen.
-    -- addCustomMessage(role, name of the string???, string)
-    TraineeShip:addCustomMessage("helms", "helms_message_victory", message_victory)
-    TraineeShip:addCustomMessage("engineering", "engineering_message_victory", message_victory)
-    TraineeShip:addCustomMessage("weapons", "weapon_message_victory", message_victory)
-    TraineeShip:addCustomMessage("science", "science_message_victory", message_victory)
-    TraineeShip:addCustomMessage("relay", "relay_message_victory", message_victory)
-
-    -- victory("Human Navy")
-end
-
 -- #####################################################################################################################
 -- ## Initialization Function                                                                                         ##
 -- #####################################################################################################################
-
 function init()
     -- Setup GM menu
     gmMainMenu()
@@ -211,7 +209,6 @@ function init()
     fob = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
     fob:setPosition(23500, 16100):setCallSign("FOB Charlie")
 end
-
 
 -- Place objects randomly in a rough line
 -- Distribute a `number` of random `object_type` objects in a line from point
