@@ -42,7 +42,7 @@ end
 --- Scenario 4 Command buttons
 function gmScenario4()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "- AMBUSH MISSION"),gmMainMenu)
+    addGMFunction(_("buttonGM", "- AMBUSH Mission"),gmMainMenu)
     addGMFunction(_("buttonGM", "   Drop Intel"),gmAmbush_1)
     addGMFunction(_("buttonGM", "   Spawn Enemies"),gmAmbush_2)
     addGMFunction(_("buttonGM", "   Activate Enemies"),gmAmbush_3)

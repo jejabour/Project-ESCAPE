@@ -31,7 +31,7 @@
 
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "+ COLLABORATION MISSION"), gmCOLLABORATION)
+    addGMFunction(_("buttonGM", "+ COLLABORATION Mission"), gmCOLLABORATION)
     addGMFunction(_("buttonGM", "+ Alert Level"), gmAlertLevel)
     addGMFunction(_("buttonGM", "+ Commands"), gmUsefulCommmands)
 end
@@ -41,7 +41,7 @@ function gmCOLLABORATION()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
-    addGMFunction(_("buttonGM", "- COLLABORATION"), gmMainMenu)
+    addGMFunction(_("buttonGM", "- COLLABORATION Mission"), gmMainMenu)
     addGMFunction(_("buttonGM", "   Start Moving"), gmCOLLABORATION_1)
     addGMFunction(_("buttonGM", "   Enemy Defeated"), gmCOLLABORATION_2)
 end
