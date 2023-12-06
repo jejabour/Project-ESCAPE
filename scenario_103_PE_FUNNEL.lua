@@ -48,6 +48,7 @@ function gmExtraCommmands()
     clearGMFunctions() -- Clear the menu
     addGMFunction(_("buttonGM", "Extra Commands       -"),gmMainMenu)
     addGMFunction(_("buttonGM", "Create CC"),gmCreateCentralCommand)
+    addGMFunction(_("buttonGM", "Set Mission"),gmSetFunnel)
     addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
 
 end
@@ -56,7 +57,7 @@ end
 function gmFUNNEL()
     -- Clear and reset the menu
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "FUNNEL                    -"), gmMainMenu)
+    addGMFunction(_("buttonGM", "FUNNEL                     -"), gmMainMenu)
     addGMFunction(_("buttonGM", "Start Moving"), gmFUNNEL_1)
     addGMFunction(_("buttonGM", "Return Home"), gmFUNNEL_2)
 
@@ -94,6 +95,98 @@ function gmFUNNEL_2()
 
 end
 
+
+
+-- ##########################
+-- SET SCENARIO
+-- ##########################
+
+function gmSetFunnel()
+    clearGMFunctions()
+    gmMainMenu()
+
+    TraineeShip = {}
+    enemyList = {}
+    friendList = {}
+    waveNumber = 0
+    alertLevel = "normal"
+
+
+     -- Create the main ship for the trainees.
+     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+     TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
+     TraineeShip:setRotation(180) -- make sure it's facing away from station
+     TraineeShip:commandDock(central_command)
+ 
+     TraineeShip:addToShipLog("A wave of asteroids have appeared around our location"
+     .. " in the shape of a funnel. Unfortunately, we need supplies from a docking station that has been surrounded by asteroids on all sides except through the asteroids. "
+     .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return to Central Command. ", "white")
+ 
+ 
+ --- THE FUNNEL
+
+    -- placeRandom(Asteroid, 400, 500, 63555, 40000, 58468, 15000)
+    -- placeRandom(Asteroid, 700, 70000, 33555, 98000, 0, 15000)
+    placeRandom_funnel(Asteroid, 300, -7500, 31000, 6500, 100000, 14000)
+    placeRandom_funnel(Asteroid, 300, 60000, 26229, 45000, 100000, 15000)
+ 
+
+    -- Surrounding the docking station
+    placeRandom_funnel(Asteroid, 75, 9202, 109076, -4023, 146011, 4000)
+    placeRandom_funnel(Asteroid, 60, 4000, 142230, 42797, 100689, 4000)
+
+
+    -- Place a ton of probes randomly throughout the asteroid belt
+    for n=1, 45 do
+        local f = random(0, 1)
+        local x = 3500 + (50000 - 3500) * f
+        local y = 55000 + (90000 - 55000) * f
+
+        local r = random(0, 360)
+        local distance = random(0, 50000)
+        x = x + math.cos(r / 180 * math.pi) * distance
+        y = y + math.sin(r / 180 * math.pi) * distance
+
+        probe = ScanProbe():setPosition(x, y):setTarget(x, y):setFaction("Human Navy"):setOwner(TraineeShip):setLifetime(60 * 30)
+        table.insert(probeList, probe)
+
+
+    end
+
+    --Place some enemies and good Guys
+
+    ExShip1 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(18427, 43827):setScanned(true)
+    ExShip2 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(35471, 44081):setScanned(true)
+    ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(30078, 47937):setScanned(true)
+    ExShip4 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(25326, 71373):setScanned(true)
+
+    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(22215, 52416):setScanned(true)
+
+    ExShip6 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(30735, 61092):setScanned(true)
+
+    ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(24451, 57579):setScanned(true)
+
+    NavyShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(19254, 23354):setScanned(true)
+    NavyShip2 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(29786, 23184):setScanned(true)
+
+    NavyStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setPosition(12423, 123339):setScanned(true)
+
+    table.insert(enemyList, ExShip1)
+    table.insert(enemyList, ExShip2)
+    table.insert(enemyList, ExShip3)
+    table.insert(enemyList, ExShip4)
+    table.insert(enemyList, ExShip5)
+    table.insert(enemyList, ExShip6)
+    table.insert(enemyList, ExStation)
+    table.insert(friendList, NavyShip1)
+    table.insert(friendList, NavyShip2)
+    table.insert(friendList, NavyStation)
+
+    mission_state = 0
+
+    -- addGMMessage("Going to mission_state 1")
+
+end
 
 
 -- ##########################################################################
@@ -162,6 +255,18 @@ function gmClearMission()
         end
     end
 
+    for _, probe in ipairs(probeList) do
+        if probe:isValid() then
+            probe:destroy()
+        end
+    end
+
+    for _, aster in ipairs(asteroidList) do
+        if aster:isValid() then
+            aster:destroy()
+        end
+    end
+
 end
 
 
@@ -226,7 +331,9 @@ function init()
     -- Setup global variables
     TraineeShip = {}
     enemyList = {}
+    probeList = {}
     friendList = {}
+    asteroidList = {}
     waveNumber = 0
     alertLevel = "normal"
 
@@ -278,14 +385,13 @@ function init()
 
     -- placeRandom(Asteroid, 400, 500, 63555, 40000, 58468, 15000)
     -- placeRandom(Asteroid, 700, 70000, 33555, 98000, 0, 15000)
-    placeRandom(Asteroid, 300, -7500, 31000, 6500, 100000, 14000)
-    placeRandom(Asteroid, 300, 60000, 26229, 45000, 100000, 15000)
-
-
+    placeRandom_funnel(Asteroid, 300, -7500, 31000, 6500, 100000, 14000)
+    placeRandom_funnel(Asteroid, 300, 60000, 26229, 45000, 100000, 15000)
+ 
 
     -- Surrounding the docking station
-    placeRandom(Asteroid, 75, 9202, 109076, -4023, 146011, 4000)
-    placeRandom(Asteroid, 60, 4000, 142230, 42797, 100689, 4000)
+    placeRandom_funnel(Asteroid, 75, 9202, 109076, -4023, 146011, 4000)
+    placeRandom_funnel(Asteroid, 60, 4000, 142230, 42797, 100689, 4000)
 
 
     -- Place a ton of probes randomly throughout the asteroid belt
@@ -300,6 +406,8 @@ function init()
         y = y + math.sin(r / 180 * math.pi) * distance
 
         probe = ScanProbe():setPosition(x, y):setTarget(x, y):setFaction("Human Navy"):setOwner(TraineeShip):setLifetime(60 * 30)
+        table.insert(probeList, probe)
+
 
     end
 
@@ -411,6 +519,25 @@ function placeRandom(object_type, number, x1, y1, x2, y2, random_amount)
         y = y + math.sin(r / 180 * math.pi) * distance
 
         object_type():setPosition(x, y)
+        
+    end
+end
+
+
+function placeRandom_funnel(object_type, number, x1, y1, x2, y2, random_amount)
+    for n = 1, number do
+        local f = random(0, 1)
+        local x = x1 + (x2 - x1) * f
+        local y = y1 + (y2 - y1) * f
+
+        local r = random(0, 360)
+        local distance = random(0, random_amount)
+        x = x + math.cos(r / 180 * math.pi) * distance
+        y = y + math.sin(r / 180 * math.pi) * distance
+
+        ast = object_type():setPosition(x, y)
+        table.insert(asteroidList, ast)
+
     end
 end
 

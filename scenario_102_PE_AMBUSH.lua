@@ -58,7 +58,7 @@ function gmScenario4()
     addGMFunction(_("buttonGM", "Bring Enemies"),gmAmbush_4)
     addGMFunction(_("buttonGM", "Defeat"),gmDefeat)
     addGMFunction(_("buttonGM", "Victory"),gmVictory)
-    addGMFunction(_("buttonGM", "Set Mission"),gmSetScenario4)
+
 end
 
 -- Buttons for creating a new central commmand and clear the mission
@@ -66,6 +66,7 @@ function gmExtraCommmands()
     clearGMFunctions() -- Clear the menu
     addGMFunction(_("buttonGM", "Extra Commands       -"),gmMainMenu)
     addGMFunction(_("buttonGM", "Create CC"),gmCreateCentralCommand)
+    addGMFunction(_("buttonGM", "Set Mission"),gmSetAmbush)
     addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
 
 end
@@ -84,7 +85,7 @@ function gmAmbush_1()
     TargetShip:destroy()
 
     -- Spawn the supply drop where the Kraylor ship was
-    transport_drop = SupplyDrop():setFaction("Human Navy"):setPosition(47589, -26790)
+    transport_drop = SupplyDrop():setFaction("Human Navy"):setPosition(52838, -29852)
 
     -- progress mission state
     mission_state = 2
@@ -102,7 +103,7 @@ function gmAmbush_2()
     Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
 
     -- Spawn two enemies near the trainees
-    ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(53328, -27216):orderAttack(TraineeShip):setScanned(true)
+    ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(57853, -30588):orderAttack(TraineeShip):setScanned(true)
     ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
 
     -- spawn three by central command, but they're set to idle
@@ -226,35 +227,45 @@ end
 -- SET SCENARIO
 -- ##########################
 
-function gmSetScenario4()
+function gmSetAmbush()
     clearGMFunctions()
     gmMainMenu()
 
     TraineeShip = {}
     enemyList = {}
     friendList = {}
+    nebulaeList = {}
     waveNumber = 0
     alertLevel = "normal"
 
+    --Nebulae in sector D7
+    nebulae1 = Nebula():setPosition(43463, -28540)
+    nebulae2 = Nebula():setPosition(52188, -26359)
+    nebulae3 = Nebula():setPosition(54350, -35362)
+
+    table.insert(nebulaeList, nebulae1)
+    table.insert(nebulaeList, nebulae2)
+    table.insert(nebulaeList, nebulae3)
+
      -- Create the main ship for the trainees.
      TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-     TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
+     TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
      TraineeShip:setRotation(180) -- make sure it's facing away from station
      TraineeShip:commandDock(central_command)
  
      TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
-     .. " but were ambushed by Exuari in sector G7. It seems all the ships in the skirmish have been abandoned, but "
+     .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
      .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
      .. "Your Science officer will be able to determine the factions of any unknown ships.", "white")
  
      
-     TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(47589, -26790):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-     ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(40112, -23993):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(52838, -29852):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(44632, -30408):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
      ExShip2 = CpuShip():setTemplate("Battlestation"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
      ExShip3 = CpuShip():setTemplate("Blade"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-     ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(49352, -16801):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-     NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(45414, -23553):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-     NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(49966, -27447):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+     ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(55840, -35901):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(50768, -33352):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(55256, -26688):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
      
  
      table.insert(enemyList, ExShip1)
@@ -332,6 +343,12 @@ function gmClearMission()
         end
     end
 
+    for _, nebula in ipairs(nebulaeList) do
+        if nebula:isValid() then
+            nebula:destroy()
+        end
+    end
+
 end
 
 
@@ -348,6 +365,7 @@ function init()
     TraineeShip = {}
     enemyList = {}
     friendList = {}
+    nebulaeList = {}
     waveNumber = 0
     alertLevel = "normal"
 
@@ -363,9 +381,14 @@ function init()
     Nebula():setPosition(-28600, -21900)
 
     --Nebulae in sector D7
-    Nebula():setPosition(43463, -28540)
-    Nebula():setPosition(52188, -26359)
-    Nebula():setPosition(54350, -35362)
+    nebulae1 = Nebula():setPosition(43463, -28540)
+    nebulae2 = Nebula():setPosition(52188, -26359)
+    nebulae3 = Nebula():setPosition(54350, -35362)
+
+    table.insert(nebulaeList, nebulae1)
+    table.insert(nebulaeList, nebulae2)
+    table.insert(nebulaeList, nebulae3)
+
 
     -- Random nebulae in the system
     Nebula():setPosition(-8000, -38300)
@@ -398,13 +421,13 @@ function init()
     .. "Your Science officer will be able to determine the factions of any unknown ships.", "white")
 
     
-    TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(47589, -26790):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(40112, -23993):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(52838, -29852):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(44632, -30408):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
     ExShip2 = CpuShip():setTemplate("Battlestation"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
     ExShip3 = CpuShip():setTemplate("Blade"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(49352, -16801):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(45414, -23553):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(49966, -27447):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+    ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(55840, -35901):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(50768, -33352):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(55256, -26688):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
     
 
     table.insert(enemyList, ExShip1)
@@ -442,7 +465,7 @@ function update(delta)
     if mission_state == 1  and not TargetShip:isValid() then
         
         -- Create a supply drop where the targetship was
-        transport_drop = SupplyDrop():setFaction("Human Navy"):setPosition(47589, -26790)
+        transport_drop = SupplyDrop():setFaction("Human Navy"):setPosition(52838, -29852)
     
         -- set mission_state to 2
         mission_state = 2
@@ -459,7 +482,7 @@ function update(delta)
         Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
 
         -- Spawn two enemies near the trainees
-        ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(53328, -27216):orderAttack(TraineeShip):setScanned(true)
+        ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(57853, -30588):orderAttack(TraineeShip):setScanned(true)
         ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
 
         -- spawn three by central command, but they're set to idle
@@ -504,6 +527,7 @@ function update(delta)
 
     -- 
     if mission_state == 4 then
+        
 
         -- 
         -- the idea is that if the trainees left the two back there, then they'll both appear by central command when they're destroyed one ship here
