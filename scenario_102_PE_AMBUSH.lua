@@ -2,9 +2,9 @@
 -- Description: A Kraylor ship carrying vital information was being escorted by the Human Navy when they were attacked by Exuari. All ships were abandoned in the skirmish. It's up to the players to navigate to the battle location, find which ship was the Kraylor ship, and retrieve the intel.
 -- Type: Project ESCAPE
 
--- ##########################################################################
--- ## NOTES ##
--- ##########################################################################
+-- #####################################################################################################################
+-- ## NOTES                                                                                                           ##
+-- #####################################################################################################################
 
 -- ######## FACTIONS #########
 -- In relation to Human Navy{
@@ -18,7 +18,7 @@
 -- ######## LOCATION #########
 -- When trying to place things{
 
-    --It's easiest to just place an object in game and use the location
+    -- It's easiest to just place an object in game and use the location
     -- on the top right to get an idea of where you are
     -- The ship starts x=22598, 16086. From this point,
     -- increasing X moves it to the right. Increasing Y moves it down.
@@ -26,48 +26,47 @@
 --}
 
 
--- ##########################################################################
--- ## GM MENU ##
--- ##########################################################################
+-- #####################################################################################################################
+-- ## GM MENU                                                                                                         ##
+-- #####################################################################################################################
 
 -- The main menu. Spacing is so it appears kinda nice in-game
 function gmMainMenu()
     -- If you don't do clear GMFunctions for every button, it leaves the menu icons on screen and just adds more after you click
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "AMBUSH                   +"), gmScenario4)
-    addGMFunction(_("buttonGM", "Alert Level               +"),gmAlertLevel)
-    addGMFunction(_("buttonGM", "Extra Commands      +"), gmExtraCommmands)
-end
-
--- Menu buttons for the Alert effects
-function gmAlertLevel()
-    clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Alert level                -"),gmMainMenu)
-    addGMFunction(_("buttonGM", "Normal"),gmAlertNormal)
-    addGMFunction(_("buttonGM", "Yellow"),gmAlertYellow)
-    addGMFunction(_("buttonGM", "Red"),gmAlertRed)
+    addGMFunction(_("buttonGM", "+ AMBUSH MISSION"), gmScenario4)
+    addGMFunction(_("buttonGM", "+ Alert Level"),gmAlertLevel)
+    addGMFunction(_("buttonGM", "+ Commands"), gmCommmands)
 end
 
 --- Scenario 4 Command buttons
 function gmScenario4()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "AMBUSH                   -"),gmMainMenu)
-    addGMFunction(_("buttonGM", "Drop Intel"),gmAmbush_1)
-    addGMFunction(_("buttonGM", "Spawn Enemies"),gmAmbush_2)
-    addGMFunction(_("buttonGM", "Activate Enemies"),gmAmbush_3)
-    addGMFunction(_("buttonGM", "Bring Enemies"),gmAmbush_4)
-    addGMFunction(_("buttonGM", "Defeat"),gmDefeat)
-    addGMFunction(_("buttonGM", "Victory"),gmVictory)
+    addGMFunction(_("buttonGM", "- AMBUSH Mission"),gmMainMenu)
+    addGMFunction(_("buttonGM", "   Drop Intel"),gmAmbush_1)
+    addGMFunction(_("buttonGM", "   Spawn Enemies"),gmAmbush_2)
+    addGMFunction(_("buttonGM", "   Activate Enemies"),gmAmbush_3)
+    addGMFunction(_("buttonGM", "   Bring Enemies"),gmAmbush_4)
+    addGMFunction(_("buttonGM", "   Defeat"),gmDefeat)
+    addGMFunction(_("buttonGM", "   Victory"),gmVictory)
+    addGMFunction(_("buttonGM", "   Set Mission"),gmSetScenario4)
+end
 
+-- Menu buttons for the Alert effects
+function gmAlertLevel()
+    clearGMFunctions() -- Clear the menu
+    addGMFunction(_("buttonGM", "- Alert Level"),gmMainMenu)
+    addGMFunction(_("buttonGM", "   Normal"),gmAlertNormal)
+    addGMFunction(_("buttonGM", "   Yellow"),gmAlertYellow)
+    addGMFunction(_("buttonGM", "   Red"),gmAlertRed)
 end
 
 -- Buttons for creating a new central commmand and clear the mission
-function gmExtraCommmands()
+function gmCommmands()
     clearGMFunctions() -- Clear the menu
-    addGMFunction(_("buttonGM", "Extra Commands       -"),gmMainMenu)
-    addGMFunction(_("buttonGM", "Create CC"),gmCreateCentralCommand)
-    addGMFunction(_("buttonGM", "Set Mission"),gmSetAmbush)
-    addGMFunction(_("buttonGM", "Clear Mission"), gmClearMission)
+    addGMFunction(_("buttonGM", "- Commands"),gmMainMenu)
+    addGMFunction(_("buttonGM", "   Create FOB"),gmCreateFOB)
+    addGMFunction(_("buttonGM", "   Clear Mission"), gmClearMission)
 
 end
 
@@ -137,7 +136,7 @@ function gmAmbush_3()
     -- Tell the enemy ships to essentially free roam, which means they just target who's nearby
     ExShip7:orderRoaming()
     ExShip8:orderRoaming()
-    
+
     -- Tell the friendlies to defend Central Command
     NavyShip3:orderDefendTarget(central_command)
     NavyShip5:orderDefendTarget(central_command)
@@ -168,11 +167,11 @@ function gmAmbush_4()
     -- Progress mission state
     mission_state = 5
 
-    -- CC tells the relay officer that those ships have followed them 
+    -- CC tells the relay officer that those ships have followed them
     if ExShip5:isValid() or ExShip6:isValid() then
         central_command:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
     end
-    
+
 
 end
 
@@ -252,7 +251,7 @@ function gmSetAmbush()
      TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
      TraineeShip:setRotation(180) -- make sure it's facing away from station
      TraineeShip:commandDock(central_command)
- 
+
      TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
      .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
      .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
@@ -280,9 +279,9 @@ function gmSetAmbush()
 
 end
 
--- ##########################################################################
--- ## GM Alert Level ##
--- ##########################################################################
+-- #####################################################################################################################
+-- ## GM ALERT LEVEL                                                                                                  ##
+-- #####################################################################################################################
 
 function gmAlertNormal()
     -- Clear and reset the menu
@@ -308,12 +307,12 @@ function gmAlertRed()
     alertLevel = "red"
 end
 
--- ##########################################################################
--- ## Extra Commands ##
--- ##########################################################################
-function gmCreateCentralCommand()
+-- #####################################################################################################################
+-- ## Commands                                                                                                        ##
+-- #####################################################################################################################
+function gmCreateFOB()
     gmMainMenu()
-    
+
     if central_command:getPosition() == nil then
         central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
         central_command:setPosition(23500, 16100):setCallSign("Central Command")
@@ -351,12 +350,9 @@ function gmClearMission()
 
 end
 
-
-
--- ##########################################################################
--- ## Initial Function ##
--- ##########################################################################
-
+-- #####################################################################################################################
+-- ## Initialization Function                                                                                         ##
+-- #####################################################################################################################
 function init()
     -- Setup GM menu
     gmMainMenu()
@@ -439,13 +435,13 @@ function init()
     table.insert(friendList, NavyShip2)
 
     -- In relation to Human Navy{
-    
+
         -- Good Guys [USN, TSN, CUF, Human Navy]
 
         -- Neutral [Arlenians, Independent]
 
         -- Bad Guys [Exuari, Ktlitans, Kraylor, Ghosts]
-    
+
     -- }
 
     mission_state = 1
@@ -459,17 +455,17 @@ function update(delta)
         TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
 
     end
-    
+
 
     -- Mission State 1 is set in the init function. Next state occurs when the TargetShip, the Kraylor ship, is destroyed
     if mission_state == 1  and not TargetShip:isValid() then
-        
+
         -- Create a supply drop where the targetship was
         transport_drop = SupplyDrop():setFaction("Human Navy"):setPosition(52838, -29852)
     
         -- set mission_state to 2
         mission_state = 2
-        
+
     end
 
     -- trigger next events when the supply drop is picked up.
@@ -525,14 +521,14 @@ function update(delta)
 
     end
 
-    -- 
+    --
     if mission_state == 4 then
         
 
-        -- 
+        --
         -- the idea is that if the trainees left the two back there, then they'll both appear by central command when they're destroyed one ship here
         if not ExShip7:isValid() or not ExShip8:isValid() or not ExShip9:isValid() then
-           
+
             if ExShip5:isValid() then
                 ExShip5:setPosition(28824, 12817)
             end
@@ -547,7 +543,7 @@ function update(delta)
         end
 
         -- binary search, sequential, merge, quick sort, stability, inplace, know how to recognize if expression is done iteratively or recursive form
-    
+
     end
 
     if mission_state == 5 then
@@ -564,22 +560,22 @@ function update(delta)
     end
 
     if mission_state == 6 then
-    
+
         if TraineeShip:isDocked(central_command) then
-        
+
             central_command:sendCommsMessage(TraineeShip,([[Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing.]]))
-            
+
             victory("Human Navy")
         end
 
-    
+
     end
 
 
     -- GM will manage alert levels, so this will reset it constantly to what
     -- the GM has set it to
 
-    
+
     TraineeShip:commandSetAlertLevel(alertLevel)
 end
 
