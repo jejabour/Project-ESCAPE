@@ -3,7 +3,7 @@
 -- Type: Project ESCAPE
 
 -- #####################################################################################################################
--- ## NOTES                                                                                                           ##
+-- ## Notes                                                                                                           ##
 -- #####################################################################################################################
 
 -- ######## FACTIONS #########
@@ -25,25 +25,21 @@
 
 --}
 
-
 -- #####################################################################################################################
--- ## GM MENU                                                                                                         ##
+-- ## GM Menu                                                                                                         ##
 -- #####################################################################################################################
-
--- The main menu. Spacing is so it appears kinda nice in-game
 function gmMainMenu()
-    -- If you don't do clear GMFunctions for every button, it leaves the menu icons on screen and just adds more after you click
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "+ AMBUSH MISSION"), gmScenario4)
+    addGMFunction(_("buttonGM", "+ AMBUSH MISSION"), gmAMBUSH)
     addGMFunction(_("buttonGM", "+ Alert Level"),gmAlertLevel)
     addGMFunction(_("buttonGM", "+ Commands"), gmCommmands)
 end
 
---- Scenario 4 Command buttons
-function gmScenario4()
-    clearGMFunctions() -- Clear the menu
+-- AMBUSH Mission Commands
+function gmAMBUSH()
+    clearGMFunctions()
     addGMFunction(_("buttonGM", "- AMBUSH Mission"),gmMainMenu)
-    addGMFunction(_("buttonGM", "   Drop Intel"),gmAmbush_1)
+    addGMFunction(_("buttonGM", "   Drop Intel"),gmAmbush_DropIntel)
     addGMFunction(_("buttonGM", "   Spawn Enemies"),gmAmbush_2)
     addGMFunction(_("buttonGM", "   Activate Enemies"),gmAmbush_3)
     addGMFunction(_("buttonGM", "   Bring Enemies"),gmAmbush_4)
@@ -52,31 +48,28 @@ function gmScenario4()
     addGMFunction(_("buttonGM", "   Set Mission"),gmSetAmbush)
 end
 
--- Menu buttons for the Alert effects
 function gmAlertLevel()
-    clearGMFunctions() -- Clear the menu
+    clearGMFunctions()
     addGMFunction(_("buttonGM", "- Alert Level"),gmMainMenu)
     addGMFunction(_("buttonGM", "   Normal"),gmAlertNormal)
     addGMFunction(_("buttonGM", "   Yellow"),gmAlertYellow)
     addGMFunction(_("buttonGM", "   Red"),gmAlertRed)
 end
 
--- Buttons for creating a new central commmand and clear the mission
 function gmCommmands()
-    clearGMFunctions() -- Clear the menu
+    clearGMFunctions()
     addGMFunction(_("buttonGM", "- Commands"),gmMainMenu)
     addGMFunction(_("buttonGM", "   Create FOB"),gmCreateStart_Station)
     addGMFunction(_("buttonGM", "   Clear Mission"), gmClearMission)
-
 end
 
-
--- ##########################################################################
--- ## AMBUSH Scenario functions ##
--- ##########################################################################
-
--- Manually destroys the Kraylor ship, creates a supply drop, and sends a message to Relay
-function gmAmbush_1()
+-- #####################################################################################################################
+-- ## AMBUSH Mission Commands                                                                                         ##
+-- #####################################################################################################################
+--[[
+    Manually destroys the Kraylor ship, creates a supply drop, and sends a message to Relay.
+]]
+function gmAmbush_DropIntel()
     clearGMFunctions()
     gmMainMenu() -- Sends you back to the main menu after clicking this button
 
@@ -88,11 +81,12 @@ function gmAmbush_1()
 
     -- progress mission state
     mission_state = 2
-
 end
 
--- Sends the comm message to Relay saying Exuari ships appear near the player and CC
--- Spawns those ships, and two friendlies near CC. All ships by CC are 'frozen' however
+--[[
+    Sends the comm message to Relay saying Exuari ships appear near the player and CC.
+    Spawns those ships, and two friendlies near CC. All ships by CC are 'frozen' however.
+]]
 function gmAmbush_2()
     clearGMFunctions()
     gmMainMenu() -- Back to the main menu
@@ -129,7 +123,9 @@ function gmAmbush_2()
 
 end
 
--- 'Activates' the ships near CC, takes them off idle
+--[[
+    'Activates' the ships near CC; takes them off idle.
+]]
 function gmAmbush_3()
     clearGMFunctions()
     gmMainMenu()
@@ -144,12 +140,11 @@ function gmAmbush_3()
 
     -- progress the mission state
     mission_state = 4
-
-
-
 end
 
--- Brings the enemy ships from where the supply drop was to CC if they're still alive
+--[[
+    Brings the enemy ships from where the supply drop was to CC if they're still alive
+]]
 function gmAmbush_4()
     clearGMFunctions()
     gmMainMenu()
@@ -172,9 +167,11 @@ function gmAmbush_4()
     if ExShip5:isValid() or ExShip6:isValid() then
         orion_starforge:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
     end
-
 end
 
+--[[
+    Ends the mission with the trainee team losing
+]]
 function gmDefeat()
     clearGMFunctions()
     gmMainMenu()
@@ -194,8 +191,12 @@ function gmDefeat()
     TraineeShip:addCustomMessage("science", "science_message_defeat", message_defeat)
     TraineeShip:addCustomMessage("relay", "relay_message_defeat", message_defeat)
 
+    -- victory("Exuari")
 end
 
+--[[
+    Ends the mission with the trainee team winning
+]]
 function gmVictory()
     clearGMFunctions()
     gmMainMenu()
@@ -275,9 +276,8 @@ function gmSetAmbush()
 end
 
 -- #####################################################################################################################
--- ## GM ALERT LEVEL                                                                                                  ##
+-- ## Alert Level                                                                                                     ##
 -- #####################################################################################################################
-
 function gmAlertNormal()
     -- Clear and reset the menu
     clearGMFunctions()
@@ -311,7 +311,6 @@ function gmCreateStart_Station()
     if orion_starforge:getPosition() == nil then
         orion_starforge = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
         orion_starforge:setPosition(23500, 16100):setCallSign("Orion Starforge")
-
     end
 end
 
@@ -346,7 +345,7 @@ function gmClearMission()
 end
 
 -- #####################################################################################################################
--- ## Initialization Function                                                                                         ##
+-- ## Helper Functions                                                                                                ##
 -- #####################################################################################################################
 function init()
     -- Setup GM menu
@@ -448,7 +447,6 @@ function update(delta)
     if TraineeShip:isDocked(orion_starforge) then
         TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
         TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
-
     end
 
 
