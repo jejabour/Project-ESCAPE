@@ -3,7 +3,7 @@
 -- Type: Project ESCAPE
 
 -- #####################################################################################################################
--- ## NOTES                                                                                                           ##
+-- ## Notes                                                                                                           ##
 -- #####################################################################################################################
 
 -- ######## FACTIONS #########
@@ -25,25 +25,21 @@
 
 --}
 
-
 -- #####################################################################################################################
--- ## GM MENU                                                                                                         ##
+-- ## GM Menu                                                                                                         ##
 -- #####################################################################################################################
-
--- The main menu. Spacing is so it appears kinda nice in-game
 function gmMainMenu()
-    -- If you don't do clear GMFunctions for every button, it leaves the menu icons on screen and just adds more after you click
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "+ AMBUSH MISSION"), gmScenario4)
+    addGMFunction(_("buttonGM", "+ AMBUSH MISSION"), gmAMBUSH)
     addGMFunction(_("buttonGM", "+ Alert Level"),gmAlertLevel)
     addGMFunction(_("buttonGM", "+ Commands"), gmCommmands)
 end
 
---- Scenario 4 Command buttons
-function gmScenario4()
-    clearGMFunctions() -- Clear the menu
+-- AMBUSH Mission Commands
+function gmAMBUSH()
+    clearGMFunctions()
     addGMFunction(_("buttonGM", "- AMBUSH Mission"),gmMainMenu)
-    addGMFunction(_("buttonGM", "   Drop Intel"),gmAmbush_1)
+    addGMFunction(_("buttonGM", "   Drop Intel"),gmAmbush_DropIntel)
     addGMFunction(_("buttonGM", "   Spawn Enemies"),gmAmbush_2)
     addGMFunction(_("buttonGM", "   Activate Enemies"),gmAmbush_3)
     addGMFunction(_("buttonGM", "   Bring Enemies"),gmAmbush_4)
@@ -52,31 +48,28 @@ function gmScenario4()
     addGMFunction(_("buttonGM", "   Set Mission"),gmSetScenario4)
 end
 
--- Menu buttons for the Alert effects
 function gmAlertLevel()
-    clearGMFunctions() -- Clear the menu
+    clearGMFunctions()
     addGMFunction(_("buttonGM", "- Alert Level"),gmMainMenu)
     addGMFunction(_("buttonGM", "   Normal"),gmAlertNormal)
     addGMFunction(_("buttonGM", "   Yellow"),gmAlertYellow)
     addGMFunction(_("buttonGM", "   Red"),gmAlertRed)
 end
 
--- Buttons for creating a new central commmand and clear the mission
 function gmCommmands()
-    clearGMFunctions() -- Clear the menu
+    clearGMFunctions()
     addGMFunction(_("buttonGM", "- Commands"),gmMainMenu)
     addGMFunction(_("buttonGM", "   Create FOB"),gmCreateFOB)
     addGMFunction(_("buttonGM", "   Clear Mission"), gmClearMission)
-
 end
 
-
--- ##########################################################################
--- ## AMBUSH Scenario functions ##
--- ##########################################################################
-
--- Manually destroys the Kraylor ship, creates a supply drop, and sends a message to Relay
-function gmAmbush_1()
+-- #####################################################################################################################
+-- ## AMBUSH Mission Commands                                                                                         ##
+-- #####################################################################################################################
+--[[
+    Manually destroys the Kraylor ship, creates a supply drop, and sends a message to Relay.
+]]
+function gmAmbush_DropIntel()
     clearGMFunctions()
     gmMainMenu() -- Sends you back to the main menu after clicking this button
 
@@ -88,17 +81,18 @@ function gmAmbush_1()
 
     -- progress mission state
     mission_state = 2
-
 end
 
--- Sends the comm message to Relay saying Exuari ships appear near the player and CC
--- Spawns those ships, and two friendlies near CC. All ships by CC are 'frozen' however
+--[[
+    Sends the comm message to Relay saying Exuari ships appear near the player and CC.
+    Spawns those ships, and two friendlies near CC. All ships by CC are 'frozen' however.
+]]
 function gmAmbush_2()
     clearGMFunctions()
     gmMainMenu() -- Back to the main menu
 
     -- message from command saying Exuari appeared next to trainees, and central command
-    central_command:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
+    fob:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
     Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
 
     -- Spawn two enemies near the trainees
@@ -128,7 +122,9 @@ function gmAmbush_2()
 
 end
 
--- 'Activates' the ships near CC, takes them off idle
+--[[
+    'Activates' the ships near CC; takes them off idle.
+]]
 function gmAmbush_3()
     clearGMFunctions()
     gmMainMenu()
@@ -138,17 +134,16 @@ function gmAmbush_3()
     ExShip8:orderRoaming()
 
     -- Tell the friendlies to defend Central Command
-    NavyShip3:orderDefendTarget(central_command)
-    NavyShip5:orderDefendTarget(central_command)
+    NavyShip3:orderDefendTarget(fob)
+    NavyShip5:orderDefendTarget(fob)
 
     -- progress the mission state
     mission_state = 4
-
-
-
 end
 
--- Brings the enemy ships from where the supply drop was to CC if they're still alive
+--[[
+    Brings the enemy ships from where the supply drop was to CC if they're still alive
+]]
 function gmAmbush_4()
     clearGMFunctions()
     gmMainMenu()
@@ -169,13 +164,13 @@ function gmAmbush_4()
 
     -- CC tells the relay officer that those ships have followed them
     if ExShip5:isValid() or ExShip6:isValid() then
-        central_command:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
+        fob:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
     end
-
-
 end
 
-
+--[[
+    Ends the mission with the trainee team losing
+]]
 function gmDefeat()
     clearGMFunctions()
     gmMainMenu()
@@ -195,11 +190,12 @@ function gmDefeat()
     TraineeShip:addCustomMessage("science", "science_message_defeat", message_defeat)
     TraineeShip:addCustomMessage("relay", "relay_message_defeat", message_defeat)
 
-
     -- victory("Exuari")
-
 end
 
+--[[
+    Ends the mission with the trainee team winning
+]]
 function gmVictory()
     clearGMFunctions()
     gmMainMenu()
@@ -218,7 +214,6 @@ function gmVictory()
     TraineeShip:addCustomMessage("relay", "relay_message_victory", message_victory)
 
     -- victory("Human Navy")
-
 end
 
 
@@ -240,7 +235,7 @@ function gmSetScenario4()
      TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
      TraineeShip:setPosition(23400, 16100):setCallSign("J.E. Thompson")
      TraineeShip:setRotation(180) -- make sure it's facing away from station
-     TraineeShip:commandDock(central_command)
+     TraineeShip:commandDock(fob)
 
      TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
      .. " but were ambushed by Exuari in sector G7. It seems all the ships in the skirmish have been abandoned, but "
@@ -270,9 +265,8 @@ function gmSetScenario4()
 end
 
 -- #####################################################################################################################
--- ## GM ALERT LEVEL                                                                                                  ##
+-- ## Alert Level                                                                                                     ##
 -- #####################################################################################################################
-
 function gmAlertNormal()
     -- Clear and reset the menu
     clearGMFunctions()
@@ -303,10 +297,9 @@ end
 function gmCreateFOB()
     gmMainMenu()
 
-    if central_command:getPosition() == nil then
-        central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
-        central_command:setPosition(23500, 16100):setCallSign("Central Command")
-
+    if fob:getPosition() == nil then
+        fob = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+        fob:setPosition(23500, 16100):setCallSign("Central Command")
     end
 end
 
@@ -335,7 +328,7 @@ function gmClearMission()
 end
 
 -- #####################################################################################################################
--- ## Initialization Function                                                                                         ##
+-- ## Helper Functions                                                                                                ##
 -- #####################################################################################################################
 function init()
     -- Setup GM menu
@@ -349,8 +342,8 @@ function init()
     alertLevel = "normal"
 
     -- Create the command station
-    central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
-    central_command:setPosition(23500, 16100):setCallSign("Central Command")
+    fob = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+    fob:setPosition(23500, 16100):setCallSign("Central Command")
 
     -- Nebula that hide the enemy station.
     Nebula():setPosition(-43300, 2200)
@@ -387,7 +380,7 @@ function init()
     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
     TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
     TraineeShip:setRotation(180) -- make sure it's facing away from station
-    TraineeShip:commandDock(central_command)
+    TraineeShip:commandDock(fob)
 
     TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
     .. " but were ambushed by Exuari in sector G7. It seems all the ships in the skirmish have been abandoned, but "
@@ -428,7 +421,7 @@ end
 
 function update(delta)
 
-    if TraineeShip:isDocked(central_command) then
+    if TraineeShip:isDocked(fob) then
         TraineeShip:setWeaponStorage("homing", 12):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
         TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
 
@@ -452,7 +445,7 @@ function update(delta)
     if mission_state == 2 and not transport_drop:isValid() then
 
         -- message from command saying Exuari appeared next to trainees, and central command
-        central_command:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
+        fob:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
         Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
 
         -- Spawn two enemies near the trainees
@@ -485,13 +478,13 @@ function update(delta)
     if mission_state == 3 then
 
         -- Trigger when the trainees are near central command. "Activate" the cpu ships
-        if distance(TraineeShip, central_command) < 7500 then
+        if distance(TraineeShip, fob) < 7500 then
             ExShip7:orderRoaming()
             ExShip8:orderRoaming()
             ExShip9:orderRoaming()
-            NavyShip3:orderDefendTarget(central_command)
-            -- NavyShip4:orderDefendTarget(central_command)
-            NavyShip5:orderDefendTarget(central_command)
+            NavyShip3:orderDefendTarget(fob)
+            -- NavyShip4:orderDefendTarget(fob)
+            NavyShip5:orderDefendTarget(fob)
 
             mission_state = 4
 
@@ -514,7 +507,7 @@ function update(delta)
                 ExShip6:setPosition(28957, 14802)
             end
 
-            central_command:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
+            fob:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
             mission_state = 5
 
         end
@@ -538,9 +531,9 @@ function update(delta)
 
     if mission_state == 6 then
 
-        if TraineeShip:isDocked(central_command) then
+        if TraineeShip:isDocked(fob) then
 
-            central_command:sendCommsMessage(TraineeShip,([[Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing.]]))
+            fob:sendCommsMessage(TraineeShip,([[Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing.]]))
 
             victory("Human Navy")
         end

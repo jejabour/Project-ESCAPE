@@ -3,7 +3,7 @@
 -- Type: Project ESCAPE
 
 -- #####################################################################################################################
--- ## NOTES                                                                                                           ##
+-- ## Notes                                                                                                           ##
 -- #####################################################################################################################
 
 -- ##### FACTIONS #####
@@ -26,43 +26,43 @@
 -- }
 
 -- #####################################################################################################################
--- ## GM MENU                                                                                                         ##
+-- ## GM Menu                                                                                                         ##
 -- #####################################################################################################################
-
 function gmMainMenu()
     clearGMFunctions()
     addGMFunction(_("buttonGM", "+ COLLABORATION Mission"), gmCOLLABORATION)
     addGMFunction(_("buttonGM", "+ Alert Level"), gmAlertLevel)
-    addGMFunction(_("buttonGM", "+ Commands"), gmUsefulCommmands)
+    addGMFunction(_("buttonGM", "+ Commands"), gmCommmands)
 end
 
--- COLLABORATION missions
+-- COLLABORATION Mission Commands
 function gmCOLLABORATION()
-    -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
     addGMFunction(_("buttonGM", "- COLLABORATION Mission"), gmMainMenu)
-    addGMFunction(_("buttonGM", "   Start Moving"), gmCOLLABORATION_1)
-    addGMFunction(_("buttonGM", "   Enemy Defeated"), gmCOLLABORATION_2)
+    addGMFunction(_("buttonGM", "   Start Moving"), gmCOLLABORATION_Undock)
+    addGMFunction(_("buttonGM", "   Victory"), gmVictory)
+    addGMFunction(_("buttonGM", "   Defeat"), gmDefeat)
 end
 
 function gmAlertLevel()
-    clearGMFunctions() -- Clear the menu
+    clearGMFunctions()
     addGMFunction(_("buttonGM", "- Alert Level"), gmMainMenu)
     addGMFunction(_("buttonGM", "   Normal"), gmAlertNormal)
     addGMFunction(_("buttonGM", "   Yellow"), gmAlertYellow)
     addGMFunction(_("buttonGM", "   Red"), gmAlertRed)
 end
 
-function gmUsefulCommmands()
-    clearGMFunctions() -- Clear the menu
+function gmCommmands()
+    clearGMFunctions()
     addGMFunction(_("buttonGM", "- Commands"), gmMainMenu)
-    addGMFunction(_("buttonGM", "   Create FOB"), gmCreateFOB)
     addGMFunction(_("buttonGM", "   Clear Mission"), gmClearMission)
 end
 
--- When undocked, tell all ships to stop being idle
-function gmCOLLABORATION_1()
+-- #####################################################################################################################
+-- ## COLLABORATION Mission Commands                                                                                  ##
+-- #####################################################################################################################
+function gmCOLLABORATION_Undock()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
@@ -70,82 +70,6 @@ function gmCOLLABORATION_1()
     mission_state = 2
 end
 
--- #####################################################################################################################
--- ## GM ALERT LEVEL                                                                                                  ##
--- #####################################################################################################################
-
-function gmAlertNormal()
-    -- Clear and reset the menu
-    clearGMFunctions()
-    gmMainMenu()
-
-    alertLevel = "normal"
-end
-
-function gmAlertYellow()
-    -- Clear and reset the menu
-    clearGMFunctions()
-    gmMainMenu()
-
-    alertLevel = "yellow"
-end
-
-function gmAlertRed()
-    -- Clear and reset the menu
-    clearGMFunctions()
-    gmMainMenu()
-
-    alertLevel = "red"
-end
-
--- #####################################################################################################################
--- ## Commands                                                                                                        ##
--- #####################################################################################################################
-
-function gmCreateFOB()
-    gmMainMenu()
-    -- Home = setPosition(23500, 16100)
-
-    if fob:getPosition() == nil then
-        fob = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
-        fob:setPosition(23500, 16100):setCallSign("Central Command")
-    end
-end
-
-function gmCreateEnemyBase()
-    gmMainMenu()
-
-
-end
-
-function gmClearMission()
-    -- Clear and reset the menu
-    clearGMFunctions()
-    gmMainMenu()
-
-    TraineeShip:destroy()
-
-    waveNumber = 0
-
-    alertLevel = "normal"
-
-    for _, friend in ipairs(friendList) do
-        if friend:isValid() then
-            friend:destroy()
-        end
-    end
-
-    for _, enemy in ipairs(enemyList) do
-        if enemy:isValid() then
-            enemy:destroy()
-        end
-    end
-
-end
-
--- #####################################################################################################################
--- ## Victory and Defeat Messages                                                                                     ##
--- #####################################################################################################################
 function gmVictory()
     clearGMFunctions()
     gmMainMenu()
@@ -155,8 +79,7 @@ function gmVictory()
     -- Display a mesasage on the main screen for 2 minutes
     globalMessage(message_victory, 120)
 
-    -- Display a popup message on each players screen.
-    -- addCustomMessage(role, name of the string???, string)
+    -- Display a popup message on each players screen
     TraineeShip:addCustomMessage("helms", "helms_message_victory", message_victory)
     TraineeShip:addCustomMessage("engineering", "engineering_message_victory", message_victory)
     TraineeShip:addCustomMessage("weapons", "weapon_message_victory", message_victory)
@@ -177,8 +100,7 @@ function gmDefeat()
     -- Display a mesasage on the main screen for 2 minutes
     globalMessage(message_defeat, 120)
 
-    -- Display a popup message on each players screen.
-    -- addCustomMessage(role, name of the string???, string)
+    -- Display a popup message on each players screen
     TraineeShip:addCustomMessage("helms", "helms_message_defeat", message_defeat)
     TraineeShip:addCustomMessage("engineering", "engineering_message_defeat", message_defeat)
     TraineeShip:addCustomMessage("weapons", "weapon_message_defeat", message_defeat)
@@ -189,23 +111,92 @@ function gmDefeat()
 end
 
 -- #####################################################################################################################
--- ## Initialization Function                                                                                         ##
+-- ## Alert Level                                                                                                     ##
 -- #####################################################################################################################
-function init()
-    -- Setup GM menu
+function gmAlertNormal()
+    clearGMFunctions()
     gmMainMenu()
 
-    -- Setup global variables
-    TraineeShip1 = {}
-    TraineeShip2 = {}
+    alertLevel = "normal"
+end
+
+function gmAlertYellow()
+    clearGMFunctions()
+    gmMainMenu()
+
+    alertLevel = "yellow"
+end
+
+function gmAlertRed()
+    clearGMFunctions()
+    gmMainMenu()
+
+    alertLevel = "red"
+end
+
+-- #####################################################################################################################
+-- ## Commands                                                                                                        ##
+-- #####################################################################################################################
+function gmClearMission()
+    gmAlertNormal()
+
+    PlayerShip1:destroy()
+    PlayerShip2:destroy()
+    waveNumber = 0
+
+    for _, friend in ipairs(friendList) do
+        if friend:isValid() then
+            friend:destroy()
+        end
+    end
+
+    for _, enemy in ipairs(enemyList) do
+        if enemy:isValid() then
+            enemy:destroy()
+        end
+    end
+
+end
+
+-- #####################################################################################################################
+-- ## Helper Functions                                                                                                ##
+-- #####################################################################################################################
+function gmSetMission()
+    gmAlertNormal()
+
     enemyList = {}
     friendList = {}
     waveNumber = 0
-    alertLevel = "normal"
 
-    -- Create the FOB
-    fob = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
-    fob:setPosition(23500, 16100):setCallSign("FOB Charlie")
+    -- Create the two ships for the players
+    PlayerShip1 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+    PlayerShip1:setPosition(23500, 16100):setCallSign("Red Team")
+    PlayerShip2 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+    PlayerShip2:setPosition(23500, 16100):setCallSign("Blue Team")
+
+    -- Create FOB
+    fob = SpaceStation():setFaction("Human Navy"):setTemplate("Large Station")
+    fob:setPosition(23500, 16100):setCallSign("Nebula Citadel")
+
+    -- Create fleet of friendly ships
+    NavyShip1 = CpuShip():setFaction("Human Navy"):setTemplate("Phobos T3")
+    NavyShip1:setCanBeDestroyed(false):orderDefendTarget(fob)
+    NavyShip2 = CpuShip():setFaction("Human Navy"):setTemplate("Phobos T3")
+    NavyShip2:setCanBeDestroyed(false):orderDefendTarget(fob)
+    NavyShip3 = CpuShip():setFaction("Human Navy"):setTemplate("Phobos T3")
+    NavyShip3:setCanBeDestroyed(false):orderDefendTarget(fob)
+
+    -- Add friendly ships to friendList
+    table.insert(friendList, NavyShip1)
+    table.insert(friendList, NavyShip2)
+    table.insert(friendList, NavyShip3)
+
+    -- Establish a mission state variable
+    mission_state = 0
+end
+
+function init()
+    gmSetMission()
 end
 
 -- Place objects randomly in a rough line
