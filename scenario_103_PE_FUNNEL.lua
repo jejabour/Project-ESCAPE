@@ -71,30 +71,23 @@ function gmFUNNEL_1()
     clearGMFunctions()
     gmMainMenu()
 
-    NavyShip1:orderFlyTowards(30326, 72195)
-    NavyShip2:orderFlyTowards(21627, 74268)
-    ExShip1:orderRoaming()
-    ExShip2:orderRoaming()
-    ExShip3:orderRoaming()
-    ExShip4:orderRoaming()
-    ExShip5:orderRoaming()
+    orderFly()
 
     mission_state = 2
 
 end
 
--- Tell them to come back to central command after docking at the target station
+-- Tell them to come back to Orion Starforge after docking at the target station
 function gmFUNNEL_2()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
 
-    central_command:sendCommsMessage(TraineeShip,("Good job retrieving the supplies. Make your way back to Central Command."))
+    orion_starforge:sendCommsMessage(TraineeShip,("Good job retrieving the supplies. Make your way back to Orion Starforge."))
     -- addGMMessage("Moving to mission state 3")
     mission_state = 3
 
 end
-
 
 
 -- ##########################
@@ -111,83 +104,29 @@ function gmSetFunnel()
     waveNumber = 0
     alertLevel = "normal"
 
-
      -- Create the main ship for the trainees.
-     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-     TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
-     TraineeShip:setRotation(180) -- make sure it's facing away from station
-     TraineeShip:commandDock(central_command)
+    initShip()
  
-     TraineeShip:addToShipLog("A wave of asteroids have appeared around our location"
-     .. " in the shape of a funnel. Unfortunately, we need supplies from a docking station that has been surrounded by asteroids on all sides except through the asteroids. "
-     .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return to Central Command. ", "white")
- 
- 
- --- THE FUNNEL
-
-    -- placeRandom(Asteroid, 400, 500, 63555, 40000, 58468, 15000)
-    -- placeRandom(Asteroid, 700, 70000, 33555, 98000, 0, 15000)
-    placeRandom_funnel(Asteroid, 300, -7500, 31000, 6500, 100000, 14000)
-    placeRandom_funnel(Asteroid, 300, 60000, 26229, 45000, 100000, 15000)
- 
+-- ####################################
+    --- THE FUNNEL
+    -- Left side. (object type, x-start-loc, y-start, x-end, y, end, amount)
+    placeRandom_funnel(Asteroid, 300, 3700, 27000, 19700, 73600, 9000)
+    -- Right side
+    placeRandom_funnel(Asteroid, 300, 41000, 24500, 39000, 72800, 8000) 
 
     -- Surrounding the docking station
-    placeRandom_funnel(Asteroid, 75, 9202, 109076, -4023, 146011, 4000)
-    placeRandom_funnel(Asteroid, 60, 4000, 142230, 42797, 100689, 4000)
-
+    placeRandom_funnel(Asteroid, 75, 20000, 80000, 13648, 96000, 3000)
+    placeRandom_funnel(Asteroid, 60, 40000, 78000, 22000, 99500, 3000)
 
     -- Place a ton of probes randomly throughout the asteroid belt
-    for n=1, 45 do
-        local f = random(0, 1)
-        local x = 3500 + (50000 - 3500) * f
-        local y = 55000 + (90000 - 55000) * f
-
-        local r = random(0, 360)
-        local distance = random(0, 50000)
-        x = x + math.cos(r / 180 * math.pi) * distance
-        y = y + math.sin(r / 180 * math.pi) * distance
-
-        probe = ScanProbe():setPosition(x, y):setTarget(x, y):setFaction("Human Navy"):setOwner(TraineeShip):setLifetime(60 * 30)
-        table.insert(probeList, probe)
-
-
-    end
+    placeRandom_probes()
 
     --Place some enemies and good Guys
-
-    ExShip1 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(18427, 43827):setScanned(true)
-    ExShip2 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(35471, 44081):setScanned(true)
-    ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(30078, 47937):setScanned(true)
-    ExShip4 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(25326, 71373):setScanned(true)
-
-    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(22215, 52416):setScanned(true)
-
-    ExShip6 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(30735, 61092):setScanned(true)
-
-    ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(24451, 57579):setScanned(true)
-
-    NavyShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(19254, 23354):setScanned(true)
-    NavyShip2 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(29786, 23184):setScanned(true)
-
-    NavyStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setPosition(12423, 123339):setScanned(true)
-
-    table.insert(enemyList, ExShip1)
-    table.insert(enemyList, ExShip2)
-    table.insert(enemyList, ExShip3)
-    table.insert(enemyList, ExShip4)
-    table.insert(enemyList, ExShip5)
-    table.insert(enemyList, ExShip6)
-    table.insert(enemyList, ExStation)
-    table.insert(friendList, NavyShip1)
-    table.insert(friendList, NavyShip2)
-    table.insert(friendList, NavyStation)
+    createShips()
 
     mission_state = 0
 
-    -- addGMMessage("Going to mission_state 1")
-
 end
-
 
 -- ##########################################################################
 -- ## GM Alert Level ##
@@ -225,9 +164,9 @@ function gmCreateCentralCommand()
     gmMainMenu()
     -- Home = setPosition(23500, 16100)
 
-    if central_command:getPosition() == nil then
-        central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
-        central_command:setPosition(23500, 16100):setCallSign("Central Command")
+    if orion_starforge:getPosition() == nil then
+        orion_starforge = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+        orion_starforge:setPosition(23500, 16100):setCallSign("Orion Starforge")
 
     end
 end
@@ -338,8 +277,8 @@ function init()
     alertLevel = "normal"
 
     -- Create the command station
-    central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
-    central_command:setPosition(23500, 16100):setCallSign("Central Command")
+    orion_starforge = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+    orion_starforge:setPosition(23500, 16100):setCallSign("Orion Starforge")
 
     -- Nebula that hide the enemy station.
     Nebula():setPosition(-43300, 2200)
@@ -371,103 +310,48 @@ function init()
     gmMainMenu()
 
     -- Create the main ship for the trainees.
-    TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-    TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
-    TraineeShip:setRotation(200) -- make sure it's facing away from station
-    TraineeShip:commandDock(central_command)
+    initShip()
 
-    TraineeShip:addToShipLog("A wave of asteroids have appeared around our location"
-    .. " in the shape of a funnel. Unfortunately, we need supplies from a docking station that has been surrounded by asteroids on all sides except through the asteroids. "
-    .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return to Central Command. ", "white")
-
-
+-- ####################################
     --- THE FUNNEL
-
-    -- placeRandom(Asteroid, 400, 500, 63555, 40000, 58468, 15000)
-    -- placeRandom(Asteroid, 700, 70000, 33555, 98000, 0, 15000)
-    placeRandom_funnel(Asteroid, 300, -7500, 31000, 6500, 100000, 14000)
-    placeRandom_funnel(Asteroid, 300, 60000, 26229, 45000, 100000, 15000)
+    -- Left side. (object type, x-start-loc, y-start, x-end, y, end, amount)
+    placeRandom_funnel(Asteroid, 300, 3700, 27000, 19700, 73600, 9000)
+    -- Right side
+    placeRandom_funnel(Asteroid, 300, 41000, 24500, 39000, 72800, 8000)
  
 
     -- Surrounding the docking station
-    placeRandom_funnel(Asteroid, 75, 9202, 109076, -4023, 146011, 4000)
-    placeRandom_funnel(Asteroid, 60, 4000, 142230, 42797, 100689, 4000)
+    placeRandom_funnel(Asteroid, 75, 20000, 80000, 13648, 96000, 3000)
+    placeRandom_funnel(Asteroid, 60, 40000, 78000, 22000, 99500, 3000)
 
-
-    -- Place a ton of probes randomly throughout the asteroid belt
-    for n=1, 45 do
-        local f = random(0, 1)
-        local x = 3500 + (50000 - 3500) * f
-        local y = 55000 + (90000 - 55000) * f
-
-        local r = random(0, 360)
-        local distance = random(0, 50000)
-        x = x + math.cos(r / 180 * math.pi) * distance
-        y = y + math.sin(r / 180 * math.pi) * distance
-
-        probe = ScanProbe():setPosition(x, y):setTarget(x, y):setFaction("Human Navy"):setOwner(TraineeShip):setLifetime(60 * 30)
-        table.insert(probeList, probe)
-
-
-    end
+    -- Place the probes
+    placeRandom_probes()
 
     --Place some enemies and good Guys
-
-    ExShip1 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(18427, 43827):setScanned(true)
-    ExShip2 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(35471, 44081):setScanned(true)
-    ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(30078, 47937):setScanned(true)
-    ExShip4 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(25326, 71373):setScanned(true)
-
-    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(22215, 52416):setScanned(true)
-
-    ExShip6 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(30735, 61092):setScanned(true)
-
-    ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(24451, 57579):setScanned(true)
-
-    NavyShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(19254, 23354):setScanned(true)
-    NavyShip2 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(29786, 23184):setScanned(true)
-
-    NavyStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setPosition(12423, 123339):setScanned(true)
-
-    table.insert(enemyList, ExShip1)
-    table.insert(enemyList, ExShip2)
-    table.insert(enemyList, ExShip3)
-    table.insert(enemyList, ExShip4)
-    table.insert(enemyList, ExShip5)
-    table.insert(enemyList, ExShip6)
-    table.insert(enemyList, ExStation)
-    table.insert(friendList, NavyShip1)
-    table.insert(friendList, NavyShip2)
-    table.insert(friendList, NavyStation)
+    createShips()
 
     mission_state = 0
 
-    -- addGMMessage("Going to mission_state 1")
+
 
 end
 
 function update(delta)
 
-    if TraineeShip:isDocked(central_command) then
+    if TraineeShip:isDocked(orion_starforge) then
         TraineeShip:setWeaponStorage("homing", 12):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
         TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
 
     end
 
-    if mission_state == 0 and TraineeShip:isDocked(central_command) then
+    if mission_state == 0 and TraineeShip:isDocked(orion_starforge) then
         mission_state = 1
         -- addGMMessage("moving to Mission state 1")
     end
 
-    if mission_state == 1 and not TraineeShip:isDocked(central_command) then
+    if mission_state == 1 and not TraineeShip:isDocked(orion_starforge) then
 
-        NavyShip1:orderFlyTowards(30326, 72195)
-        NavyShip2:orderFlyTowards(21627, 74268)
-        ExShip1:orderRoaming()
-        ExShip2:orderRoaming()
-        ExShip3:orderRoaming()
-        ExShip4:orderRoaming()
-        ExShip5:orderRoaming()
+        orderFly()
 
         mission_state = 2
         -- addGMMessage("moving to Mission state 2")
@@ -477,12 +361,12 @@ function update(delta)
 
 
     if mission_state == 2 and TraineeShip:isDocked(NavyStation) then
-        central_command:sendCommsMessage(TraineeShip,("Now that you've gotten the supplies, make your way back to Central Command."))
+        orion_starforge:sendCommsMessage(TraineeShip,("Now that you've gotten the supplies, make your way back to Orion Starforge."))
         -- addGMMessage("Moving to mission state 3")
         mission_state = 3
     end
 
-    if mission_state == 3 and TraineeShip:isDocked(central_command) then
+    if mission_state == 3 and TraineeShip:isDocked(orion_starforge) then
 
         message_victory = "Good job, the supplies have been safely recovered. Return for mission debriefing."
 
@@ -501,7 +385,18 @@ function update(delta)
 
 end
 
+function initShip()
+    TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+    TraineeShip:setPosition(23524, 16802):setCallSign("J.E. Thompson")
+    TraineeShip:setRotation(90)
+    -- TraineeShip:commandTargetRotation(190) -- make sure it's facing away from station
+    TraineeShip:commandDock(orion_starforge)
 
+    TraineeShip:addToShipLog("A wave of asteroids have appeared around our location"
+    .. " in the shape of a funnel. Unfortunately, we need supplies from a docking station in sector L5 that has been surrounded by asteroids on all sides except through the asteroids. "
+    .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return to Orion Starforge. ", "white")
+
+end
 
 
 --- Place objects randomly in a rough line
@@ -523,7 +418,11 @@ function placeRandom(object_type, number, x1, y1, x2, y2, random_amount)
     end
 end
 
-
+-- ####################################
+    -- THE FUNNEL 
+    -- Creates the asteroids for the funnel
+    -- x = x-start + (x-end - x-start)
+    -- y = y-start + (y-end - y-start)
 function placeRandom_funnel(object_type, number, x1, y1, x2, y2, random_amount)
     for n = 1, number do
         local f = random(0, 1)
@@ -540,6 +439,92 @@ function placeRandom_funnel(object_type, number, x1, y1, x2, y2, random_amount)
 
     end
 end
+
+-- ####################################
+    -- THE PROBES 
+    -- Place a ton of probes randomly throughout the asteroid belt
+    -- x = x-start + (x-end - x-start)
+    -- y = y-start + (y-end - y-start)
+function placeRandom_probes()
+    for n=1, 60 do
+        local f = random(0, 1)
+        local x = 3000 + (50000 - 6000) * f
+        local y = 30000 + (90000 - 40000) * f
+
+        local r = random(0, 360)
+        local distance = random(0, 30000)
+        x = x + math.cos(r / 180 * math.pi) * distance
+        y = y + math.sin(r / 180 * math.pi) * distance
+
+        probe = ScanProbe():setPosition(x, y):setTarget(x, y):setFaction("Human Navy"):setOwner(TraineeShip):setLifetime(60 * 30)
+        table.insert(probeList, probe)
+
+    end
+end
+
+-- ####################################
+    -- THE ENEMIES 
+function createShips()
+
+    ExShip1 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(18427, 43827):setScanned(true)
+    ExShip2 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(23009, 43849):setScanned(true)
+    ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(27059, 43447):setScanned(true)
+    ExShip4 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(31601, 42900):setScanned(true)
+
+    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(23152, 55882):setScanned(true)
+    ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(26948, 55346):setScanned(true)
+    ExShip7 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(31069, 54316):setScanned(true)
+
+    ExShip8 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(28862, 62216):setScanned(true)
+
+    ExShip9 = CpuShip():setTemplate("Adder MK5"):setFaction("Exuari"):setPosition(31379, 77307):setScanned(true):orderDefendLocation(31379, 77307)
+
+    ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(32554, 64435):setScanned(true)
+
+    NavyShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(19254, 23354):setScanned(true)
+    NavyShip2 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(29786, 23184):setScanned(true)
+    NavyShip3 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(22800, 28202):setScanned(true)
+    NavyShip4 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(28308, 28433):setScanned(true)
+
+    NavyStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setPosition(25388, 86065):setScanned(true)
+
+    table.insert(enemyList, ExShip1)
+    table.insert(enemyList, ExShip2)
+    table.insert(enemyList, ExShip3)
+    table.insert(enemyList, ExShip4)
+    table.insert(enemyList, ExShip5)
+    table.insert(enemyList, ExShip6)
+    table.insert(enemyList, ExShip7)
+    table.insert(enemyList, ExShip8)
+    table.insert(enemyList, ExShip9)
+    table.insert(enemyList, ExStation)
+    table.insert(friendList, NavyShip1)
+    table.insert(friendList, NavyShip2)
+    table.insert(friendList, NavyShip3)
+    table.insert(friendList, NavyShip4)
+    table.insert(friendList, NavyStation)
+
+end
+
+function orderFly()
+
+    NavyShip1:orderFlyTowards(31065, 72565)
+    NavyShip2:orderFlyTowards(31065, 72565)
+    NavyShip3:orderFlyTowards(31065, 72565)
+    NavyShip4:orderFlyTowards(31065, 72565)
+    ExShip1:orderRoaming()
+    ExShip2:orderRoaming()
+    ExShip3:orderRoaming()
+    ExShip4:orderRoaming()
+    ExShip5:orderRoaming()
+    ExShip6:orderRoaming()
+    ExShip7:orderRoaming()
+    ExShip8:orderRoaming()
+    ExShip9:orderRoaming()
+
+
+end
+
 
 --- Return the distance between two objects.
 function distance(obj1, obj2)
