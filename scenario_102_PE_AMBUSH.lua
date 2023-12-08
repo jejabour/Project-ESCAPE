@@ -65,7 +65,7 @@ end
 function gmCommmands()
     clearGMFunctions() -- Clear the menu
     addGMFunction(_("buttonGM", "- Commands"),gmMainMenu)
-    addGMFunction(_("buttonGM", "   Create FOB"),gmCreateFOB)
+    addGMFunction(_("buttonGM", "   Create FOB"),gmCreateStart_Station)
     addGMFunction(_("buttonGM", "   Clear Mission"), gmClearMission)
 
 end
@@ -97,15 +97,15 @@ function gmAmbush_2()
     clearGMFunctions()
     gmMainMenu() -- Back to the main menu
 
-    -- message from command saying Exuari appeared next to trainees, and central command
-    central_command:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
-    Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
+    -- message from command saying Exuari appeared next to trainees, and Orion Starforge
+    orion_starforge:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking Orion Starforge!
+    Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and Orion Starforge!]]))
 
     -- Spawn two enemies near the trainees
     ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(57853, -30588):orderAttack(TraineeShip):setScanned(true)
     ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
 
-    -- spawn three by central command, but they're set to idle
+    -- spawn three by Orion Starforge, but they're set to idle
     ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle():setScanned(true)
     ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle():setScanned(true)
     -- ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
@@ -137,9 +137,9 @@ function gmAmbush_3()
     ExShip7:orderRoaming()
     ExShip8:orderRoaming()
 
-    -- Tell the friendlies to defend Central Command
-    NavyShip3:orderDefendTarget(central_command)
-    NavyShip5:orderDefendTarget(central_command)
+    -- Tell the friendlies to defend Orion Starforge
+    NavyShip3:orderDefendTarget(orion_starforge)
+    NavyShip5:orderDefendTarget(orion_starforge)
 
     -- progress the mission state
     mission_state = 4
@@ -169,7 +169,7 @@ function gmAmbush_4()
 
     -- CC tells the relay officer that those ships have followed them
     if ExShip5:isValid() or ExShip6:isValid() then
-        central_command:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
+        orion_starforge:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
     end
 
 
@@ -247,10 +247,10 @@ function gmSetAmbush()
     table.insert(nebulaeList, nebulae3)
 
      -- Create the main ship for the trainees.
-     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis"):setWeaponStorageMax("homing", 20):setWeaponStorage("homing", 20)
      TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
      TraineeShip:setRotation(180) -- make sure it's facing away from station
-     TraineeShip:commandDock(central_command)
+     TraineeShip:commandDock(orion_starforge)
 
      TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
      .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
@@ -310,12 +310,12 @@ end
 -- #####################################################################################################################
 -- ## Commands                                                                                                        ##
 -- #####################################################################################################################
-function gmCreateFOB()
+function gmCreateStart_Station()
     gmMainMenu()
 
-    if central_command:getPosition() == nil then
-        central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
-        central_command:setPosition(23500, 16100):setCallSign("Central Command")
+    if orion_starforge:getPosition() == nil then
+        orion_starforge = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+        orion_starforge:setPosition(23500, 16100):setCallSign("Orion Starforge")
 
     end
 end
@@ -366,8 +366,8 @@ function init()
     alertLevel = "normal"
 
     -- Create the command station
-    central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
-    central_command:setPosition(23500, 16100):setCallSign("Central Command")
+    orion_starforge = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+    orion_starforge:setPosition(23500, 16100):setCallSign("Orion Starforge")
 
     -- Nebula that hide the enemy station.
     Nebula():setPosition(-43300, 2200)
@@ -406,10 +406,10 @@ function init()
     gmMainMenu()
 
     -- Create the main ship for the trainees.
-    TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+    TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis"):setWeaponStorageMax("homing", 20):setWeaponStorage("homing", 20)
     TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
     TraineeShip:setRotation(180) -- make sure it's facing away from station
-    TraineeShip:commandDock(central_command)
+    TraineeShip:commandDock(orion_starforge)
 
     TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
     .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
@@ -450,8 +450,8 @@ end
 
 function update(delta)
 
-    if TraineeShip:isDocked(central_command) then
-        TraineeShip:setWeaponStorage("homing", 12):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+    if TraineeShip:isDocked(orion_starforge) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
         TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
 
     end
@@ -470,18 +470,18 @@ function update(delta)
 
     -- trigger next events when the supply drop is picked up.
     -- Spawn 2 enemy ships near the trainees
-    -- Spawn 3 enemy ships and 2 friendly ships by Central Command, but they're idle
+    -- Spawn 3 enemy ships and 2 friendly ships by Orion Starforge, but they're idle
     if mission_state == 2 and not transport_drop:isValid() then
 
-        -- message from command saying Exuari appeared next to trainees, and central command
-        central_command:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking central command!
-        Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and central command!]]))
+        -- message from command saying Exuari appeared next to trainees, and Orion Starforge
+        orion_starforge:sendCommsMessage(TraineeShip,([[The Exuari must have discovered that we sent for this intel, and are attacking Orion Starforge!
+        Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and Orion Starforge!]]))
 
         -- Spawn two enemies near the trainees
         ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(57853, -30588):orderAttack(TraineeShip):setScanned(true)
         ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
 
-        -- spawn three by central command, but they're set to idle
+        -- spawn three by Orion Starforge, but they're set to idle
         ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle():setScanned(true)
         ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle():setScanned(true)
         ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
@@ -503,17 +503,17 @@ function update(delta)
 
     end
 
-    -- Activates the ships near Central Command
+    -- Activates the ships near Orion Starforge
     if mission_state == 3 then
 
-        -- Trigger when the trainees are near central command. "Activate" the cpu ships
-        if distance(TraineeShip, central_command) < 7500 then
+        -- Trigger when the trainees are near Orion Starforge. "Activate" the cpu ships
+        if distance(TraineeShip, orion_starforge) < 7500 then
             ExShip7:orderRoaming()
             ExShip8:orderRoaming()
             ExShip9:orderRoaming()
-            NavyShip3:orderDefendTarget(central_command)
-            -- NavyShip4:orderDefendTarget(central_command)
-            NavyShip5:orderDefendTarget(central_command)
+            NavyShip3:orderDefendTarget(orion_starforge)
+            -- NavyShip4:orderDefendTarget(orion_starforge)
+            NavyShip5:orderDefendTarget(orion_starforge)
 
             mission_state = 4
 
@@ -526,7 +526,7 @@ function update(delta)
         
 
         --
-        -- the idea is that if the trainees left the two back there, then they'll both appear by central command when they're destroyed one ship here
+        -- the idea is that if the trainees left the two back there, then they'll both appear by Orion Starforge when they're destroyed one ship here
         if not ExShip7:isValid() or not ExShip8:isValid() or not ExShip9:isValid() then
 
             if ExShip5:isValid() then
@@ -537,7 +537,7 @@ function update(delta)
                 ExShip6:setPosition(28957, 14802)
             end
 
-            central_command:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
+            orion_starforge:sendCommsMessage(TraineeShip,("The enemies you left by the supply drop location have followed you to the base!"))
             mission_state = 5
 
         end
@@ -561,9 +561,9 @@ function update(delta)
 
     if mission_state == 6 then
 
-        if TraineeShip:isDocked(central_command) then
+        if TraineeShip:isDocked(orion_starforge) then
 
-            central_command:sendCommsMessage(TraineeShip,([[Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing.]]))
+            orion_starforge:sendCommsMessage(TraineeShip,([[Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing.]]))
 
             victory("Human Navy")
         end
