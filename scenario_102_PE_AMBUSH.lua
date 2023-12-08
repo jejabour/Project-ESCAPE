@@ -201,7 +201,7 @@ function gmVictory()
     clearGMFunctions()
     gmMainMenu()
 
-    message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
+    message_victory = "Thank you, crew, for your service! The threat has been defeated, and the mission is complete. Return for debriefing."
 
     -- Display a mesasage on the main screen for 2 minutes
     globalMessage(message_victory, 120)
