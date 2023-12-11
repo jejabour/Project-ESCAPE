@@ -30,33 +30,38 @@
 -- #####################################################################################################################
 function gmMainMenu()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "+ COLLABORATION Mission"), gmCOLLABORATION)
-    addGMFunction(_("buttonGM", "+ Alert Level"), gmAlertLevel)
-    addGMFunction(_("buttonGM", "+ Commands"), gmCommmands)
+    addGMFunction(_("buttonGM", "COLLABORATION    ▶"), gmCOLLABORATION)
+    addGMFunction(_("buttonGM", "Alert Level          ▶"), gmAlertLevel)
+    addGMFunction(_("buttonGM", "Commands         ▶"), gmCommmands)
 end
 
 -- COLLABORATION Mission Commands
 function gmCOLLABORATION()
     clearGMFunctions()
-    gmMainMenu()
-    addGMFunction(_("buttonGM", "- COLLABORATION Mission"), gmMainMenu)
-    addGMFunction(_("buttonGM", "   Start Moving"), gmCOLLABORATION_Undock)
-    addGMFunction(_("buttonGM", "   Victory"), gmVictory)
-    addGMFunction(_("buttonGM", "   Defeat"), gmDefeat)
+    addGMFunction(_("buttonGM", "COLLABORATION    ▼"), gmMainMenu)
+    addGMFunction(_("buttonGM", "   • Start Moving "), gmCOLLABORATION_Undock)
+    addGMFunction(_("buttonGM", "   • Victory          "), gmVictory)
+    addGMFunction(_("buttonGM", "   • Defeat           "), gmDefeat)
+    addGMFunction(_("buttonGM", "Alert Level          ▶"), gmAlertLevel)
+    addGMFunction(_("buttonGM", "Commands         ▶"), gmCommmands)
 end
 
 function gmAlertLevel()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "- Alert Level"), gmMainMenu)
-    addGMFunction(_("buttonGM", "   Normal"), gmAlertNormal)
-    addGMFunction(_("buttonGM", "   Yellow"), gmAlertYellow)
-    addGMFunction(_("buttonGM", "   Red"), gmAlertRed)
+    addGMFunction(_("buttonGM", "COLLABORATION    ▶"), gmMainMenu)
+    addGMFunction(_("buttonGM", "Alert Level          ▼"), gmMainMenu)
+    addGMFunction(_("buttonGM", "   • Normal       "), gmAlertNormal)
+    addGMFunction(_("buttonGM", "   • Yellow        "), gmAlertYellow)
+    addGMFunction(_("buttonGM", "   • Red            "), gmAlertRed)
+    addGMFunction(_("buttonGM", "Commands         ▶"), gmCommmands)
 end
 
 function gmCommmands()
     clearGMFunctions()
-    addGMFunction(_("buttonGM", "- Commands"), gmMainMenu)
-    addGMFunction(_("buttonGM", "   Clear Mission"), gmClearMission)
+    addGMFunction(_("buttonGM", "COLLABORATION    ▶"), gmMainMenu)
+    addGMFunction(_("buttonGM", "Alert Level          ▶"), gmMainMenu)
+    addGMFunction(_("buttonGM", "Commands         ▼"), gmMainMenu)
+    addGMFunction(_("buttonGM", "   • Clear Mission"), gmClearMission)
 end
 
 -- #####################################################################################################################
@@ -66,8 +71,6 @@ function gmCOLLABORATION_Undock()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
-
-    mission_state = 2
 end
 
 function gmVictory()
@@ -117,21 +120,21 @@ function gmAlertNormal()
     clearGMFunctions()
     gmMainMenu()
 
-    alertLevel = "normal"
+    alertLevel = "Normal"
 end
 
 function gmAlertYellow()
     clearGMFunctions()
     gmMainMenu()
 
-    alertLevel = "yellow"
+    alertLevel = "Yellow"
 end
 
 function gmAlertRed()
     clearGMFunctions()
     gmMainMenu()
 
-    alertLevel = "red"
+    alertLevel = "Red"
 end
 
 -- #####################################################################################################################
@@ -142,7 +145,6 @@ function gmClearMission()
 
     PlayerShip1:destroy()
     PlayerShip2:destroy()
-    waveNumber = 0
 
     for _, friend in ipairs(friendList) do
         if friend:isValid() then
@@ -166,30 +168,43 @@ function gmSetMission()
 
     enemyList = {}
     friendList = {}
-    waveNumber = 0
-
-    -- Create the two ships for the players
-    PlayerShip1 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-    PlayerShip1:setPosition(23500, 16100):setCallSign("Red Team")
-    PlayerShip2 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
-    PlayerShip2:setPosition(23500, 16100):setCallSign("Blue Team")
 
     -- Create FOB
-    fob = SpaceStation():setFaction("Human Navy"):setTemplate("Large Station")
-    fob:setPosition(23500, 16100):setCallSign("Nebula Citadel")
+    NebulaCitadel = SpaceStation():setFaction("Human Navy"):setTemplate("Large Station")
+    NebulaCitadel:setPosition(23500, 16100):setCallSign("Nebula Citadel")
+    x, y = NebulaCitadel:getPosition()
 
-    -- Create fleet of friendly ships
-    NavyShip1 = CpuShip():setFaction("Human Navy"):setTemplate("Phobos T3")
-    NavyShip1:setCanBeDestroyed(false):orderDefendTarget(fob)
-    NavyShip2 = CpuShip():setFaction("Human Navy"):setTemplate("Phobos T3")
-    NavyShip2:setCanBeDestroyed(false):orderDefendTarget(fob)
-    NavyShip3 = CpuShip():setFaction("Human Navy"):setTemplate("Phobos T3")
-    NavyShip3:setCanBeDestroyed(false):orderDefendTarget(fob)
+    -- Create the two ships for the players
+    PlayerShip1 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis"):setPosition(x, y):setCallSign("Red")
+    PlayerShip2 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis"):setPosition(x, y):setCallSign("Blue")
 
-    -- Add friendly ships to friendList
-    table.insert(friendList, NavyShip1)
-    table.insert(friendList, NavyShip2)
-    table.insert(friendList, NavyShip3)
+    -- Create enemy mother ship
+    EnemyMotherShip = CpuShip():setFaction("Exuari"):setTemplate("Ryder"):setPosition(x + 10000, y)
+    --                            Idx,  Arc,    Dir,    Range,  CycleTime,  Dmg
+    EnemyMotherShip:setBeamWeapon(0,    20,    -90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(1,    20,    -90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(2,    20,     90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(3,    20,     90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(4,    20,    -90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(5,    20,    -90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(6,    20,     90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(7,    20,     90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(8,    20,    -90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(9,    20,    -90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(10,   20,     90,     1200.0, 9.0,        1)
+    EnemyMotherShip:setBeamWeapon(11,   20,     90,     1200.0, 9.0,        1)
+    EnemyMotherShip:orderFlyTowards(x, y)
+
+    -- Add enemy mother ship to enemyList
+    table.insert(enemyList, EnemyMotherShip)
+
+    -- Add nebula to obscure enemy mother ship
+    nebula = Nebula():setPosition(x + 10000, y)
+
+    -- Spawn the first waves of ships
+    spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
+    spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
+    spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
 
     -- Establish a mission state variable
     mission_state = 0
@@ -197,6 +212,41 @@ end
 
 function init()
     gmSetMission()
+end
+
+-- Spawn a ship with the given origin, target, faction, and template
+function spawnShip(origin, target, faction, template)
+    x, y = origin:getPosition()
+    Ship = CpuShip():setFaction(faction):setTemplate(template):setPosition(x, y):setHullMax(0):setShieldsMax(0)
+
+    list = {}
+    if faction == "Exuari" then
+        list = enemyList
+        x, y = target:getPosition()
+        Ship:orderFlyTowards(x, y)
+    else
+        list = friendlyList
+        Ship:orderDefendTarget(target)
+    end
+
+    table.insert(list, Ship)
+end
+
+-- Changes to make every time step
+function update(delta)
+    if spawnDelay ~= nil then
+        spawnDelay = spawnDelay - delta
+        if spawnDelay < 0 then
+            spawnShip(NebulaCitadel, NebulaCitadel, "Human Navy", "MU52 Hornet")
+            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
+            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
+            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
+            spawnDelay = nil
+        end
+        return
+    end
+
+    spawnDelay = 15
 end
 
 -- Place objects randomly in a rough line
