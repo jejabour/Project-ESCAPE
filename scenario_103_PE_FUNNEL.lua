@@ -338,6 +338,8 @@ end
 
 function update(delta)
 
+    TraineeShip:commandSetAlertLevel(alertLevel)
+
     if TraineeShip:isDocked(orion_starforge) or TraineeShip:isDocked(NavyStation) then
         TraineeShip:setWeaponStorage("homing", 12):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
         TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
