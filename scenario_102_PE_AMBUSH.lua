@@ -45,7 +45,7 @@ function gmAMBUSH()
     addGMFunction(_("buttonGM", "   Bring Enemies"),gmAmbush_4)
     addGMFunction(_("buttonGM", "   Defeat"),gmDefeat)
     addGMFunction(_("buttonGM", "   Victory"),gmVictory)
-    addGMFunction(_("buttonGM", "   Set Mission"),gmSetScenario4)
+    addGMFunction(_("buttonGM", "   Set Mission"),gmSetAmbush)
 end
 
 function gmAlertLevel()
@@ -105,9 +105,9 @@ function gmAmbush_2()
     -- ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
 
     -- spawn two weak and one decent friendly ships by command, set to idle
-    NavyShip3 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
-    -- NavyShip4 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(24134, 17232):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
-    NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true):setWeaponStorageMax("homing", 12):setWeaponStorage("homing", 12)
+    NavyShip3 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true)
+    NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true)
+    NavyShip6 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24497, 14788):orderIdle():setScanned(true)
 
     -- If we add all the ships and friendlies to a list, we can everything with the Clear Mission button easily
     table.insert(enemyList, ExShip5)
@@ -116,6 +116,7 @@ function gmAmbush_2()
     table.insert(enemyList, ExShip8)
     table.insert(friendList, NavyShip3)
     table.insert(friendList, NavyShip5)
+    table.insert(friendList, NavyShip6)
 
     -- Progress mission state
     mission_state = 3
@@ -200,7 +201,7 @@ function gmVictory()
     clearGMFunctions()
     gmMainMenu()
 
-    message_victory = "Thank you, crew, for your service! The threat has been defeated, the intel recovered, and the mission is complete. Return for debriefing."
+    message_victory = "Thank you, crew, for your service! The threat has been defeated, and the mission is complete. Return for debriefing."
 
     -- Display a mesasage on the main screen for 2 minutes
     globalMessage(message_victory, 120)
@@ -213,7 +214,6 @@ function gmVictory()
     TraineeShip:addCustomMessage("science", "science_message_victory", message_victory)
     TraineeShip:addCustomMessage("relay", "relay_message_victory", message_victory)
 
-    -- victory("Human Navy")
 end
 
 
@@ -258,8 +258,9 @@ function gmSetAmbush()
      ExShip2 = CpuShip():setTemplate("Battlestation"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
      ExShip3 = CpuShip():setTemplate("Blade"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
      ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(55840, -35901):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-     NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(50768, -33352):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-     NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(55256, -26688):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+     NavyShip1 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(50768, -33352):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+     NavyShip2 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(55256, -26688):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+     
      
  
      table.insert(enemyList, ExShip1)
@@ -479,9 +480,9 @@ function update(delta)
         ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
 
         -- spawn two weak and one decent friendly ships by command, set to idle
-        NavyShip3 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
-        -- NavyShip4 = CpuShip():setTemplate("Adder MK8"):setFaction("Human Navy"):setPosition(24134, 17232):orderIdle():setScanned(true):setWeaponStorageMax("HVLI", 6):setWeaponStorage("HVLI", 6)
-        NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true):setWeaponStorageMax("homing", 12):setWeaponStorage("homing", 12)
+        NavyShip3 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true)
+        NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true)
+        NavyShip6 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24497, 14788):orderIdle():setScanned(true)
 
         table.insert(enemyList, ExShip5)
         table.insert(enemyList, ExShip6)
@@ -490,6 +491,7 @@ function update(delta)
         table.insert(enemyList, ExShip9)
         table.insert(friendList, NavyShip3)
         table.insert(friendList, NavyShip5)
+        table.insert(friendList, NavyShip6)
 
         mission_state = 3
 
@@ -515,9 +517,7 @@ function update(delta)
 
     --
     if mission_state == 4 then
-        
 
-        --
         -- the idea is that if the trainees left the two back there, then they'll both appear by Orion Starforge when they're destroyed one ship here
         if not ExShip7:isValid() or not ExShip8:isValid() or not ExShip9:isValid() then
 
@@ -534,8 +534,6 @@ function update(delta)
 
         end
 
-        -- binary search, sequential, merge, quick sort, stability, inplace, know how to recognize if expression is done iteratively or recursive form
-
     end
 
     if mission_state == 5 then
@@ -544,10 +542,6 @@ function update(delta)
         if not ExShip5:isValid() and not ExShip6:isValid() and not ExShip7:isValid() and not ExShip8:isValid() then
             mission_state = 6
         end
-
-        -- and not ExShip9:isValid()
-
-
 
     end
 
