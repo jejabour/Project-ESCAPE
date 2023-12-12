@@ -520,9 +520,9 @@ function gmSetRetrieveData()
     TraineeShip:commandDock(repair_station)
 
     TraineeShip:addToShipLog("We have received reports that a hostile force is "
-    .. "enroute to one of our satellites on the border of our space. This satellite "
-    .. "has crucial data that must be retrieved before the Exuari get their hands "
-    .. "on it. Retrieve the data and return it to command. Do not allow the Exuari "
+    .. "enroute to Orion Starforge. This station "
+    .. "has codes to enable comms back to Earth's central command post that must be retrieved before the Exuari get their hands "
+    .. "on it. Retrieve the codes and return them to the Repair Station. Do not allow the Exuari "
     .. "to have it.", "white")
 
     satellite = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy"):setPosition(60500, 42100):setCallSign("Orion Starforge"):setCommsScript("")
@@ -742,6 +742,26 @@ function update(delta)
     -- GM will manage alert levels, so this will reset it constantly to what
     -- the GM has set it to
     TraineeShip:commandSetAlertLevel(alertLevel)
+    
+    if TraineeShip:isDocked(orion_starforge) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+    end
+
+    if TraineeShip:isDocked(nebula_citadel) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+    end
+
+    if TraineeShip:isDocked(repair_station) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+    end
+
+    if TraineeShip:isDocked(deep_space_ix) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+    end
 end
 
 --- Return the distance between two objects.

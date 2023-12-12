@@ -333,14 +333,14 @@ function initShip()
     TraineeShip2:commandDock(nebula_citadel)
 
     TraineeShip1:addToShipLog("This is the final frontier!"
-    .. " The enemy is fast approaching us from Sector H4, and their largest battlehip is on the way! We need you to team up with another group to fight off invading enemies "
-    .. "near our Nebula Citadel base, and destroy the enemy mothership, Odin! We estimate about 20 minutes before they get here. Good luck!", "white")
+    .. " The enemy is fast approaching us from Sector H4, and their largest battleship is on the way! We need you to team up with another group to intercept the Odin "
+    .. "before it reaches the Nebula Citadel! We don't know their ETA, so assume they are within minutes of arriving. Good luck!", "white")
 
     TraineeShip1:addToShipLog("As one last ditch effort, have your science officer scan the Odin in one more attempt to ask for peace, and relay their response.", "white")
 
     TraineeShip2:addToShipLog("This is the final frontier!"
-    .. " The enemy is fast approaching us from Sector H4, and their largest battlehip is on the way! We need you to team up with another group to fight off invading enemies "
-    .. "near our Nebula Citadel base, and destroy the enemy mothership, Odin! We estimate about 20 minutes before they get here. Good luck!", "white")
+    .. " The enemy is fast approaching us from Sector H4, and their largest battleship is on the way! We need you to team up with another group to intercept the Odin "
+    .. "before it reaches the Nebula Citadel! We don't know their ETA, so assume they are within minutes of arriving. Good luck!", "white")
 
     TraineeShip2:addToShipLog("As one last ditch effort, have your science officer scan the Odin in one more attempt to ask for peace, and relay their response.", "white")
 
