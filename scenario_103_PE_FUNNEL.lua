@@ -468,20 +468,20 @@ end
     -- THE ENEMIES 
 function createShips()
 
-    ExShip1 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(18427, 43827):setScanned(true):orderStandGround()
-    ExShip2 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(23009, 43849):setScanned(true):orderStandGround()
-    ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(27059, 43447):setScanned(true):orderStandGround()
-    ExShip4 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(31601, 42900):setScanned(true):orderStandGround()
+    ExShip1 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(18427, 43827):orderStandGround()
+    ExShip2 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(23009, 43849):orderStandGround()
+    ExShip3 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(27059, 43447):orderStandGround()
+    ExShip4 = CpuShip():setTemplate("Phobos M3"):setFaction("Exuari"):setPosition(31601, 42900):orderStandGround()
 
-    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(23152, 55882):setScanned(true):orderStandGround()
-    ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(26948, 55346):setScanned(true):orderStandGround()
-    ExShip7 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(31069, 54316):setScanned(true):orderStandGround()
+    ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(23152, 55882):orderStandGround()
+    ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(26948, 55346):orderStandGround()
+    ExShip7 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(31069, 54316):orderStandGround()
 
     ExShip8 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(28862, 62216):setScanned(true):orderStandGround()
 
     ExShip9 = CpuShip():setTemplate("Adder MK5"):setFaction("Exuari"):setPosition(31379, 77307):setScanned(true):orderDefendLocation(31379, 77307)
 
-    ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(32554, 64435):setScanned(true)
+    ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(32554, 64435)
 
     NavyShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(19254, 23354):setScanned(true)
     NavyShip2 = CpuShip():setTemplate("Phobos T3"):setFaction("Human Navy"):setPosition(29786, 23184):setScanned(true)

@@ -96,18 +96,18 @@ function gmAmbush_2()
     Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and Orion Starforge!]]))
 
     -- Spawn two enemies near the trainees
-    ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(57853, -30588):orderAttack(TraineeShip):setScanned(true)
-    ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
+    ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(57853, -30588):orderAttack(TraineeShip)
+    ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip)
 
     -- spawn three by Orion Starforge, but they're set to idle
-    ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle():setScanned(true)
-    ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle():setScanned(true)
+    ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle()
+    ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle()
     -- ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
 
     -- spawn two weak and one decent friendly ships by command, set to idle
-    NavyShip3 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true)
-    NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle():setScanned(true)
-    NavyShip6 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24497, 14788):orderIdle():setScanned(true)
+    NavyShip3 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle()
+    NavyShip5 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24931, 16094):orderIdle()
+    NavyShip6 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(24497, 14788):orderIdle()
 
     -- If we add all the ships and friendlies to a list, we can everything with the Clear Mission button easily
     table.insert(enemyList, ExShip5)
@@ -471,13 +471,13 @@ function update(delta)
         Be aware, some must have heard the explosion and are coming after you too. Defend yourselves and Orion Starforge!]]))
 
         -- Spawn two enemies near the trainees
-        ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(57853, -30588):orderAttack(TraineeShip):setScanned(true)
-        ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip):setScanned(true)
+        ExShip5 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(57853, -30588):orderAttack(TraineeShip)
+        ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(56023, -25758):orderAttack(TraineeShip)
 
         -- spawn three by Orion Starforge, but they're set to idle
-        ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle():setScanned(true)
-        ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle():setScanned(true)
-        ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle():setScanned(true)
+        ExShip7 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(19148, 18485):orderIdle()
+        ExShip8 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(20327, 14200):orderIdle()
+        ExShip9 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(24316, 13208):orderIdle()
 
         -- spawn two weak and one decent friendly ships by command, set to idle
         NavyShip3 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(22427, 16224):orderIdle():setScanned(true)

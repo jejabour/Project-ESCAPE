@@ -39,7 +39,8 @@ end
 function gmCollab()
     clearGMFunctions()
     addGMFunction(_("buttonGM", "- Collab Mission"),gmMainMenu)
-    addGMFunction(_("buttonGM", "   Drop Intel"),gmAmbush_SpawnWave)
+    addGMFunction(_("buttonGM", "   Spawn Wave"),gmSpawnWave)
+    addGMFunction(_("buttonGM", "   Move Ships"),gmMove_Ships)
     addGMFunction(_("buttonGM", "   Defeat"),gmDefeat)
     addGMFunction(_("buttonGM", "   Victory"),gmVictory)
     addGMFunction(_("buttonGM", "   Set Mission"),gmSetCollab)
@@ -73,11 +74,12 @@ function init()
     TraineeShip = {}
     enemyList = {}
     friendList = {}
+    asteroidList = {}
     waveNumber = 0
     alertLevel = "normal"
 
     nebula_citadel = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy"):setRepairDocked(true)
-    nebula_citadel:setPosition(23500, 16100):setCallSign("Nebula Citadel")
+    nebula_citadel:setPosition(23500, 16100):setCallSign("Nebula Citadel"):setCanBeDestroyed(false)
 
     -- Nebula that hide the enemy station.
     Nebula():setPosition(-43300, 2200)
@@ -98,15 +100,48 @@ function init()
     placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 2000)
     placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 2000)
 
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+
+    initShip()
+
+    placeRandom_funnel(Asteroid, 75, -43743, 60000, 69000, 38300, 30000)
+    -- addGMMessage(asteroidList[0])
+
+
+    createShips()
+
+    mission_state = 0
+
+end
+
+function gmSetCollab()
+
+    gmMainMenu()
+
+
+    TraineeShip = {}
+    enemyList = {}
+    friendList = {}
+    asteroidList = {}
+    waveNumber = 0
+    alertLevel = "normal"
+
+    
+    placeRandom_funnel(Asteroid, 75, -43743, 60000, 69000, 38300, 30000)
+    -- addGMMessage(asteroidList[0])
+
     initShip()
 
     createShips()
+
 
 end
 
 
 
-function gmAmbush_SpawnWave()
+function gmSpawnWave()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
@@ -218,12 +253,67 @@ function randomSpawnPointInfo(distance)
     return x, y, rx, ry
 end
 
+function gmMove_Ships()
+
+    clearGMFunctions()
+    gmMainMenu()
+
+    nebula_citadel:sendCommsMessage(TraineeShip1, ("The Exuari have jumped to the Nebula Citadel! We need as much backup as we can get now! "))
+    nebula_citadel:sendCommsMessage(TraineeShip2, ("The Exuari have jumped to the Nebula Citadel! We need as much backup as we can get now! "))
+
+    if ExShip5:isValid() then
+        -- Move it close to CC
+        ExShip5:setPosition(13282, 18050)
+    end
+
+    if ExShip6:isValid() then
+        -- Move it close to CC
+        ExShip6:setPosition(15359, 13848)
+    end
+
+    if ExShip7:isValid() then
+        -- Move it close to CC
+        ExShip7:setPosition(22263, 24628)
+    end
+
+    if ExShip8:isValid() then
+        -- Move it close to CC
+        ExShip8:setPosition(21843, 9814):orderRoaming()
+    end
+
+    if ExShip9:isValid() then
+        -- Move it close to CC
+        ExShip9:setPosition(35423, 21283):orderRoaming()
+    end
+
+    if ExForetress:isValid() then
+        -- Move it close to CC
+        ExForetress:setPosition(14120, 22797):orderRoaming()
+    end
+
+
+end
 
 
 
 function update(delta)
 
-    TraineeShip:commandSetAlertLevel(alertLevel)
+    TraineeShip1:commandSetAlertLevel(alertLevel)
+
+    TraineeShip2:commandSetAlertLevel(alertLevel)
+
+
+    if TraineeShip1:isDocked(nebula_citadel) then
+        TraineeShip1:setWeaponStorage("homing", 24):setWeaponStorage("nuke", 10):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 12):setWeaponStorage("HVLI", 24)
+        TraineeShip1:setScanProbeCount(TraineeShip1:getMaxScanProbeCount())
+    end
+
+    if TraineeShip2:isDocked(nebula_citadel) then
+        TraineeShip2:setWeaponStorage("homing", 24):setWeaponStorage("nuke", 10):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 12):setWeaponStorage("HVLI", 24)
+        TraineeShip2:setScanProbeCount(TraineeShip1:getMaxScanProbeCount())
+    end
+
+    
 
 end
 
@@ -246,29 +336,33 @@ function initShip()
     .. " The enemy is fast approaching us from Sector H4, and their largest battlehip is on the way! We need you to team up with another group to fight off invading enemies "
     .. "near our Nebula Citadel base, and destroy the enemy mothership, Odin! We estimate about 20 minutes before they get here. Good luck!", "white")
 
+    TraineeShip1:addToShipLog("As one last ditch effort, have your science officer scan the Odin in one more attempt to ask for peace, and relay their response.", "white")
+
     TraineeShip2:addToShipLog("This is the final frontier!"
     .. " The enemy is fast approaching us from Sector H4, and their largest battlehip is on the way! We need you to team up with another group to fight off invading enemies "
     .. "near our Nebula Citadel base, and destroy the enemy mothership, Odin! We estimate about 20 minutes before they get here. Good luck!", "white")
+
+    TraineeShip2:addToShipLog("As one last ditch effort, have your science officer scan the Odin in one more attempt to ask for peace, and relay their response.", "white")
 
 end
 
 
 function createShips()
 
-    ExShip1 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(-12666, 39095):setScanned(true):orderAttack(nebula_citadel)
-    ExShip2 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(-8769, 42007):setScanned(true):orderAttack(nebula_citadel)
-    ExShip3 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(-5657, 44321):setScanned(true):orderAttack(nebula_citadel)
-    ExShip4 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(-1810, 46548):setScanned(true):orderAttack(nebula_citadel)
+    ExShip1 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(-6539, 33015):orderAttack(nebula_citadel)
+    ExShip2 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(-2642, 36852):orderAttack(nebula_citadel)
+    ExShip3 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(2636, 40254):orderAttack(nebula_citadel)
+    ExShip4 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(6879, 42643):orderAttack(nebula_citadel)
 
-    ExForetress = CpuShip():setTemplate("Fortress"):setFaction("Exuari"):setPosition(-32127, 62007):setScanned(true):orderStandGround()
+    ExForetress = CpuShip():setTemplate("Fortress"):setFaction("Exuari"):setPosition(-20129, 56910):orderStandGround():setCallSign("Odin")
+    ExForetress:setDescriptions("", "We do not want compromise, we declare war!")
 
-    -- ExShip5 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(23152, 55882):setScanned(true):orderStandGround()
-    -- ExShip6 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(26948, 55346):setScanned(true):orderStandGround()
-    -- ExShip7 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(31069, 54316):setScanned(true):orderStandGround()
+    ExShip5 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-16269, 45690):orderStandGround()
+    ExShip6 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-12357, 50486):orderStandGround()
+    ExShip7 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-8188, 54737):orderStandGround()
 
-    -- ExShip8 = CpuShip():setTemplate("Gunship"):setFaction("Exuari"):setPosition(28862, 62216):setScanned(true):orderStandGround()
-
-    -- ExShip9 = CpuShip():setTemplate("Adder MK5"):setFaction("Exuari"):setPosition(31379, 77307):setScanned(true):orderDefendLocation(31379, 77307)
+    ExShip8 = CpuShip():setTemplate("MT52 Hornet"):setFaction("Exuari"):setPosition(-20197, 55877):orderDefendTarget(ExForetress)
+    ExShip9 = CpuShip():setTemplate("MT52 Hornet"):setFaction("Exuari"):setPosition(-20023, 57836):orderDefendTarget(ExForetress)
 
     -- ExStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setPosition(32554, 64435):setScanned(true)
 
@@ -279,20 +373,20 @@ function createShips()
 
     -- NavyStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setPosition(25388, 86065):setScanned(true)
 
-    -- table.insert(enemyList, ExShip1)
-    -- table.insert(enemyList, ExShip2)
-    -- table.insert(enemyList, ExShip3)
-    -- table.insert(enemyList, ExShip4)
-    -- table.insert(enemyList, ExShip5)
-    -- table.insert(enemyList, ExShip6)
-    -- table.insert(enemyList, ExShip7)
-    -- table.insert(enemyList, ExShip8)
-    -- table.insert(enemyList, ExShip9)
-    -- table.insert(enemyList, ExStation)
-    -- table.insert(friendList, NavyShip1)
-    -- table.insert(friendList, NavyShip2)
-    -- table.insert(friendList, NavyShip3)
-    -- table.insert(friendList, NavyShip4)
+    table.insert(enemyList, ExShip1)
+    table.insert(enemyList, ExShip2)
+    table.insert(enemyList, ExShip3)
+    table.insert(enemyList, ExShip4)
+    table.insert(enemyList, ExShip5)
+    table.insert(enemyList, ExShip6)
+    table.insert(enemyList, ExShip7)
+    table.insert(enemyList, ExShip8)
+    table.insert(enemyList, ExShip9)
+    table.insert(enemyList, ExForetress)
+    table.insert(friendList, NavyShip1)
+    table.insert(friendList, NavyShip2)
+    table.insert(friendList, NavyShip3)
+    table.insert(friendList, NavyShip4)
     -- table.insert(friendList, NavyStation)
 
 end
@@ -390,8 +484,10 @@ function gmClearMission()
     clearGMFunctions()
     gmMainMenu()
 
-    TraineeShip:destroy()
+    TraineeShip1:destroy()
+    TraineeShip2:destroy()
 
+    waveNumber = 0
 
     alertLevel = "normal"
 
@@ -407,12 +503,36 @@ function gmClearMission()
         end
     end
 
-    for _, nebula in ipairs(nebulaeList) do
-        if nebula:isValid() then
-            nebula:destroy()
+    for _, aster in ipairs(asteroidList) do
+        if aster:isValid() then
+            aster:destroy()
         end
     end
 
+end
+
+
+-- ####################################
+-- THE FUNNEL 
+-- Creates the asteroids for the funnel
+-- x = x-start + (x-end - x-start)
+-- y = y-start + (y-end - y-start)
+function placeRandom_funnel(object_type, number, x1, y1, x2, y2, random_amount)
+    for n = 1, number do
+        local f = random(0, 1)
+        local x = x1 + (x2 - x1) * f
+        local y = y1 + (y2 - y1) * f
+
+        local r = random(0, 360)
+        local distance = random(0, random_amount)
+        x = x + math.cos(r / 180 * math.pi) * distance
+        y = y + math.sin(r / 180 * math.pi) * distance
+
+        ast = object_type():setPosition(x, y)
+        table.insert(asteroidList, ast)
+        -- addGMMessage("Adding to list?")
+
+    end
 end
 
 
