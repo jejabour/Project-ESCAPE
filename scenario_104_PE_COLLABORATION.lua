@@ -170,13 +170,16 @@ function gmSetMission()
     friendList = {}
 
     -- Create FOB
+    x, y = 0, 0
     NebulaCitadel = SpaceStation():setFaction("Human Navy"):setTemplate("Large Station")
-    NebulaCitadel:setPosition(23500, 16100):setCallSign("Nebula Citadel")
+    NebulaCitadel:setPosition(0, 0):setCallSign("Nebula Citadel")
     x, y = NebulaCitadel:getPosition()
 
     -- Create the two ships for the players
-    PlayerShip1 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis"):setPosition(x, y):setCallSign("Red")
-    PlayerShip2 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis"):setPosition(x, y):setCallSign("Blue")
+    PlayerShip1 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+    PlayerShip1:setPosition(x, y):commandDock(NebulaCitadel):setCallSign("Red")
+    PlayerShip2 = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
+    PlayerShip2:setPosition(x, y):commandDock(NebulaCitadel):setCallSign("Blue")
 
     -- Create enemy mother ship
     EnemyMotherShip = CpuShip():setFaction("Exuari"):setTemplate("Ryder"):setPosition(x + 10000, y)
@@ -206,6 +209,12 @@ function gmSetMission()
     spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
     spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
 
+    -- Spawn space objects
+    --          Type            Number  x1      y1      x2      y2      Random variance in position
+    spawnObject(Asteroid,       1000,  -50000, -50000,  50000,  50000)  --,  100000                      )
+    spawnObject(VisualAsteroid, 1000,  -50000, -50000,  50000,  50000)  --,  100000                      )
+    spawnObject(Nebula,         10,    -50000, -50000,  50000,  50000)
+
     -- Establish a mission state variable
     mission_state = 0
 end
@@ -218,18 +227,15 @@ end
 function spawnShip(origin, target, faction, template)
     x, y = origin:getPosition()
     Ship = CpuShip():setFaction(faction):setTemplate(template):setPosition(x, y):setHullMax(0):setShieldsMax(0)
-
-    list = {}
     if faction == "Exuari" then
-        list = enemyList
+        table.insert(enemyList, Ship)
         x, y = target:getPosition()
         Ship:orderFlyTowards(x, y)
     else
-        list = friendlyList
+        table.insert(friendlyList, Ship)
         Ship:orderDefendTarget(target)
     end
-
-    table.insert(list, Ship)
+    return
 end
 
 -- Changes to make every time step
@@ -237,11 +243,11 @@ function update(delta)
     if spawnDelay ~= nil then
         spawnDelay = spawnDelay - delta
         if spawnDelay < 0 then
-            spawnShip(NebulaCitadel, NebulaCitadel, "Human Navy", "MU52 Hornet")
-            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
-            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
-            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
             spawnDelay = nil
+            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
+            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
+            spawnShip(EnemyMotherShip, NebulaCitadel, "Exuari", "Dagger")
+            --spawnShip(NebulaCitadel, NebulaCitadel, "Human Navy", "MU52 Hornet")
         end
         return
     end
@@ -263,6 +269,15 @@ function placeRandom(object_type, number, x1, y1, x2, y2, random_amount)
         x = x + math.cos(r / 180 * math.pi) * distance
         y = y + math.sin(r / 180 * math.pi) * distance
 
+        object_type():setPosition(x, y)
+    end
+end
+
+-- Place objects at some random location in the box bounded by the two given coordinate points
+function spawnObject(object_type, number, x1, y1, x2, y2)
+    for n = 1, number do
+        local x = random(x1, x2)
+        local y = random(y1, y2)
         object_type():setPosition(x, y)
     end
 end

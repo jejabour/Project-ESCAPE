@@ -106,7 +106,7 @@ function init()
 
     initShip()
 
-    placeRandom_funnel(Asteroid, 75, -43743, 60000, 69000, 38300, 30000)
+    placeRandom_funnel(Asteroid, 90, -43743, 60000, 69000, 38300, 30000)
     -- addGMMessage(asteroidList[0])
 
 
@@ -128,14 +128,11 @@ function gmSetCollab()
     waveNumber = 0
     alertLevel = "normal"
 
-    
-    placeRandom_funnel(Asteroid, 75, -43743, 60000, 69000, 38300, 30000)
-    -- addGMMessage(asteroidList[0])
-
     initShip()
 
-    createShips()
+    placeRandom_funnel(Asteroid, 90, -43743, 60000, 69000, 38300, 30000)
 
+    createShips()
 
 end
 
@@ -357,9 +354,9 @@ function createShips()
     ExForetress = CpuShip():setTemplate("Fortress"):setFaction("Exuari"):setPosition(-20129, 56910):orderStandGround():setCallSign("Odin")
     ExForetress:setDescriptions("", "We do not want compromise, we declare war!")
 
-    ExShip5 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-16269, 45690):orderStandGround()
-    ExShip6 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-12357, 50486):orderStandGround()
-    ExShip7 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-8188, 54737):orderStandGround()
+    ExShip5 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-16269, 45690):orderStandGround():setWeaponStorageMax("HVLI", 3):setWeaponStorage("HVLI", 3)
+    ExShip6 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-12357, 50486):orderStandGround():setWeaponStorageMax("HVLI", 3):setWeaponStorage("HVLI", 3)
+    ExShip7 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-8188, 54737):orderStandGround():setWeaponStorageMax("HVLI", 3):setWeaponStorage("HVLI", 3)
 
     ExShip8 = CpuShip():setTemplate("MT52 Hornet"):setFaction("Exuari"):setPosition(-20197, 55877):orderDefendTarget(ExForetress)
     ExShip9 = CpuShip():setTemplate("MT52 Hornet"):setFaction("Exuari"):setPosition(-20023, 57836):orderDefendTarget(ExForetress)
