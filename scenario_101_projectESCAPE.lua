@@ -114,7 +114,7 @@ function gmRescueJJ1()
     table.insert(friendList, lifepod)
 
     -- Notify the trainees
-    central_command:sendCommsMessage(TraineeShip,
+    nebula_citadel:sendCommsMessage(TraineeShip,
         _("incCall", "JJ Johnson's ship has been attacked and destroyed, but "
         .. "not before it launched an escape pod. \n Life signs are detected "
         .. "in the pod. Please retrieve the pod to see if JJ Johnson "
@@ -177,7 +177,7 @@ function gmRescueJJ5()
     clearGMFunctions()
     gmMainMenu()
 
-    central_command:sendCommsMessage(TraineeShip,
+    nebula_citadel:sendCommsMessage(TraineeShip,
         _("incCall", "J.E. Thompson, this is Central Command. We've lost JJ "
         .. "Johnson and his crew. This is a great tragedy not only for their "
         .. "families and friends but also for our nation's peace as a whole. Return "
@@ -192,7 +192,7 @@ function gmRescueJJ6()
     clearGMFunctions()
     gmMainMenu()
 
-    central_command:sendCommsMessage(TraineeShip,
+    nebula_citadel:sendCommsMessage(TraineeShip,
         _("incCall", "J.E. Thompson, this is Central Command. Great work "
         .. "retrieving JJ Johnson safely! Return him to command and report for your "
         .. "debriefing.")
@@ -205,11 +205,14 @@ function gmSetRescueJJ()
     clearGMFunctions()
     gmMainMenu()
 
+    nebula_citadel = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+    nebula_citadel:setPosition(23500, 16100):setCallSign("Nebula Citadel")
+
     -- Create the main ship for the trainees.
     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
     TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
     TraineeShip:setRotation(180) -- make sure it's facing away from station
-    TraineeShip:commandDock(central_command)
+    TraineeShip:commandDock(nebula_citadel)
 
     TraineeShip:addToShipLog("The diplomat, JJ Johnson, was traveling back from "
     .. "peace talks with our enemy faction, the Exuari. We have just received a "
@@ -263,11 +266,14 @@ function gmSetWaves()
 
     waveNumber = 0
 
+    deep_space_ix = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+    deep_space_ix:setPosition(23500, 16100):setCallSign("Deep Space IX")
+
     -- Create the main ship for the trainees.
     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
     TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
     TraineeShip:setRotation(180) -- make sure it's facing away from station
-    TraineeShip:commandDock(central_command)
+    TraineeShip:commandDock(deep_space_ix)
 
     TraineeShip:addToShipLog("The attack on JJ Johnson has shown that our peace "
     .. "with the Exuari faction is over and war has begun. We have received reports "
@@ -281,7 +287,7 @@ function gmSetWaves()
     human_m1:setCallSign("HM1")
     human_m1:setScanned(true)
     human_m1:setPosition(23490, 16050)
-    human_m1:orderDefendTarget(central_command)
+    human_m1:orderDefendTarget(deep_space_ix)
 
     human_m2 = CpuShip()
     human_m2:setFaction("Human Navy")
@@ -289,7 +295,7 @@ function gmSetWaves()
     human_m2:setCallSign("HM2")
     human_m2:setScanned(true)
     human_m2:setPosition(23490, 16050)
-    human_m2:orderDefendTarget(central_command)
+    human_m2:orderDefendTarget(deep_space_ix)
 
     human_m3 = CpuShip()
     human_m3:setFaction("Human Navy")
@@ -297,16 +303,13 @@ function gmSetWaves()
     human_m3:setCallSign("HM3")
     human_m3:setScanned(true)
     human_m3:setPosition(23490, 16050)
-    human_m3:orderDefendTarget(central_command)
+    human_m3:orderDefendTarget(deep_space_ix)
 
     table.insert(friendList, human_m1)
     table.insert(friendList, human_m2)
     table.insert(friendList, human_m3)
 end
 
-
-
-    -- central_command:setPosition(23500, 16100):setCallSign("Central Command")
 
 function randomSpawnPointInfo(distance)
     local x, y
@@ -483,7 +486,7 @@ function gmRetrieveData3()
     clearGMFunctions()
     gmMainMenu()
 
-    central_command:sendCommsMessage(TraineeShip,
+    repair_station:sendCommsMessage(TraineeShip,
         _("incCall", "J.E. Thompson, great job retrieving the data. Report for debriefing.")
         )
 end
@@ -494,7 +497,7 @@ function gmRetrieveData4()
     clearGMFunctions()
     gmMainMenu()
 
-    central_command:sendCommsMessage(TraineeShip,
+    repair_station:sendCommsMessage(TraineeShip,
         _("incCall", "J.E. Thompson, it is regrettable that you've failed this "
         .. "mission. Now our enemies will have intel that will harm the war effort "
         .. "- and likely lead to our defeat.")
@@ -507,24 +510,23 @@ function gmSetRetrieveData()
     clearGMFunctions()
     gmMainMenu()
 
+    repair_station = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+    repair_station:setPosition(23500, 16100):setCallSign("Repair Station")
+    
     -- Create the main ship for the trainees.
     TraineeShip = PlayerSpaceship():setFaction("Human Navy"):setTemplate("Atlantis")
     TraineeShip:setPosition(22598, 16086):setCallSign("J.E. Thompson")
     TraineeShip:setRotation(180) -- make sure it's facing away from station
-    TraineeShip:commandDock(central_command)
+    TraineeShip:commandDock(repair_station)
 
     TraineeShip:addToShipLog("We have received reports that a hostile force is "
-    .. "enroute to one of our satellites on the border of our space. This satellite "
-    .. "has crucial data that must be retrieved before the Exuari get their hands "
-    .. "on it. Retrieve the data and return it to command. Do not allow the Exuari "
+    .. "enroute to Orion Starforge. This station "
+    .. "has codes to enable comms back to Earth's central command post that must be retrieved before the Exuari get their hands "
+    .. "on it. Retrieve the codes and return them to the Repair Station. Do not allow the Exuari "
     .. "to have it.", "white")
 
-    satellite = SpaceStation()
-    satellite:setTemplate("Small Station")
-    satellite:setFaction("Human Navy")
-    satellite:setPosition(60500, 42100)
-    satellite:setCallSign(_("callsign-station", "Satellite Station"))
-    satellite:setCommsScript("")
+    satellite = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy"):setPosition(60500, 42100):setCallSign("Orion Starforge"):setCommsScript("")
+  
 
     table.insert(friendList, satellite)
 
@@ -653,17 +655,13 @@ function gmCreateCentralCommand()
 
     end
 
-    -- if central_command:getPosition() == nil then
-    --     central_command = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
-    --     central_command:setPosition(23500, 16100):setCallSign("Central Command")
-
-    -- end
 end
 
 function gmClearMission()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
+    addGMMessage("Start")
 
     TraineeShip:destroy()
 
@@ -682,6 +680,15 @@ function gmClearMission()
             enemy:destroy()
         end
     end
+
+    if nebula_citadel:isValid() then nebula_citadel:destroy() end
+        
+    if deep_space_ix:isValid() then  deep_space_ix:destroy() end
+       
+    if repair_station:isValid() then  repair_station:destroy() end
+       
+    if orion_starforge:isValid() then orion_starforge:destroy() end
+
 
 end
 
@@ -704,8 +711,7 @@ function init()
     alertLevel = "normal"
 
     -- Create the command station
-    central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
-    central_command:setPosition(23500, 16100):setCallSign("Central Command")
+
 
     -- Nebula that hide the enemy station.
     Nebula():setPosition(-43300, 2200)
@@ -736,6 +742,26 @@ function update(delta)
     -- GM will manage alert levels, so this will reset it constantly to what
     -- the GM has set it to
     TraineeShip:commandSetAlertLevel(alertLevel)
+    
+    if TraineeShip:isDocked(orion_starforge) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+    end
+
+    if TraineeShip:isDocked(nebula_citadel) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+    end
+
+    if TraineeShip:isDocked(repair_station) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+    end
+
+    if TraineeShip:isDocked(deep_space_ix) then
+        TraineeShip:setWeaponStorage("homing", 20):setWeaponStorage("nuke", 4):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 6):setWeaponStorage("HVLI", 20)
+        TraineeShip:setScanProbeCount(TraineeShip:getMaxScanProbeCount())
+    end
 end
 
 --- Return the distance between two objects.
