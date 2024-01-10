@@ -64,6 +64,14 @@ function init()
     .. "scan other ships. Once you tap on a ship, you can press the Scan button to play an alignment minigame, which, upon completion, will show you information "
     .. "on the right had side, including their faction. ")
 
+    TraineeShip:addCustomMessage("weapons", "science_start_message", "This is the Science screen! You have a wider view than some of the other roles, and can "
+    .. "scan other ships. Once you tap on a ship, you can press the Scan button to play an alignment minigame, which, upon completion, will show you information "
+    .. "on the right had side, including their faction. ")
+
+    TraineeShip:addCustomMessage("relay", "science_start_message", "This is the Science screen! You have a wider view than some of the other roles, and can "
+    .. "scan other ships. Once you tap on a ship, you can press the Scan button to play an alignment minigame, which, upon completion, will show you information "
+    .. "on the right had side, including their faction. ")
+
     -- In relation to Human Navy{
     
         -- Good Guys [USN, TSN, CUF, Human Navy]
