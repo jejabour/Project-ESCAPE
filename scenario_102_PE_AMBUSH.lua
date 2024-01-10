@@ -412,7 +412,7 @@ function init()
     TraineeShip:commandDock(central_command)
 
     TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
-    .. " but were ambushed by Exuari in sector G7. It seems all the ships in the skirmish have been abandoned, but "
+    .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
     .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
     .. "Your Science officer will be able to determine the factions of any unknown ships.", "white")
 
