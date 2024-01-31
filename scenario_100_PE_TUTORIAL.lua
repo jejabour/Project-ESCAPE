@@ -18,6 +18,7 @@ function init()
     waveNumber = 0
     alertLevel = "normal"
 
+
     -- Create the command station
     central_command = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
     central_command:setPosition(23500, 16100):setCallSign("Central Command")
@@ -48,29 +49,6 @@ function init()
     -- Create the main ship for the trainees.
     initShip()
 
-    TraineeShip:addCustomMessage("helms", "helms_start_message", "This is the Helms screen! You can activate your impulse drives by sliding the slider on your left. "
-    .. "You can also set your jump drive to quickly travel long distances by setting the slider to a certain distance, then pressing Jump. "
-    .. "Be careful, this will launch you in the direction your ship is facing, which you can change by tapping in the radar where you want to face. "
-    .. "You also have Combat Maneuver, which quickly moves your ship in a very short distance, for dodging and whatnot. "
-    .. "Right now, you are docked at a station. Tap Undock to try moving around.")
-
-    TraineeShip:addCustomMessage("engineering", "engineering_start_message", "This is the Engineering screen! You are in control of the ship's wellbeing. "
-    .. "You have repair men on the top of your screen that you can tap on, then tap a location of your ship to get them repairing. "
-    .. "On the bottom of the screen, you have the systems, how much power they have, and their coolant. "
-    .. "You can tap on a system, then on the right using the sliders, increase or descrease their power and coolant. More power will create heat, which needs coolant. "
-    .. "Things will take damage and get hot while playing, so stay vigilant!")
-
-    TraineeShip:addCustomMessage("science", "science_start_message", "This is the Science screen! You have a wider view than some of the other roles, and can "
-    .. "scan other ships. Once you tap on a ship, you can press the Scan button to play an alignment minigame, which, upon completion, will show you information "
-    .. "on the right had side, including their faction. ")
-
-    TraineeShip:addCustomMessage("weapons", "science_start_message", "This is the Science screen! You have a wider view than some of the other roles, and can "
-    .. "scan other ships. Once you tap on a ship, you can press the Scan button to play an alignment minigame, which, upon completion, will show you information "
-    .. "on the right had side, including their faction. ")
-
-    TraineeShip:addCustomMessage("relay", "science_start_message", "This is the Science screen! You have a wider view than some of the other roles, and can "
-    .. "scan other ships. Once you tap on a ship, you can press the Scan button to play an alignment minigame, which, upon completion, will show you information "
-    .. "on the right had side, including their faction. ")
 
     -- In relation to Human Navy{
     
@@ -81,6 +59,7 @@ function init()
         -- Bad Guys [Exuari, Ktlitans, Kraylor, Ghosts]
     
     -- }
+
 
     mission_state = 1
 
@@ -108,12 +87,15 @@ function gmTutorials()
     clearGMFunctions() -- Clear the Menu
     
     addGMFunction(_("buttonGM", "- Tutorial"), gmMainMenu)
+    addGMFunction(_("buttonGM", "Helms"), gmHelms)
+    addGMFunction(_("buttonGM", "Engineering"), gmEngineering)
+    addGMFunction(_("buttonGM", "Engineering-2"), gmEngineering_2)
+    addGMFunction(_("buttonGM", "Science"), gmScience)
+    addGMFunction(_("buttonGM", "Weapons"), gmWeapons)
+    addGMFunction(_("buttonGM", "Relay"), gmRelay)
     addGMFunction(_("buttonGM", "Send Mission"), gmSendMission)
     addGMFunction(_("buttonGM", "Surprise Station"), surpriseStation)
-    addGMFunction(_("buttonGM", "Weapons"), gmWeapons)
-    addGMFunction(_("buttonGM", "Engineer"), gmEngineer)
-    addGMFunction(_("buttonGM", "Science"), gmScience)
-    addGMFunction(_("buttonGM", "Relay"), gmRelay)
+
 end
 
 function gmSendMission()
@@ -182,11 +164,125 @@ function gmSpawnStation()
 
 end
 
+function gmHelms()
+    clearGMFunctions() -- Clear the Menu
+    gmMainMenu() -- Return to main screen
+
+    TraineeShip:addCustomMessage("helms", "helms_start_message", "This is the Helms screen! You can activate your impulse drives by sliding the slider on your left. "
+    .. "This is how you will typically move around, and you can tap anywhere in the radar to change direction. "
+    .. "You can also set your jump drive to quickly travel long distances by setting the slider to a certain distance, then pressing Jump. "
+    .. "This will launch you in the direction your ship is facing. "
+    .. "You also have Combat Maneuver, which quickly moves your ship in a very short distance, useful for dodging. "
+    .. "Right now, you are docked at a station. Tap Undock to try moving around.")
+
+end
+
+
+
+function gmEngineering()
+    clearGMFunctions() -- Clear the Menu
+    gmMainMenu() -- Return to main screen
+
+    TraineeShip:addCustomMessage("engineering", "engineering_start_message", "This is the Engineering screen! You are in control of the ship's wellbeing. "
+    .. "You have repair men on the top of your screen that you can tap on, then tap a location of your ship to get them repairing. "
+    .. "On the bottom of the screen, you have the systems, how much power they have, and their coolant. "
+    .. "You can tap on a system, then on the right using the sliders, increase or descrease their power and coolant. More power will create heat, which needs coolant. "
+    .. "Things will take damage and get hot while playing, so stay vigilant!")
+
+end
+
+function gmEngineering_2()
+    clearGMFunctions() -- Clear the Menu
+    gmMainMenu() -- Return to main screen
+
+    TraineeShip:addCustomMessage("engineering", "engineering_effects_message", "Your systems have been changed to represent a possible scenario. "
+    .. "Use your repair men to fix the red areas on the ship, and distribute coolant to cool overheating systems. ")
+
+    TraineeShip:setSystemHealth("reactor", 0.3)
+    TraineeShip:setSystemHeat("reactor", 0.9)
+
+    -- TraineeShip:setSystemHeat("beamweapons", 0.9)
+
+    -- TraineeShip:setSystemHeat("missilesystem", 0.3)
+
+    -- TraineeShip:setSystemHeat("maneuvering", 0.9) -- I don't know what the proper name for maneuvering is
+    
+    -- TraineeShip:setSystemHealth("impulse", 0.4)
+    TraineeShip:setSystemHeat("impulse", 0.6)
+
+    -- TraineeShip:setSystemHeat("jumpdrive", 0.9)
+    
+    TraineeShip:setSystemHealth("frontshield", 0.7)
+    TraineeShip:setSystemHeat("frontshield", 0.5)
+
+    -- TraineeShip:setSystemHeat("rearshield", 0.9)
+
+end
+
+function gmScience()
+    clearGMFunctions() -- Clear the Menu
+    gmMainMenu() -- Return to main screen
+
+    ship_pos_x, ship_pos_y = TraineeShip:getPosition()
+
+    ship_pos_x = ship_pos_x - 16900
+    ship_pos_y = ship_pos_y - 10198
+
+    -- addGMMessage(ship_pos_x)
+
+    ExShipS = CpuShip():setFaction("Exuari"):setTemplate("Adder MK9"):setPosition(ship_pos_x, ship_pos_y):orderIdle():setScanned(false):setShieldsMax(20, 20):setHull(60, 60)
+    table.insert(enemyList, ExShip1)
+
+    TraineeShip:addCustomMessage("science", "science_start_message", "This is the Science screen! You have a wider view than most of the other roles, and can "
+    .. "scan other ships. Once you tap on a ship, you can press the Scan button to play an alignment minigame, which, upon completion, will show you information "
+    .. "on the right hand side, including their faction. ")
+
+    TraineeShip:addCustomMessage("science", "science_second_message", "There is an unidentified ship at 300 degrees, about 20 units away. "
+    .. "You can tell by the distance by the faint rings on your radar, and the direction by the numbers on the outer edge. "
+    .. "Tap on that ship, then hit the scan button on the right, and slide the sliders to align the frequency waves in the slider minigame.")
+
+    
+end
+
 function gmWeapons()
     clearGMFunctions() -- Clear the Menu
     gmMainMenu() -- Return to main screen
 
+    TraineeShip:addCustomMessage("weapons", "weapons_start_message", "This is the Weapons screen! You are in control of your ships shields and attacking other ships. "
+    .. "In addition to the Shields button in the lower right corner, you have a number of weapons to choose from, those being Homing Missiles, Nukes, Mines, EMPs, HVLI's, and your ships beams. "
+    .. "Your ships beams will fire automatically at anything in the red radius shown in front of your ship on the radar as long as a ship is targeted, done by tapping. ")
+
+    TraineeShip:addCustomMessage("weapons", "weapons_second_message", "To fire your other weapons, you will first have to load them into a tube. Tap on a weapon name to see the tubes it can be loaded into, "
+    .. "Then tap one of the tubes. It will take a moment to load up, then you can tap the tube your weapon is loaded into to fire. ")
+
+    TraineeShip:addCustomMessage("weapons", "weapons_third_message", "You'll notice your ship only has Left facing tubes, Right facing tubes, and a Rear facing tube. This means your main weapons can only be fired "
+    .. "From those directions, with Mines being the only weapon launched from the rear. You will have to coordinate with your Helms officer to face the proper direction in order to efficiently attack enemies. ")
+
+    TraineeShip:addCustomMessage("weapons", "weapons_fourth_message", "An enemy has spawned next to you. Try attacking them with missles by coordinating the direction your ship faces with the helms officer. ")
+
+
+    ship_pos_x, ship_pos_y = TraineeShip:getPosition()
+
+    ship_pos_x = ship_pos_x + 900
+    ship_pos_y = ship_pos_y - 3000
+
+
+    ExShipW = CpuShip():setFaction("Exuari"):setTemplate("Adder MK9"):setPosition(ship_pos_x, ship_pos_y):orderIdle():setScanned(true):setShieldsMax(20, 20):setHull(60, 60)
+    
+
 end
+
+function gmRelay()
+    clearGMFunctions() -- Clear the Menu
+    gmMainMenu() -- Return to main screen
+
+    TraineeShip:addCustomMessage("relay", "relay_start_message", "This is the Relay screen! You have a wider view than every other role, and you can send "
+    .. "probes to check the area around you.  "
+    .. "on the right had side, including their faction. ")
+
+end
+
+
 
 
 
@@ -241,10 +337,10 @@ function update(delta)
 
     end
 
-    if not ExShip1:isValid() then
-        TraineeShip:addCustomMessage("weapons", "weapon_message_victory", "Great job! Note that you must also have a ship targeted, by tapping them, for you beams to fire. "
-        .. "Keep in contact with your helms officer to ensure the ship is facing the right way for your weapons to hit!")
-    end
+    -- if not ExShip1:isValid() then
+    --     TraineeShip:addCustomMessage("weapons", "weapon_message_victory", "Great job! Note that you must also have a ship targeted, by tapping them, for you beams to fire. "
+    --     .. "Keep in contact with your helms officer to ensure the ship is facing the right way for your weapons to hit!")
+    -- end
 
     TraineeShip:commandSetAlertLevel(alertLevel)
 
