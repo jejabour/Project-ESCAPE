@@ -24,23 +24,23 @@ function init()
     central_command:setPosition(23500, 16100):setCallSign("Central Command")
 
     -- Nebula that hide the enemy station.
-    Nebula():setPosition(-43300, 2200)
+    -- Nebula():setPosition(-43300, 2200)
     Nebula():setPosition(-34000, -700)
-    Nebula():setPosition(-32000, -10000)
+    -- Nebula():setPosition(-32000, -10000)
     Nebula():setPosition(-24000, -14300)
-    Nebula():setPosition(-28600, -21900)
+    -- Nebula():setPosition(-28600, -21900)
 
     -- Random nebulae in the system
-    Nebula():setPosition(-8000, -38300)
+    -- Nebula():setPosition(-8000, -38300)
     Nebula():setPosition(24000, -30700)
     Nebula():setPosition(42300, 3100)
     Nebula():setPosition(49200, 10700)
-    Nebula():setPosition(3750, 31250)
-    Nebula():setPosition(-39500, 18700)
+    -- Nebula():setPosition(3750, 31250)
+    -- Nebula():setPosition(-39500, 18700)
 
     -- Create 50 Asteroids
-    placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 2000)
-    placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 2000)
+    placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 5000)
+    placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 5000)
 
     -- Clear and reset the menu
     clearGMFunctions()
@@ -219,6 +219,8 @@ function gmEngineering_2()
 
 end
 
+
+
 function gmScience()
     clearGMFunctions() -- Clear the Menu
     gmMainMenu() -- Return to main screen
@@ -230,19 +232,22 @@ function gmScience()
 
     -- addGMMessage(ship_pos_x)
 
-    ExShipS = CpuShip():setFaction("Exuari"):setTemplate("Adder MK9"):setPosition(ship_pos_x, ship_pos_y):orderIdle():setScanned(false):setShieldsMax(20, 20):setHull(60, 60)
-    table.insert(enemyList, ExShip1)
+    ExShipS = CpuShip():setFaction("Exuari"):setTemplate("Adder MK4"):setPosition(ship_pos_x, ship_pos_y):setScanned(false):setShieldsMax(20, 20):setHull(60)
+    
+    
 
     TraineeShip:addCustomMessage("science", "science_start_message", "This is the Science screen! You have a wider view than most of the other roles, and can "
     .. "scan other ships. Once you tap on a ship, you can press the Scan button to play an alignment minigame, which, upon completion, will show you information "
-    .. "on the right hand side, including their faction. ")
+    .. "on the right-hand side, including their faction. ")
 
     TraineeShip:addCustomMessage("science", "science_second_message", "There is an unidentified ship at 300 degrees, about 20 units away. "
     .. "You can tell by the distance by the faint rings on your radar, and the direction by the numbers on the outer edge. "
     .. "Tap on that ship, then hit the scan button on the right, and slide the sliders to align the frequency waves in the slider minigame.")
 
-    
+    mission_state = 2
+
 end
+
 
 function gmWeapons()
     clearGMFunctions() -- Clear the Menu
@@ -345,6 +350,19 @@ function update(delta)
     TraineeShip:commandSetAlertLevel(alertLevel)
 
     -- spawn_station:setCommsScript("You're a stinky butt")
+
+    while mission_state == 2 and ExShipS:isScannedBy(TraineeShip) do
+        
+        
+        addGMMessage("Made it here")
+
+        TraineeShip:addCustomMessage("science", "science_scanned_message", "Good job. Now you can see details on the right such as the Faction this ship "
+        .. "belongs to, it's shield health, and hull health. If you were to scan it again, it would be a more difficult wavelength challenge"
+        .. " but you would also see more detailed information about their various systems.")
+
+        mission_sate = 3
+    end
+
 
 end
 
