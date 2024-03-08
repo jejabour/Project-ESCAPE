@@ -111,24 +111,13 @@ function gmSendMission()
     TraineeShip:addToShipLog("We've picked up a distress signal at a friendly station in sector E5. "
     .. "Fly there, and see what's going on. "
     .. "Make sure you keep your crew up to date with information, as you are the "
-    .. "only one who receives information. "
-    .. "You can close this message by tapping anywhere in the message window.",
-    "white")
+    .. "only one who receives information. ", "white")
 
-    TraineeShip:addToShipLog("You can send out probes to reveal areas of interest "
-    .. "by tapping 'Launch Probe', then tapping a location on the map. " 
-    .. "Your probe count is refilled upon docking. ",
-    "yellow")
-
-    TraineeShip:addToShipLog("You can also place waypoints at any location. "
-    .. "These will give your crewmates an indicator as to what direction you " 
-    .. "want them to go in. Now, exit this menu by tapping anywhere, then place a waypoint on the green station in sector E5",
-    "yellow")
 
     exampleStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setCommsScript("")
     exampleStation:setPosition(9444, -7000)
     
-    -- if spawn_station:isFriendly()
+    mission_state = 2
 
 
 end
@@ -142,7 +131,7 @@ function surpriseStation()
     TraineeShip:addCustomMessage("weapons", "weapon_message_victory", "There is an enemy ship! Load some Homing Missiles by tapping Homing, then the Load buttons. Once those are ready, tap the enemy to lock on, and fire them from the respective side of your ship by tapping Left:Homing or Right:Homing!. Don't forget to activate your shields on the bottom right!")
 
     exampleStation:setFaction("Exuari")
-    ExShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(9500, -7100):orderAttack(TraineeShip):setScanned(true):setShieldsMax(25):setHull(40)
+    
     
 
 
@@ -187,7 +176,13 @@ function gmEngineering()
     .. "You have repair men on the top of your screen that you can tap on, then tap a location of your ship to get them repairing. "
     .. "On the bottom of the screen, you have the systems, how much power they have, and their coolant. "
     .. "You can tap on a system, then on the right using the sliders, increase or descrease their power and coolant. More power will create heat, which needs coolant. "
-    .. "Things will take damage and get hot while playing, so stay vigilant!")
+    .. "Things will take damage and get hot while playing.")
+
+    TraineeShip:addCustomMessage("engineering", "engineering_start_message", "This is the Engineering screen! You are in control of the ship's wellbeing. "
+    .. "You have repair men on the top of your screen that you can tap on, then tap a location of your ship to get them repairing. "
+    .. "")
+
+
 
 end
 
@@ -244,7 +239,6 @@ function gmScience()
     .. "You can tell by the distance by the faint rings on your radar, and the direction by the numbers on the outer edge. "
     .. "Tap on that ship, then hit the scan button on the right, and slide the sliders to align the frequency waves in the slider minigame.")
 
-    mission_state = 2
 
 end
 
@@ -261,7 +255,7 @@ function gmWeapons()
     .. "Then tap one of the tubes. It will take a moment to load up, then you can tap the tube your weapon is loaded into to fire. ")
 
     TraineeShip:addCustomMessage("weapons", "weapons_third_message", "You'll notice your ship only has Left facing tubes, Right facing tubes, and a Rear facing tube. This means your main weapons can only be fired "
-    .. "From those directions, with Mines being the only weapon launched from the rear. You will have to coordinate with your Helms officer to face the proper direction in order to efficiently attack enemies. ")
+    .. "from those directions, with Mines being the only weapon launched from the rear. ")
 
     TraineeShip:addCustomMessage("weapons", "weapons_fourth_message", "An enemy has spawned next to you. Try attacking them with missles by coordinating the direction your ship faces with the helms officer. ")
 
@@ -281,9 +275,18 @@ function gmRelay()
     clearGMFunctions() -- Clear the Menu
     gmMainMenu() -- Return to main screen
 
+    TraineeShip:addToShipLog("These are the logs! Central Command is located in sector F6, and the Nebulaes in sector F7, E3, and D6 will block your view, even from probes.", "white")
+
     TraineeShip:addCustomMessage("relay", "relay_start_message", "This is the Relay screen! You have a wider view than every other role, and you can send "
-    .. "probes to check the area around you.  "
-    .. "on the right had side, including their faction. ")
+    .. "probes to check the area around you, as well as waypoints to direct your teammates. "
+    .. "You are also in charge of checking the ship's log. Tapping the box that spreads the bottom of the screen will open up the log, where you will often find "
+    .. "instructions regarding your mission, such as the quadrant your target is located in.")
+
+    TraineeShip:addCustomMessage("relay", "relay_cont_message", "Your probes and waypoints are your main assets. You can tap the Launch Probe button, then tap a location on "
+    .. "the map to send a probe in that direction. The probe will illuminate an area around it on the map. "
+    .. "Waypoints are just as easy. You can tap Place Waypoint to pin a marker on the map, and the direction that waypoint is in will show on the map of your teammates. ")
+
+    TraineeShip:addCustomMessage("relay", "relay_cont_message", "Try opening your log to see the information provided by Central Command. ")
 
 end
 
@@ -351,18 +354,32 @@ function update(delta)
 
     -- spawn_station:setCommsScript("You're a stinky butt")
 
-    while mission_state == 2 and ExShipS:isScannedBy(TraineeShip) do
-        
-        
-        addGMMessage("Made it here")
+    if mission_state == 2 then
+        if distance(TraineeShip, exampleStation) < 7500 then
+            ExShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(9644, -6500):orderAttack(TraineeShip):setScanned(true):setShieldsMax(25):setHull(40)
 
-        TraineeShip:addCustomMessage("science", "science_scanned_message", "Good job. Now you can see details on the right such as the Faction this ship "
-        .. "belongs to, it's shield health, and hull health. If you were to scan it again, it would be a more difficult wavelength challenge"
-        .. " but you would also see more detailed information about their various systems.")
-
-        mission_sate = 3
+    
+           mission_state = 3
+        end
+     
     end
 
+    if mission_state == 3 then
+        if not ExShip1:isValid() then
+            message_victory = "Thank you, crew, for your service! The threat has been defeated, and the mission is complete."
+
+            -- Display a mesasage on the main screen for 2 minutes
+            globalMessage(message_victory, 20)
+        
+            -- Display a popup message on each players screen.
+            -- addCustomMessage(role, name of the string???, string)
+            TraineeShip:addCustomMessage("helms", "helms_message_victory", message_victory)
+            TraineeShip:addCustomMessage("engineering", "engineering_message_victory", message_victory)
+            TraineeShip:addCustomMessage("weapons", "weapon_message_victory", message_victory)
+            TraineeShip:addCustomMessage("science", "science_message_victory", message_victory)
+            TraineeShip:addCustomMessage("relay", "relay_message_victory", message_victory)
+        end
+    end
 
 end
 
