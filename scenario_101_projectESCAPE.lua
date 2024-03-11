@@ -116,7 +116,7 @@ function gmRescueJJ1()
     -- Notify the trainees
     nebula_citadel:sendCommsMessage(TraineeShip,
         _("incCall", "JJ Johnson's ship has been attacked and destroyed, but "
-        .. "not before it launched an escape pod. \n Life signs are detected "
+        .. "not before it launched an escape pod in sector G5. \n Life signs are detected "
         .. "in the pod. Please retrieve the pod to see if JJ Johnson "
         .. "survived. His death would be a great blow to the region's peace "
         .. "negotiations.")
@@ -520,7 +520,7 @@ function gmSetRetrieveData()
     TraineeShip:commandDock(repair_station)
 
     TraineeShip:addToShipLog("We have received reports that a hostile force is "
-    .. "enroute to Orion Starforge. This station "
+    .. "enroute to Orion Starforge in sector H8. This station "
     .. "has codes to enable comms back to Earth's central command post that must be retrieved before the Exuari get their hands "
     .. "on it. Retrieve the codes and return them to the Repair Station. Do not allow the Exuari "
     .. "to have it.", "white")
@@ -661,7 +661,7 @@ function gmClearMission()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
-    addGMMessage("Start")
+    -- addGMMessage("Start")
 
     TraineeShip:destroy()
 

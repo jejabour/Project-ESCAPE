@@ -25,9 +25,9 @@ function init()
 
     -- Nebula that hide the enemy station.
     -- Nebula():setPosition(-43300, 2200)
-    Nebula():setPosition(-34000, -700)
+    Nebula():setPosition(-34000, -7000)
     -- Nebula():setPosition(-32000, -10000)
-    Nebula():setPosition(-24000, -14300)
+    -- Nebula():setPosition(-24000, -14300)
     -- Nebula():setPosition(-28600, -21900)
 
     -- Random nebulae in the system
@@ -39,7 +39,7 @@ function init()
     -- Nebula():setPosition(-39500, 18700)
 
     -- Create 50 Asteroids
-    placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 5000)
+    placeRandom(Asteroid, 50, -7500, -10000, -12500, 30000, 15000)
     placeRandom(VisualAsteroid, 50, -7500, -10000, -12500, 30000, 5000)
 
     -- Clear and reset the menu
@@ -103,15 +103,12 @@ function gmSendMission()
     gmMainMenu() -- Return to main screen
 
 
-    update_Relay = ("You can check the logs by tapping the long icon "
-    .. "on the bottom of the screen, and close it by tapping anywhere "
-    .. "in the message")
-    TraineeShip:addCustomMessage("Relay", "Relay-message1", update_Relay)
+    central_command:sendCommsMessage(TraineeShip,([[We've picked up a distress signal at a friendly station in sector E5. Fly there, and see what's going on. Make sure you keep your crew up to date with information, as you are the only one who receives information. ]]))
 
-    TraineeShip:addToShipLog("We've picked up a distress signal at a friendly station in sector E5. "
-    .. "Fly there, and see what's going on. "
-    .. "Make sure you keep your crew up to date with information, as you are the "
-    .. "only one who receives information. ", "white")
+    -- TraineeShip:addToShipLog("We've picked up a distress signal at a friendly station in sector E5. "
+    -- .. "Fly there, and see what's going on. "
+    -- .. "Make sure you keep your crew up to date with information, as you are the "
+    -- .. "only one who receives information. ", "white")
 
 
     exampleStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setCommsScript("")
@@ -159,7 +156,7 @@ function gmHelms()
 
     TraineeShip:addCustomMessage("helms", "helms_start_message", "This is the Helms screen! You can activate your impulse drives by sliding the slider on your left. "
     .. "This is how you will typically move around, and you can tap anywhere in the radar to change direction. "
-    .. "You can also set your jump drive to quickly travel long distances by setting the slider to a certain distance, then pressing Jump. "
+    .. "You can also set your jump drive to quickly travel long distances by setting the slider to a specified distance, then pressing Jump. "
     .. "This will launch you in the direction your ship is facing. "
     .. "You also have Combat Maneuver, which quickly moves your ship in a very short distance, useful for dodging. "
     .. "Right now, you are docked at a station. Tap Undock to try moving around.")
@@ -263,7 +260,7 @@ function gmWeapons()
     ship_pos_x, ship_pos_y = TraineeShip:getPosition()
 
     ship_pos_x = ship_pos_x + 900
-    ship_pos_y = ship_pos_y - 3000
+    ship_pos_y = ship_pos_y - 2500
 
 
     ExShipW = CpuShip():setFaction("Exuari"):setTemplate("Adder MK9"):setPosition(ship_pos_x, ship_pos_y):orderIdle():setScanned(true):setShieldsMax(20, 20):setHull(60, 60)
@@ -278,7 +275,7 @@ function gmRelay()
     TraineeShip:addToShipLog("These are the logs! Central Command is located in sector F6, and the Nebulaes in sector F7, E3, and D6 will block your view, even from probes.", "white")
 
     TraineeShip:addCustomMessage("relay", "relay_start_message", "This is the Relay screen! You have a wider view than every other role, and you can send "
-    .. "probes to check the area around you, as well as waypoints to direct your teammates. "
+    .. "probes to check the area around you, as well as place waypoints to direct your teammates. "
     .. "You are also in charge of checking the ship's log. Tapping the box that spreads the bottom of the screen will open up the log, where you will often find "
     .. "instructions regarding your mission, such as the quadrant your target is located in.")
 
@@ -357,7 +354,11 @@ function update(delta)
     if mission_state == 2 then
         if distance(TraineeShip, exampleStation) < 7500 then
             ExShip1 = CpuShip():setTemplate("Phobos T3"):setFaction("Exuari"):setPosition(9644, -6500):orderAttack(TraineeShip):setScanned(true):setShieldsMax(25):setHull(40)
+            exampleStation:sendCommsMessage(TraineeShip, ([[Thank you for responding to our distress signal. Now prepare to die!]]))
 
+            TraineeShip:addCustomMessage("weapons", "weapon_message_victory", "There is an enemy ship! Load some Homing Missiles by tapping Homing, then the Load buttons. Once those are ready, tap the enemy to lock on, and fire them from the respective side of your ship by tapping Left:Homing or Right:Homing!. Don't forget to activate your shields on the bottom right!")
+        
+            exampleStation:setFaction("Exuari")
     
            mission_state = 3
         end
