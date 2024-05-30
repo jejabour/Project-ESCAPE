@@ -94,61 +94,9 @@ function gmTutorials()
     addGMFunction(_("buttonGM", "Weapons"), gmWeapons)
     addGMFunction(_("buttonGM", "Relay"), gmRelay)
     addGMFunction(_("buttonGM", "Send Mission"), gmSendMission)
-    addGMFunction(_("buttonGM", "Surprise Station"), surpriseStation)
 
 end
 
-function gmSendMission()
-    clearGMFunctions() -- Clear the Menu
-    gmMainMenu() -- Return to main screen
-
-
-    central_command:sendCommsMessage(TraineeShip,([[We've picked up a distress signal at a friendly station in sector E5. Fly there, and see what's going on. Make sure you keep your crew up to date with information, as you are the only one who receives information. ]]))
-
-    -- TraineeShip:addToShipLog("We've picked up a distress signal at a friendly station in sector E5. "
-    -- .. "Fly there, and see what's going on. "
-    -- .. "Make sure you keep your crew up to date with information, as you are the "
-    -- .. "only one who receives information. ", "white")
-
-
-    exampleStation = SpaceStation():setTemplate("Medium Station"):setFaction("Human Navy"):setCommsScript("")
-    exampleStation:setPosition(9444, -7000)
-    
-    mission_state = 2
-
-
-end
-
-
-function surpriseStation()
-
-        
-    exampleStation:sendCommsMessage(TraineeShip, "Thank you for responding to our distress signal. Now prepare to die!")
-
-    TraineeShip:addCustomMessage("weapons", "weapon_message_victory", "There is an enemy ship! Load some Homing Missiles by tapping Homing, then the Load buttons. Once those are ready, tap the enemy to lock on, and fire them from the respective side of your ship by tapping Left:Homing or Right:Homing!. Don't forget to activate your shields on the bottom right!")
-
-    exampleStation:setFaction("Exuari")
-    
-    
-
-
-end
-
-
-function gmSpawnStation()
-    clearGMFunctions() -- Clear the Menu
-    gmMainMenu() -- Return to main screen
-
-    -- Message1 = "This is a test message."
-    -- TraineeShip:addCustomMessage("Helms", "Helms-message1", cur_locx)
-    
-    cur_locx, cur_locy = TraineeShip:getPosition()
-    spawn_station = SpaceStation():setTemplate("Small Station"):setFaction("Human Navy")
-    spawn_station:setPosition(cur_locx + 300, cur_locy - 400)
-
-    
-
-end
 
 function gmHelms()
     clearGMFunctions() -- Clear the Menu
@@ -288,6 +236,21 @@ function gmRelay()
 end
 
 
+function gmSendMission()
+    clearGMFunctions() -- Clear the Menu
+    gmMainMenu() -- Return to main screen
+
+    central_command:sendCommsMessage(TraineeShip,([[We've picked up a signal from a weakened station in sector E5. Fly there, and see what's going on. Make sure you keep your crew up to date with information, as you are the only one who receives information. ]]))
+
+    exampleStation = SpaceStation():setTemplate("Medium Station"):setFaction("Exuari"):setCommsScript("")
+    exampleStation:setPosition(9444, -7000)
+    
+    mission_state = 2
+
+
+end
+
+
 
 
 
@@ -342,14 +305,8 @@ function update(delta)
 
     end
 
-    -- if not ExShip1:isValid() then
-    --     TraineeShip:addCustomMessage("weapons", "weapon_message_victory", "Great job! Note that you must also have a ship targeted, by tapping them, for you beams to fire. "
-    --     .. "Keep in contact with your helms officer to ensure the ship is facing the right way for your weapons to hit!")
-    -- end
 
     TraineeShip:commandSetAlertLevel(alertLevel)
-
-    -- spawn_station:setCommsScript("You're a stinky butt")
 
     if mission_state == 2 then
         if distance(TraineeShip, exampleStation) < 7500 then

@@ -396,7 +396,7 @@ function initShip()
 
     TraineeShip:addToShipLog("A wave of asteroids have appeared around our location"
     .. " in the shape of a funnel. Unfortunately, we need supplies from a docking station in sector J6 that has been surrounded by asteroids on all sides except through the asteroids. "
-    .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return to Orion Starforge. ", "white")
+    .. "Be warned, when we sent out probes in the asteroid belt, we detected several Exuari ships. Navigate the asteroids, dock to pick up the supplies, and return and dock at Orion Starforge. ", "white")
 
 end
 

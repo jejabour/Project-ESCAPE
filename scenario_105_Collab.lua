@@ -35,12 +35,13 @@ function gmMainMenu()
     addGMFunction(_("buttonGM", "+ Commands"), gmCommmands)
 end
 
--- AMBUSH Mission Commands
+
 function gmCollab()
     clearGMFunctions()
     addGMFunction(_("buttonGM", "- Collab Mission"),gmMainMenu)
     addGMFunction(_("buttonGM", "   Spawn Wave"),gmSpawnWave)
     addGMFunction(_("buttonGM", "   Move Ships"),gmMove_Ships)
+    addGMFunction(_("buttomGM", "   UpdateMission"),gmUpdateMission)
     addGMFunction(_("buttonGM", "   Defeat"),gmDefeat)
     addGMFunction(_("buttonGM", "   Victory"),gmVictory)
     addGMFunction(_("buttonGM", "   Set Mission"),gmSetCollab)
@@ -119,7 +120,6 @@ end
 function gmSetCollab()
 
     gmMainMenu()
-
 
     TraineeShip = {}
     enemyList = {}
@@ -291,6 +291,15 @@ function gmMove_Ships()
 
 end
 
+function gmUpdateMission()
+
+    OdinLoc = ExForetress:getSectorName()
+
+    nebula_citadel:sendCommsMessage(TraineeShip1, ("We have received intel that confirms the location of the Odin in Sector " ..OdinLoc.. ". If you can destroy the Odin, all enemy ships should retreat!"))
+
+    nebula_citadel:sendCommsMessage(TraineeShip2, ("We have received intel that confirms the location of the Odin in Sector " ..OdinLoc.. ". If you can destroy the Odin, all enemy ships should retreat!"))
+
+end
 
 
 function update(delta)
@@ -308,6 +317,15 @@ function update(delta)
     if TraineeShip2:isDocked(nebula_citadel) then
         TraineeShip2:setWeaponStorage("homing", 24):setWeaponStorage("nuke", 10):setWeaponStorage("mine", 8):setWeaponStorage("EMP", 12):setWeaponStorage("HVLI", 24)
         TraineeShip2:setScanProbeCount(TraineeShip1:getMaxScanProbeCount())
+    end
+
+    if not ExForetress:isValid() then
+        for _, enemy in ipairs(enemyList) do
+            if enemy:isValid() then
+                enemy:destroy()
+            end
+        end
+
     end
 
     
@@ -330,13 +348,13 @@ function initShip()
     TraineeShip2:commandDock(nebula_citadel)
 
     TraineeShip1:addToShipLog("This is the final frontier!"
-    .. " The enemy is fast approaching us from Sector H4, and their largest battleship is on the way! We need you to team up with another group to intercept the Odin "
+    .. " The enemy is fast approaching us from Sector H4, and their largest battleship, the Odin, is on the way! We need you to team up with another group to intercept the Odin "
     .. "before it reaches the Nebula Citadel! We don't know their ETA, so assume they are within minutes of arriving. Good luck!", "white")
 
     TraineeShip1:addToShipLog("As one last ditch effort, have your science officer scan the Odin in one more attempt to ask for peace, and relay their response.", "white")
 
     TraineeShip2:addToShipLog("This is the final frontier!"
-    .. " The enemy is fast approaching us from Sector H4, and their largest battleship is on the way! We need you to team up with another group to intercept the Odin "
+    .. " The enemy is fast approaching us from Sector H4, and their largest battleship, the Odin, is on the way! We need you to team up with another group to intercept the Odin "
     .. "before it reaches the Nebula Citadel! We don't know their ETA, so assume they are within minutes of arriving. Good luck!", "white")
 
     TraineeShip2:addToShipLog("As one last ditch effort, have your science officer scan the Odin in one more attempt to ask for peace, and relay their response.", "white")
@@ -351,7 +369,7 @@ function createShips()
     ExShip3 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(2636, 40254):orderAttack(nebula_citadel)
     ExShip4 = CpuShip():setTemplate("Adder MK4"):setFaction("Exuari"):setPosition(6879, 42643):orderAttack(nebula_citadel)
 
-    ExForetress = CpuShip():setTemplate("Fortress"):setFaction("Exuari"):setPosition(-20129, 56910):orderStandGround():setCallSign("Odin")
+    ExForetress = CpuShip():setTemplate("Fortress"):setFaction("Exuari"):setPosition(-20129, 56910):orderAttack(nebula_citadel):setCallSign("Odin"):setImpulseMaxSpeed(30)
     ExForetress:setDescriptions("", "We do not want compromise, we declare war!")
 
     ExShip5 = CpuShip():setTemplate("Gunner"):setFaction("Exuari"):setPosition(-16269, 45690):orderStandGround():setWeaponStorageMax("HVLI", 3):setWeaponStorage("HVLI", 3)
@@ -398,7 +416,7 @@ function gmVictory()
     clearGMFunctions()
     gmMainMenu()
 
-    message_victory = "Thank you, crew, for your service! The threat has been defeated, and the mission is complete. Return for debriefing."
+    message_victory = "Thank you, crew, for your service! The Odin has been defeated and all enemy ships have fled! Return for debriefing."
 
     -- Display a mesasage on the main screen for 2 minutes
     globalMessage(message_victory, 120)
