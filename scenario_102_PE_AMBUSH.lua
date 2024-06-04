@@ -262,6 +262,7 @@ function gmSetAmbush()
      NavyShip2 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(55256, -26688):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
      
      
+     
  
      table.insert(enemyList, ExShip1)
      table.insert(enemyList, ExShip2)
@@ -371,9 +372,9 @@ function init()
     Nebula():setPosition(-28600, -21900)
 
     --Nebulae in sector D7
-    nebulae1 = Nebula():setPosition(43463, -28540)
+    -- nebulae1 = Nebula():setPosition(43463, -28540)
     nebulae2 = Nebula():setPosition(52188, -26359)
-    nebulae3 = Nebula():setPosition(54350, -35362)
+    -- nebulae3 = Nebula():setPosition(54350, -35362)
 
     table.insert(nebulaeList, nebulae1)
     table.insert(nebulaeList, nebulae2)
@@ -412,13 +413,14 @@ function init()
 
     
     TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(52838, -29852):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(44632, -30408):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    -- ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(44632, -30408):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
     ExShip2 = CpuShip():setTemplate("Battlestation"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
     ExShip3 = CpuShip():setTemplate("Blade"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-    ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(55840, -35901):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    -- ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(55840, -35901):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
     NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(50768, -33352):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
     NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(55256, -26688):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
-    
+    ArlenShip = CpuShip():setTemplate("Guard"):setFaction("Arlenians"):setPosition(55256, -25588):orderAttack(TraineeShip):setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+
 
     table.insert(enemyList, ExShip1)
     table.insert(enemyList, ExShip2)
@@ -460,6 +462,10 @@ function update(delta)
         mission_state = 2
 
     end
+
+    -- if not NavyShip1:isValid() then
+
+    -- end
 
     -- trigger next events when the supply drop is picked up.
     -- Spawn 2 enemy ships near the trainees
