@@ -46,8 +46,9 @@ function gmRetrieveData()
     addGMFunction(_("buttonGM", "Retrieve Data -"),gmMainMenu)
     addGMFunction(_("buttonGM", "1) Docked at Station"),gmRetrieveData1)
     addGMFunction(_("buttonGM", "2) Enemies Arrive"),gmRetrieveData2)
-    addGMFunction(_("buttonGM", "3) Data Retrieved"),gmRetrieveData3)
-    addGMFunction(_("buttonGM", "3) Data Lost"),gmRetrieveData4)
+    addGMFunction(_("buttonGM", "3) Pickup Crew"), gmRetrieveData3)
+    addGMFunction(_("buttonGM", "4) Data Retrieved"),gmRetrieveData4)
+    addGMFunction(_("buttonGM", "5) Data Lost"),gmRetrieveData5)
     addGMFunction(_("buttonGM", "Set Mission"),gmSetRetrieveData)
 end
 
@@ -97,8 +98,8 @@ function gmRescueJJ1()
 
     -- Destroy JJ Johnson's ship and activate the enemies on-site
     jj_transport:destroy()
-    exuari_guard1:orderRoaming()
-    exuari_guard2:orderRoaming()
+    exuari_guard1:orderStandGround()
+    exuari_guard2:orderStandGround()
 
     -- Spawn the life pod
     lifepod = SupplyDrop()
@@ -214,6 +215,17 @@ function gmSetRescueJJ()
     TraineeShip:setRotation(180) -- make sure it's facing away from station
     TraineeShip:commandDock(nebula_citadel)
 
+    message_save_JJ = "The diplomat, JJ Johnson, was traveling back from "
+    .. "peace talks with our enemy faction, the Exuari. We have just received a "
+    .. "distress signal from his vessel and need to respond immediately due to the "
+    .. "sensitive nature of his work. If we lose JJ, we may very well lose our "
+    .. "uneasy peace and fall into war. Ensure his safe return at all costs."
+
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("relay", "message_get_data", message_save_JJ)
+
     TraineeShip:addToShipLog("The diplomat, JJ Johnson, was traveling back from "
     .. "peace talks with our enemy faction, the Exuari. We have just received a "
     .. "distress signal from his vessel and need to respond immediately due to the "
@@ -266,7 +278,7 @@ function gmSetWaves()
 
     waveNumber = 0
 
-    deep_space_ix = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy")
+    deep_space_ix = SpaceStation():setTemplate("Large Station"):setFaction("Human Navy"):setHullMax(200):setHull(200):setShieldsMax(400, 400, 400)
     deep_space_ix:setPosition(23500, 16100):setCallSign("Deep Space IX")
 
     -- Create the main ship for the trainees.
@@ -275,9 +287,20 @@ function gmSetWaves()
     TraineeShip:setRotation(180) -- make sure it's facing away from station
     TraineeShip:commandDock(deep_space_ix)
 
+    message_protect_Deep_Space_IX = "The attack on JJ Johnson has shown that our peace "
+    .. "with the Exuari faction is over and war has begun. We have received reports "
+    .. "that an attack on Deep Space IX is soon to take place. We have requested "
+    .. "reinforcements, but until they arrive, you and the other ships already "
+    .. "on-station must defend us. They could arrive at any moment - be prepared."
+
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("relay", "message_get_data", message_protect_Deep_Space_IX)
+
     TraineeShip:addToShipLog("The attack on JJ Johnson has shown that our peace "
     .. "with the Exuari faction is over and war has begun. We have received reports "
-    .. "that an attack on Central Command is soon to take place. We have requested "
+    .. "that an attack on Deep Space IX is soon to take place. We have requested "
     .. "reinforcements, but until they arrive, you and the other ships already "
     .. "on-station must defend us. They could arrive at any moment - be prepared.", "white")
 
@@ -433,6 +456,8 @@ function gmRetrieveData1()
     clearGMFunctions()
     gmMainMenu()
 
+
+
     satellite:sendCommsMessage(TraineeShip,
         _("incCall", "J.E. Thompson, welcome to the E.O.S. Scope satellite. I "
         .. "am the station-board Artificial Intelligence that runs this unmanned "
@@ -480,8 +505,32 @@ function gmRetrieveData2()
         )
 end
 
---- 3) Data Retrieved
+
 function gmRetrieveData3()
+    -- Clear and reset the menu
+    clearGMFunctions()
+    gmMainMenu()
+
+    message_pickup_crew = "Your crew is ready to be picked up."
+
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("helms", "message_pickup_crew", message_pickup_crew)
+    TraineeShip:addCustomMessage("engineering", "message_pickup_crew", message_pickup_crew)
+    TraineeShip:addCustomMessage("weapons", "message_pickup_crew", message_pickup_crew)
+    TraineeShip:addCustomMessage("science", "message_pickup_crew", message_pickup_crew)
+    TraineeShip:addCustomMessage("relay", "message_pickup_crew", message_pickup_crew)
+
+
+end
+
+
+
+
+
+--- 4) Data Retrieved
+function gmRetrieveData4()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
@@ -491,8 +540,8 @@ function gmRetrieveData3()
         )
 end
 
---- 4) Data Lost
-function gmRetrieveData4()
+--- 5) Data Lost
+function gmRetrieveData5()
     -- Clear and reset the menu
     clearGMFunctions()
     gmMainMenu()
@@ -519,6 +568,20 @@ function gmSetRetrieveData()
     TraineeShip:setRotation(180) -- make sure it's facing away from station
     TraineeShip:commandDock(repair_station)
 
+
+
+    message_retrieve_data = "We have received reports that a hostile force is "
+    .. "enroute to Orion Starforge in sector H8. This station "
+    .. "has codes to enable comms back to Earth's central command post that must be retrieved before the Exuari get their hands "
+    .. "on it. Retrieve the codes and return them to the Repair Station. Do not allow the Exuari "
+    .. "to have it."
+
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("relay", "message_get_data", message_retrieve_data)
+
+    
     TraineeShip:addToShipLog("We have received reports that a hostile force is "
     .. "enroute to Orion Starforge in sector H8. This station "
     .. "has codes to enable comms back to Earth's central command post that must be retrieved before the Exuari get their hands "

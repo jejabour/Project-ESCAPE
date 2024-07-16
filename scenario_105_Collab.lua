@@ -347,6 +347,16 @@ function initShip()
     TraineeShip2:setRotation(0) -- make sure it's facing away from station
     TraineeShip2:commandDock(nebula_citadel)
 
+    message_collab = "This is the final frontier!"
+    .. " The enemy is fast approaching us from Sector H4, and their largest battleship, the Odin, is on the way! We need you to team up with another group to intercept the Odin "
+    .. "before it reaches the Nebula Citadel! We don't know their ETA, so assume they are within minutes of arriving. Good luck!"
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip1:addCustomMessage("relay", "message_get_data", message_collab)
+
+    TraineeShip2:addCustomMessage("relay", "message_get_data", message_collab)
+
     TraineeShip1:addToShipLog("This is the final frontier!"
     .. " The enemy is fast approaching us from Sector H4, and their largest battleship, the Odin, is on the way! We need you to team up with another group to intercept the Odin "
     .. "before it reaches the Nebula Citadel! We don't know their ETA, so assume they are within minutes of arriving. Good luck!", "white")

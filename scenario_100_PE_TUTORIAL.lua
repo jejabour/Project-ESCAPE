@@ -220,6 +220,8 @@ function gmRelay()
     clearGMFunctions() -- Clear the Menu
     gmMainMenu() -- Return to main screen
 
+    
+
     TraineeShip:addToShipLog("These are the logs! Central Command is located in sector F6, and the Nebulaes in sector F7, E3, and D6 will block your view, even from probes.", "white")
 
     TraineeShip:addCustomMessage("relay", "relay_start_message", "This is the Relay screen! You have a wider view than every other role, and you can send "

@@ -233,9 +233,9 @@ function gmSetAmbush()
     alertLevel = "normal"
 
     --Nebulae in sector D7
-    nebulae1 = Nebula():setPosition(43463, -28540)
+    -- nebulae1 = Nebula():setPosition(43463, -28540)
     nebulae2 = Nebula():setPosition(52188, -26359)
-    nebulae3 = Nebula():setPosition(54350, -35362)
+    -- nebulae3 = Nebula():setPosition(54350, -35362)
 
     table.insert(nebulaeList, nebulae1)
     table.insert(nebulaeList, nebulae2)
@@ -247,17 +247,32 @@ function gmSetAmbush()
      TraineeShip:setRotation(180) -- make sure it's facing away from station
      TraineeShip:commandDock(orion_starforge)
 
+
+     message_get_data = "An envoy of our ships were escorting a captured Kraylor ship,"
+     .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
+     .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
+     .. "Your Science officer will be able to determine the factions of any unknown ships. "
+     .. "You can tap the bottom of the screen to read this log at any time."
+
+
+     -- Display a popup message on each players screen.
+     -- addCustomMessage(role, name of the string???, string)
+     TraineeShip:addCustomMessage("relay", "message_get_data", message_get_data)
+
+
      TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
      .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
      .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
-     .. "Your Science officer will be able to determine the factions of any unknown ships.", "white")
+     .. "Your Science officer will be able to determine the factions of any unknown ships. "
+     .. "You can tap the bottom of the screen to read this log at any time.", "white")
+
  
      
      TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(52838, -29852):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-     ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(44632, -30408):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    --  ExShip1 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(44632, -30408):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
      ExShip2 = CpuShip():setTemplate("Battlestation"):setFaction("Exuari"):setPosition(42746, -27708):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
      ExShip3 = CpuShip():setTemplate("Blade"):setFaction("Exuari"):setPosition(49928, -23979):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
-     ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(55840, -35901):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
+    --  ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(55840, -35901):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
      NavyShip1 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(50768, -33352):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
      NavyShip2 = CpuShip():setTemplate("Guard"):setFaction("Human Navy"):setPosition(55256, -26688):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
      
@@ -325,6 +340,8 @@ function gmClearMission()
 
     alertLevel = "normal"
 
+
+
     for _, friend in ipairs(friendList) do
         if friend:isValid() then
             friend:destroy()
@@ -342,6 +359,7 @@ function gmClearMission()
             nebula:destroy()
         end
     end
+
 
 end
 
@@ -406,10 +424,22 @@ function init()
     TraineeShip:setRotation(180) -- make sure it's facing away from station
     TraineeShip:commandDock(orion_starforge)
 
+    message_get_data = "An envoy of our ships were escorting a captured Kraylor ship,"
+    .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
+    .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
+    .. "Your Science officer will be able to determine the factions of any unknown ships. "
+     .. "You can tap the bottom of the screen to read this log at any time."
+
+
+    -- Display a popup message on each players screen.
+    -- addCustomMessage(role, name of the string???, string)
+    TraineeShip:addCustomMessage("relay", "message_get_data", message_get_data)
+
     TraineeShip:addToShipLog("An envoy of our ships were escorting a captured Kraylor ship,"
     .. " but were ambushed by Exuari in sector D7. It seems all the ships in the skirmish have been abandoned, but "
     .. "there is still intel on the Kraylor ship. Find the Kraylor ship, destroy the ship to expose the intel package, grab it, and bring it back. "
-    .. "Your Science officer will be able to determine the factions of any unknown ships.", "white")
+    .. "Your Science officer will be able to determine the factions of any unknown ships. "
+    .. "You can tap the bottom of the screen to read this log at any time.", "white")
 
     
     TargetShip = CpuShip():setTemplate("Equipment Freighter 2"):setFaction("Kraylor"):setPosition(52838, -29852):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
@@ -419,7 +449,7 @@ function init()
     -- ExShip4 = CpuShip():setTemplate("Adder MK6"):setFaction("Exuari"):setPosition(55840, -35901):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
     NavyShip1 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(50768, -33352):orderIdle():setScanned(false):setShieldsMax(1, 1):setHull(1, 60)
     NavyShip2 = CpuShip():setTemplate("Karnack"):setFaction("Human Navy"):setPosition(55256, -26688):orderIdle():setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
-    ArlenShip = CpuShip():setTemplate("Guard"):setFaction("Arlenians"):setPosition(55256, -25588):orderAttack(TraineeShip):setScanned(false):setShieldsMax(1, 1) :setHull(1, 60)
+    
 
 
     table.insert(enemyList, ExShip1)
