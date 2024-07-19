@@ -92,6 +92,7 @@ function gmTutorials()
     addGMFunction(_("buttonGM", "Engineering-2"), gmEngineering_2)
     addGMFunction(_("buttonGM", "Science"), gmScience)
     addGMFunction(_("buttonGM", "Weapons"), gmWeapons)
+    addGMFunction(_("buttonGM", "Send Life Pod"), gmSupplyDrop)
     addGMFunction(_("buttonGM", "Relay"), gmRelay)
     addGMFunction(_("buttonGM", "Send Mission"), gmSendMission)
 
@@ -213,6 +214,28 @@ function gmWeapons()
 
     ExShipW = CpuShip():setFaction("Exuari"):setTemplate("Adder MK9"):setPosition(ship_pos_x, ship_pos_y):orderIdle():setScanned(true):setShieldsMax(20, 20):setHull(60, 60)
     
+
+end
+
+function gmSupplyDrop()
+
+
+ship_pos_x, ship_pos_y = TraineeShip:getPosition()
+
+pod_pos_x = ship_pos_x + 900
+pod_pos_y = ship_pos_y -2500
+
+drop_example = SupplyDrop()
+
+drop_example:setFaction("Human Navy")
+drop_example:setPosition(pod_pos_x, pod_pos_y)
+lifepod:setCallSign("Example_LifePod_or_Intel")
+lifepod:setDescriptions(
+    _("scienceDescription-lifepod", "Life Pod, or Supplies, or Intel"),
+    _("scienceDescription-lifepod", "This is an example of what it's like to find intel, life pods, etc.")
+)
+lifepod:setScanningParameters(1,1)
+
 
 end
 
